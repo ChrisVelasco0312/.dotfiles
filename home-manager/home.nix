@@ -47,4 +47,6 @@
 		theme = "dpoggi";
 	};
 
+	xdg.configFile."hypr/hyprland.conf".source = ../dots/hypr/hyprland.conf;
+
 }

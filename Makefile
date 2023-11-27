@@ -5,6 +5,8 @@ build-home:
 build:
 	make build-flake
 	make build-home
+backup-configs:
+	home-manager switch -b backup --flake .#cavelasco@nixos
 clean:
 	nix-collect-garbage
 	
