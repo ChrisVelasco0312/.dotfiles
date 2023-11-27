@@ -1,5 +1,5 @@
 {
- description = "My Flakie"; #You can change this to whatever
+ description = "The One And Only NixOS Config"; 
 
  inputs = {
    # Nixpkgs
@@ -11,33 +11,29 @@
 
    # Hardware
    hardware.url = "github:nixos/nixos-hardware";
+
+   #hyprland
+   hyprland.url = "github:hyprwm/Hyprland";
  };
 
- outputs = { self, nixpkgs, home-manager, ... }@inputs: {
-   # NixOS configuration entrypoint
-   # Available through 'nixos-rebuild --flake .#your-hostname'
-
+ outputs = { self, nixpkgs, home-manager, hyprland, ... }@inputs: {
    nixosConfigurations = {
-     # FIXME replace with your hostname
      nixos = nixpkgs.lib.nixosSystem {
-       specialArgs = { inherit inputs; }; # Pass flake inputs to our config
-       # > Our main nixos configuration file <
+       specialArgs = { inherit inputs; }; 
        modules = [ 
          ./nixos/configuration.nix
        ];
      };
    };
 
-   # home-manager configuration entrypoint
-   # Available through 'home-manager --flake .#your-username@your-hostname'
    homeConfigurations = {
-     # FIXME replace with your username@hostname
      "cavelasco@nixos" = home-manager.lib.homeManagerConfiguration {
-       pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-       extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
-       # > Our main home-manager configuration file <
+       pkgs = nixpkgs.legacyPackages.x86_64-linux; 
+       extraSpecialArgs = { inherit inputs; }; 
        modules = [ 
            ./home-manager/home.nix 
+	   hyprland.nixosModule.default
+	   { programs.hyprland.enable = true; }
            ];
      };
    };

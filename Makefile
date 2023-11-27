@@ -5,5 +5,7 @@ build-home:
 build:
 	make build-flake
 	make build-home
+clean:
+	nix-collect-garbage
 	
 
