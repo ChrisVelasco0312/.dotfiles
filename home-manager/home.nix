@@ -49,9 +49,6 @@
 
 	xdg.configFile."hypr/hyprland.conf".source = ../dots/hypr/hyprland.conf;
 
-	xdg.configFile.nvim = {
-	  source = ../dots/nvim-frankenstein;
-	  recursive = true;
-	};
+	xdg.configFile.nvim.source = ../dots/nvim-frankenstein;
 
 }
