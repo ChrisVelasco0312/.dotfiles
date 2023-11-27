@@ -105,6 +105,7 @@
      zsh
      guake
      xclip
+     gnumake
   ];
 
   programs.zsh.enable = true;
