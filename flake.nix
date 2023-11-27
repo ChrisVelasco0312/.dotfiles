@@ -11,17 +11,15 @@
 
    # Hardware
    hardware.url = "github:nixos/nixos-hardware";
-
-   #hyprland
-   hyprland.url = "github:hyprwm/Hyprland";
  };
 
- outputs = { self, nixpkgs, home-manager, hyprland, ... }@inputs: {
+ outputs = { self, nixpkgs, home-manager, ... }@inputs: {
    nixosConfigurations = {
      nixos = nixpkgs.lib.nixosSystem {
        specialArgs = { inherit inputs; }; 
        modules = [ 
          ./nixos/configuration.nix
+	 ./nixos/hyprland.nix
        ];
      };
    };
@@ -30,11 +28,7 @@
      "cavelasco@nixos" = home-manager.lib.homeManagerConfiguration {
        pkgs = nixpkgs.legacyPackages.x86_64-linux; 
        extraSpecialArgs = { inherit inputs; }; 
-       modules = [ 
-           ./home-manager/home.nix 
-	   hyprland.nixosModule.default
-	   { programs.hyprland.enable = true; }
-           ];
+       modules = [  ./home-manager/home.nix ];
      };
    };
  };

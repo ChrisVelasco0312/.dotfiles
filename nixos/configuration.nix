@@ -6,7 +6,7 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [ 
       ./hardware-configuration.nix
     ];
 
@@ -85,7 +85,6 @@
     description = "cavelasco";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-      firefox
     ];
     shell = pkgs.zsh;
   };
@@ -103,14 +102,13 @@
      git
      opera
      zsh
-     guake
      xclip
      gnumake
   ];
 
   programs.zsh.enable = true;
 
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     fira-code
     fira-code-symbols
   ];
