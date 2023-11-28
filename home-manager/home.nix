@@ -1,9 +1,11 @@
 { config, pkgs, inputs, lib, ... }:
 
 {
-  home.username = "cavelasco";
-  home.homeDirectory = "/home/cavelasco";
-  home.stateVersion = "22.11";
+  home = {
+    username = "cavelasco";
+    homeDirectory = "/home/cavelasco";
+    stateVersion = "23.05";
+  };
   nixpkgs = {
 		config = {
 			allowUnfree = true;
@@ -14,6 +16,8 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
   home.packages = with pkgs; [
+        node2nix
+        nodejs
         bat
         fzf
         ripgrep
@@ -21,6 +25,10 @@
         tree
         eza
         gcc
+        fish
+        pavucontrol
+        mpd
+        rofi
 	];
   
   programs.neovim = {
@@ -45,15 +53,16 @@
 	programs.zsh = {
 		enable = true;
 	};
-
 	programs.zsh.oh-my-zsh= {
 		enable = true;
 		plugins = ["git" "python" "docker" "fzf"];
 		theme = "dpoggi";
 	};
 
+  ## CONFIGS
 	xdg.configFile."hypr/hyprland.conf".source = ../dots/hypr/hyprland.conf;
-
-	xdg.configFile.nvim.source = ../dots/nvim-frankenstein;
-
+  
+  ## waybar
+  xdg.configFile."waybar/config".source = ../dots/waybar/config;
+  xdg.configFile."waybar/style.css".source = ../dots/waybar/style.css;
 }

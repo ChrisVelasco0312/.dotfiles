@@ -39,5 +39,4 @@
       
       devShells.x86_64-linux.default = (import ./node-shells/shell.nix {inherit pkgs; });
      };
-     
 }
