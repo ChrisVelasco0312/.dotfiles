@@ -29,12 +29,27 @@
         pavucontrol
         mpd
         rofi
+	helix
 	];
+
+ programs.helix.settings = {
+   theme = "onedark";
+   editor = {
+    line-number = "relative";
+    lsp.display-messages = true;
+   };
+   keys.normal = {
+    space.space = "file_picker";
+    space.w = ":w";
+    space.q = ":q";
+    esc = [ "collapse_selection" "keep_primary_selection" ];
+   };
+ };
   
   programs.neovim = {
   	enable = true;
   	viAlias = true;
-	  vimAlias = true;
+	vimAlias = true;
   };
 
   programs.neovim.plugins = [

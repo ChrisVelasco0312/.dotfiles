@@ -79,15 +79,24 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.cavelasco = {
     isNormalUser = true;
     description = "cavelasco";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel"];
     packages = with pkgs; [
     ];
     shell = pkgs.zsh;
   };
+
+  #docker
+  virtualisation.docker.enable = true;
+  virtualisation.docker.rootless = {
+    enable = true;
+    setSocketVariable = true;
+  };
+  users.extraGroups.docker.members = [ "cavelasco" ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
