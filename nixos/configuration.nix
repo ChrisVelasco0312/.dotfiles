@@ -104,6 +104,7 @@
      zsh
      xclip
      gnumake
+     nodenv
   ];
 
   programs.zsh.enable = true;

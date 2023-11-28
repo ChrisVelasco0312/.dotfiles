@@ -20,13 +20,18 @@
         jq
         tree
         eza
+        gcc
 	];
   
   programs.neovim = {
   	enable = true;
   	viAlias = true;
-	vimAlias = true;
-  	};
+	  vimAlias = true;
+  };
+
+  programs.neovim.plugins = [
+   pkgs.vimPlugins.nvim-treesitter.withAllGrammars
+  ];
 
 	home.sessionVariables = {
 		EDITOR="nvim";
