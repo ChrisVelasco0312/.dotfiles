@@ -63,7 +63,7 @@
 		enable = true;
     enableCompletion = true;
     enableAutosuggestions = true;
-    enableSyntaxHighlighting = true;
+    syntaxHighlighting.enable = true;
 	};
 	programs.zsh.oh-my-zsh= {
 		enable = true;
