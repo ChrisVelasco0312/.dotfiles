@@ -29,27 +29,14 @@
         pavucontrol
         mpd
         rofi
-	helix
-	];
+	      vscode-fhs
+  ];
 
- programs.helix.settings = {
-   theme = "onedark";
-   editor = {
-    line-number = "relative";
-    lsp.display-messages = true;
-   };
-   keys.normal = {
-    space.space = "file_picker";
-    space.w = ":w";
-    space.q = ":q";
-    esc = [ "collapse_selection" "keep_primary_selection" ];
-   };
- };
-  
+  #NEOVIM 
   programs.neovim = {
   	enable = true;
   	viAlias = true;
-	vimAlias = true;
+    vimAlias = true;
   };
 
   programs.neovim.plugins = [
@@ -63,21 +50,30 @@
 		l = "eza";
 		ls = "eza";
 		cat = "bat";
+    codehere = "env -u WAYLAND_DISPLAY code .";
 	};
 
+  #ZSH
 	programs.zsh = {
 		enable = true;
+    enableCompletion = true;
+    enableAutosuggestions = true;
+    enableSyntaxHighlighting = true;
 	};
 	programs.zsh.oh-my-zsh= {
 		enable = true;
 		plugins = ["git" "python" "docker" "fzf"];
-		theme = "dpoggi";
+		theme = "dst";
 	};
+
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
 
   ## CONFIGS
 	xdg.configFile."hypr/hyprland.conf".source = ../dots/hypr/hyprland.conf;
-  
-  ## waybar
+  # waybar
   xdg.configFile."waybar/config".source = ../dots/waybar/config;
   xdg.configFile."waybar/style.css".source = ../dots/waybar/style.css;
 }
