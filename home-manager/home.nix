@@ -1,6 +1,10 @@
 { config, pkgs, inputs, lib, ... }:
 
 {
+  imports = [
+    ./programs/tmux/tmux.nix
+  ];
+
   home = {
     username = "cavelasco";
     homeDirectory = "/home/cavelasco";

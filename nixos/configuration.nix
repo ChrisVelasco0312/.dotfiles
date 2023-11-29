@@ -107,7 +107,6 @@
      wget
      neovim
      ranger
-     tmux
      git
      opera
      zsh
