@@ -3,6 +3,7 @@
 {
   imports = [
     ./programs/tmux/tmux.nix
+    ./programs/rofi
   ];
 
   home = {
