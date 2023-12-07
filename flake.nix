@@ -24,7 +24,7 @@
            specialArgs = { inherit inputs; }; 
            modules = [ 
              ./nixos/configuration.nix
-             ./nixos/hyprland.nix
+            #  ./nixos/hyprland.nix
            ];
          };
        };

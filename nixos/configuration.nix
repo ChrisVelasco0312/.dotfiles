@@ -50,7 +50,6 @@
   };
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
@@ -62,14 +61,21 @@
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
-  # Enable the GNOME Desktop Environment.
-  # services.xserver.displayManager.gdm.enable = true;
-  # services.xserver.desktopManager.gnome.enable = true;
-
-  # Configure keymap in X11
   services.xserver = {
+    enable = true;
     layout = "us";
     xkbVariant = "";
+    desktopManager = {
+        xfce = {
+          enable = true;
+          noDesktop = true;
+          enableXfwm = false;
+        };
+    };
+    windowManager.awesome.enable = true;
+    libinput.enable = true;
+    libinput.mouse.naturalScrolling = true;
+    libinput.touchpad.naturalScrolling = true;
   };
 
   # Enable CUPS to print documents.
@@ -102,7 +108,7 @@
     description = "cavelasco";
     extraGroups = [ "networkmanager" "wheel"];
     packages = with pkgs; [
-      brave
+      firefox
     ];
     shell = pkgs.zsh;
   };

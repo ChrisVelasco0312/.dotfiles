@@ -4,6 +4,7 @@
   imports = [
     ./programs/tmux/tmux.nix
     ./programs/rofi
+    ./programs/alacritty/alacritty.nix
   ];
 
   home = {
@@ -35,6 +36,13 @@
         mpd
         rofi
 	      vscode-fhs
+        nitrogen
+        picom
+        dmenu
+        unzip
+        (nerdfonts.override {
+          fonts = ["JetBrainsMono" "Inconsolata"];
+        })
   ];
 
   #NEOVIM 
@@ -51,6 +59,7 @@
 	home.sessionVariables = {
 		EDITOR="nvim";
 	};
+
 	home.shellAliases = {
 		l = "eza";
 		ls = "eza";
@@ -77,8 +86,11 @@
   };
 
   ## CONFIGS
-	xdg.configFile."hypr/hyprland.conf".source = ../dots/hypr/hyprland.conf;
+	# xdg.configFile."hypr/hyprland.conf".source = ../dots/hypr/hyprland.conf;
   # waybar
   xdg.configFile."waybar/config".source = ../dots/waybar/config;
   xdg.configFile."waybar/style.css".source = ../dots/waybar/style.css;
+
+  #awesome
+  xdg.configFile.awesome.source = ../dots/awesome;
 }
