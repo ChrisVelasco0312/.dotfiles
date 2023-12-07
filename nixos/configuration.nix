@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports =
@@ -43,8 +43,24 @@
     LC_TIME = "es_CO.UTF-8";
   };
 
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+  };
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
+  services.xserver.videoDrivers = [ "nvidia" ];
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    powerManagement.finegrained = false;
+    open = false;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+  };
 
   # Enable the GNOME Desktop Environment.
   # services.xserver.displayManager.gdm.enable = true;
@@ -86,6 +102,7 @@
     description = "cavelasco";
     extraGroups = [ "networkmanager" "wheel"];
     packages = with pkgs; [
+      brave
     ];
     shell = pkgs.zsh;
   };
@@ -112,7 +129,6 @@
      zsh
      xclip
      gnumake
-     nodenv
   ];
 
   programs.zsh.enable = true;
