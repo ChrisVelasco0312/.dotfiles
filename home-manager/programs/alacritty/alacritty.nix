@@ -9,7 +9,7 @@ programs.alacritty = {
 				y=10;
 			};
 			window.decorations = "none";
-			window.opacity = 0.7;
+			window.opacity = 0.5;
 			scrolling.history = 1000;
 			font = {
 				normal = {
@@ -24,7 +24,7 @@ programs.alacritty = {
 					family = "JetBrains Mono Nerd Font";
 					style = "Italic";
 				};
-				size = 14;
+				size = 12;
 			};
 		};
 	};

@@ -108,7 +108,7 @@
     description = "cavelasco";
     extraGroups = [ "networkmanager" "wheel"];
     packages = with pkgs; [
-      firefox
+      brave 
     ];
     shell = pkgs.zsh;
   };
