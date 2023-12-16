@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, lib, ... }:
+{ config, pkgs, inputs, lib, vimUtils, ... }:
 
 {
   imports = [
@@ -10,7 +10,7 @@
   home = {
     username = "cavelasco";
     homeDirectory = "/home/cavelasco";
-    stateVersion = "23.05";
+    stateVersion = "24.05";
   };
   nixpkgs = {
 		config = {
@@ -22,27 +22,27 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
   home.packages = with pkgs; [
-        node2nix
-        nodejs
-        bat
-        fzf
-        ripgrep
-        jq
-        tree
-        eza
-        gcc
-        fish
-        pavucontrol
-        mpd
-        rofi
-	      vscode-fhs
-        nitrogen
-        picom
-        dmenu
-        unzip
-        (nerdfonts.override {
-          fonts = ["JetBrainsMono" "Inconsolata"];
-        })
+    nodejs
+    bat
+    fzf
+    ripgrep
+    jq
+    tree
+    eza
+    gcc
+    fish
+    pavucontrol
+    mpd
+    rofi
+    vscode-fhs
+    nitrogen
+    picom
+    dmenu
+    unzip
+    (nerdfonts.override {
+      fonts = ["JetBrainsMono" "Inconsolata"];
+    })
+    guake
   ];
 
   #NEOVIM 
@@ -50,11 +50,14 @@
   	enable = true;
   	viAlias = true;
     vimAlias = true;
-  };
 
-  programs.neovim.plugins = [
-   pkgs.vimPlugins.nvim-treesitter.withAllGrammars
-  ];
+    extraConfig = builtins.concatStringsSep "\n" [
+      ()
+    ];
+    plugins = [
+      pkgs.vimPlugins.nvim-treesitter.withAllGrammars
+    ];
+  };
 
 	home.sessionVariables = {
 		EDITOR="nvim";
