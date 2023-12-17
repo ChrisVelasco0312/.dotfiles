@@ -5,12 +5,13 @@
     ./programs/tmux/tmux.nix
     ./programs/rofi
     ./programs/alacritty/alacritty.nix
+    ./programs/neovim
   ];
 
   home = {
     username = "cavelasco";
     homeDirectory = "/home/cavelasco";
-    stateVersion = "24.05";
+    stateVersion = "23.05";
   };
   nixpkgs = {
 		config = {
@@ -44,20 +45,6 @@
     })
     guake
   ];
-
-  #NEOVIM 
-  programs.neovim = {
-  	enable = true;
-  	viAlias = true;
-    vimAlias = true;
-
-    extraConfig = builtins.concatStringsSep "\n" [
-      ()
-    ];
-    plugins = [
-      pkgs.vimPlugins.nvim-treesitter.withAllGrammars
-    ];
-  };
 
 	home.sessionVariables = {
 		EDITOR="nvim";
