@@ -25,6 +25,7 @@
       nodePackages.typescript
       nodePackages.typescript-language-server 
       nodePackages.eslint
+      nodePackages.prettier
     ];
 
     extraLuaConfig = ''
@@ -34,11 +35,16 @@
       -- plugins config
       ${builtins.readFile ./nvim-lua/plugins/telescope.lua }
       ${builtins.readFile ./nvim-lua/plugins/autopairs.lua }
+      ${builtins.readFile ./nvim-lua/plugins/autotag.lua }
       ${builtins.readFile ./nvim-lua/plugins/bufferline.lua }
       ${builtins.readFile ./nvim-lua/plugins/cmp.lua }
       ${builtins.readFile ./nvim-lua/plugins/lsp-config.lua }
       ${builtins.readFile ./nvim-lua/plugins/mason.lua }
       ${builtins.readFile ./nvim-lua/plugins/onedark.lua }
+      ${builtins.readFile ./nvim-lua/plugins/treesitter.lua }
+      ${builtins.readFile ./nvim-lua/plugins/prettier.lua }
+      ${builtins.readFile ./nvim-lua/plugins/null-ls.lua }
+      ${builtins.readFile ./nvim-lua/plugins/lualine.lua }
     '';
 
     plugins = with pkgs.vimPlugins; [
@@ -57,6 +63,7 @@
       cmp-nvim-lsp
       lspkind-nvim
       cmp_luasnip
+      cmp-buffer
       luasnip
       ##  lsp
       nvim-lspconfig
@@ -65,6 +72,20 @@
       neodev-nvim
       ## theme
       onedark-nvim
+      ## copilot
+      #TODO: Add codeium configurations
+      # codeium-vim
+      plenary-nvim
+      nvim-ts-autotag
+      no-neck-pain-nvim
+      vim-prettier
+      null-ls-nvim
+      lualine-nvim
+      nvim-web-devicons
+      vim-startify
+      comment-nvim
+      vim-fugitive
+      vim-rhubarb
     ];
   };
 }
