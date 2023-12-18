@@ -45,6 +45,7 @@
       fonts = ["JetBrainsMono" "Inconsolata"];
     })
     guake
+    obsidian
   ];
 
 	home.sessionVariables = {

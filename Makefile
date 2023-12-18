@@ -1,8 +1,10 @@
 show-cmds:
 	cat Makefile
-build-flake:
-	 sudo nixos-rebuild switch --flake .#nixos
-build-home:
+flake:
+	sudo nixos-rebuild switch --flake .#nixos
+update:
+	sudo nixos-rebuild switch --upgrade --flake .#nixos
+home:
 	home-manager switch --flake .#cavelasco@nixos 
 build:
 	make build-flake
