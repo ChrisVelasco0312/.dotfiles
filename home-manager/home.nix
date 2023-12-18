@@ -23,7 +23,8 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
   home.packages = with pkgs; [
-    nodejs
+    nodejs_20
+    bun
     bat
     fzf
     ripgrep
