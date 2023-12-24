@@ -1,6 +1,20 @@
 { config, pkgs, inputs, lib, vimUtils, ... }:
 
 {
+
+  nixpkgs = {
+      overlays = [
+        (final: prev: {
+          vimPlugins = prev.vimPlugins // {
+            own-lualine-nvim = prev.vimUtils.buildVimPlugin {
+              name = "lualine";
+              src = inputs.plugin-lualine;
+            };
+          };
+        })
+      ];
+    };
+
   imports = [
     ./programs/tmux/tmux.nix
     ./programs/rofi

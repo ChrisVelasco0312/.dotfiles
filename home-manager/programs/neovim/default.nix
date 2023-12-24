@@ -1,24 +1,10 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 {
+
   programs.neovim = {
     enable = true;
   	viAlias = true;
     vimAlias = true;
-
-    # read in the vim config from filesystem
-    # this enables syntaxhighlighting when editing those
-    # extraConfig = builtins.concatStringsSep "\n" [
-      #(lib.strings.fileContents ./plugins.vim)
-      #(lib.strings.fileContents ./lsp.vim)
-
-      # this allows you to add lua config files
-      # ''
-      #   lua << EOF
-      #   ${lib.strings.fileContents ./config.lua}
-      #   ${lib.strings.fileContents ./lsp.lua}
-      #   EOF
-      # ''
-    # ];
 
     extraPackages = with pkgs; [
       tree-sitter
@@ -75,12 +61,12 @@
       ## copilot
       #TODO: Add codeium configurations
       # codeium-vim
+      own-lualine-nvim
       plenary-nvim
       nvim-ts-autotag
       no-neck-pain-nvim
       vim-prettier
       null-ls-nvim
-      lualine-nvim
       nvim-web-devicons
       vim-startify
       comment-nvim

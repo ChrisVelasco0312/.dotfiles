@@ -51,11 +51,28 @@
         "type": "github"
       }
     },
+    "plugin-lualine": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1697772980,
+        "narHash": "sha256-jV+6mV0dyuhiHGei1UqE2r2GoiKJLtdZI2AMNexbi7E=",
+        "owner": "nvim-lualine",
+        "repo": "lualine.nvim",
+        "rev": "2248ef254d0a1488a72041cfb45ca9caada6d994",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nvim-lualine",
+        "repo": "lualine.nvim",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "hardware": "hardware",
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "plugin-lualine": "plugin-lualine"
       }
     }
   },

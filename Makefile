@@ -13,5 +13,3 @@ backup-configs:
 	home-manager switch -b backup --flake .#cavelasco@nixos
 clean:
 	nix-collect-garbage
-	
-

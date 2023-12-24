@@ -9,6 +9,10 @@
    home-manager.url = "github:nix-community/home-manager";
    home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+   # Neovim plugins:
+   plugin-lualine.url = "github:nvim-lualine/lualine.nvim";
+   plugin-lualine.flake = false;
+
    # Hardware
    hardware.url = "github:nixos/nixos-hardware";
  };
