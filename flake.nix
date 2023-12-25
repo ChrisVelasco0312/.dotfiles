@@ -1,6 +1,6 @@
 {
  description = "The One And Only NixOS Config"; 
-
+ 
  inputs = {
    # Nixpkgs
    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -13,11 +13,13 @@
    plugin-lualine.url = "github:nvim-lualine/lualine.nvim";
    plugin-lualine.flake = false;
 
+
+   nixd.url = "github:nix-community/nixd";
    # Hardware
    hardware.url = "github:nixos/nixos-hardware";
  };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, nixd, home-manager, ... }@inputs:
     let 
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -27,6 +29,12 @@
          nixos = nixpkgs.lib.nixosSystem {
            specialArgs = { inherit inputs; }; 
            modules = [ 
+           {
+             nixpkgs.overlays = [ nixd.overlays.default ];
+             environment.systemPackages = with pkgs; [
+               nixd
+             ];
+           }
              ./nixos/configuration.nix
             #  ./nixos/hyprland.nix
            ];

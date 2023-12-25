@@ -72,6 +72,10 @@ local servers = {
     filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
     cmd = { "typescript-language-server", "--stdio" }
   },
+  nil_ls = {
+    filetypes = { "nix" },
+    cmd = { "nixd", "--stdio" }
+  },
   lua_ls = {
     Lua = {
       workspace = {

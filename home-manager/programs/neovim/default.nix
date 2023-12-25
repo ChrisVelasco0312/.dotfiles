@@ -1,7 +1,17 @@
-{ config, pkgs, lib, inputs, ... }:
+{ 
+  # config, 
+  pkgs, 
+  # lib, 
+  # inputs, 
+  ... 
+}:
 {
-
-  programs.neovim = {
+  programs.neovim = 
+  let
+    # toLua = str: "lua << EOF\n${str}\nEOF\n";
+    toLuaFile = file: "lua << EOF\n${builtins.readFile file}\nEOF\n";
+  in
+  {
     enable = true;
   	viAlias = true;
     vimAlias = true;
@@ -12,6 +22,10 @@
       nodePackages.typescript-language-server 
       nodePackages.eslint
       nodePackages.prettier
+
+      luajitPackages.lua-lsp
+      rnix-lsp
+      nil
     ];
 
     extraLuaConfig = ''
@@ -19,54 +33,67 @@
       ${builtins.readFile ./nvim-lua/base.lua } 
       ${builtins.readFile ./nvim-lua/maps.lua }
       -- plugins config
-      ${builtins.readFile ./nvim-lua/plugins/telescope.lua }
-      ${builtins.readFile ./nvim-lua/plugins/autopairs.lua }
       ${builtins.readFile ./nvim-lua/plugins/autotag.lua }
-      ${builtins.readFile ./nvim-lua/plugins/bufferline.lua }
-      ${builtins.readFile ./nvim-lua/plugins/cmp.lua }
-      ${builtins.readFile ./nvim-lua/plugins/lsp-config.lua }
-      ${builtins.readFile ./nvim-lua/plugins/mason.lua }
-      ${builtins.readFile ./nvim-lua/plugins/onedark.lua }
-      ${builtins.readFile ./nvim-lua/plugins/treesitter.lua }
-      ${builtins.readFile ./nvim-lua/plugins/prettier.lua }
-      ${builtins.readFile ./nvim-lua/plugins/null-ls.lua }
-      ${builtins.readFile ./nvim-lua/plugins/lualine.lua }
+      ${builtins.readFile ./nvim-lua/plugins/autopairs.lua }
+      ${builtins.readFile ./nvim-lua/plugins/telescope.lua }
     '';
 
     plugins = with pkgs.vimPlugins; [
-      # you can use plugins from the pkgs
-      vim-which-key
-      nvim-treesitter.withAllGrammars
-      ## telescope
+      ## telescope dependencies
       telescope-nvim
       telescope-fzf-native-nvim
       telescope-file-browser-nvim
-      ## misc
       nvim-autopairs
-      bufferline-nvim
+      {
+        plugin = nvim-lspconfig;
+        config = toLuaFile ./nvim-lua/plugins/lsp.lua;
+      }
+      {
+        plugin = bufferline-nvim;
+        config = toLuaFile ./nvim-lua/plugins/bufferline.lua;
+      }
+      {
+        plugin = own-lualine-nvim;
+        config = toLuaFile ./nvim-lua/plugins/lualine.lua;
+      }
+      plenary-nvim
+      ## mason dependencies
+      mason-lspconfig-nvim
+      lspkind-nvim
       ## autocompletion
+      {
+        plugin = nvim-cmp;
+        config =  toLuaFile ./nvim-lua/plugins/cmp.lua;
+      }
       nvim-cmp
       cmp-nvim-lsp
-      lspkind-nvim
       cmp_luasnip
       cmp-buffer
+      {
+        plugin = onedark-nvim;
+        config =  toLuaFile ./nvim-lua/plugins/onedark.lua;
+      }
+      {
+        plugin = vim-prettier;
+        config = toLuaFile ./nvim-lua/plugins/prettier.lua;
+      }
+      {
+        plugin = null-ls-nvim;
+        config = toLuaFile ./nvim-lua/plugins/null-ls.lua;
+      }
+      {
+        plugin = nvim-treesitter.withAllGrammars;
+        config = toLuaFile ./nvim-lua/plugins/treesitter.lua;
+      }
+      vim-which-key
+      ## misc
       luasnip
       ##  lsp
-      nvim-lspconfig
-      mason-nvim
-      mason-lspconfig-nvim
       neodev-nvim
-      ## theme
-      onedark-nvim
-      ## copilot
       #TODO: Add codeium configurations
       # codeium-vim
-      own-lualine-nvim
-      plenary-nvim
       nvim-ts-autotag
       no-neck-pain-nvim
-      vim-prettier
-      null-ls-nvim
       nvim-web-devicons
       vim-startify
       comment-nvim
