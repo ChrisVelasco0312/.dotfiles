@@ -18,6 +18,7 @@
 
     extraPackages = with pkgs; [
       tree-sitter
+      nodePackages.vscode-langservers-extracted
       nodePackages.typescript
       nodePackages.typescript-language-server 
       nodePackages.eslint

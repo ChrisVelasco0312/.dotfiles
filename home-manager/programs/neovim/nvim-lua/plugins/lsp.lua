@@ -86,6 +86,10 @@ local server_configs = {
     filetypes = { "nix" },
     cmd = { "nixd", "--stdio" }
   },
+  eslint = {
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+    cmd = { "vscode-eslint-language-server", "--stdio" }
+  }
 }
 
 lspconfig.tsserver.setup {
@@ -98,4 +102,10 @@ lspconfig.nil_ls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = server_configs.nil_ls
+}
+
+lspconfig.eslint.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = server_configs.eslint
 }
