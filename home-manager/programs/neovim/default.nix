@@ -39,7 +39,7 @@
       ${builtins.readFile ./nvim-lua/plugins/telescope.lua }
     '';
 
-    plugins = with pkgs.vimPlugins; [
+  plugins = with pkgs.vimPlugins; [
       ## telescope dependencies
       telescope-nvim
       telescope-fzf-native-nvim
