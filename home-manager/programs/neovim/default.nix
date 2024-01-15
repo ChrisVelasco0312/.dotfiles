@@ -49,6 +49,11 @@
         plugin = nvim-lspconfig;
         config = toLuaFile ./nvim-lua/plugins/lsp.lua;
       }
+      lsp-colors-nvim
+      {
+        plugin = trouble-nvim;
+        config = toLuaFile ./nvim-lua/plugins/trouble.lua;
+      }
       {
         plugin = bufferline-nvim;
         config = toLuaFile ./nvim-lua/plugins/bufferline.lua;
@@ -58,8 +63,6 @@
         config = toLuaFile ./nvim-lua/plugins/lualine.lua;
       }
       plenary-nvim
-      ## mason dependencies
-      mason-lspconfig-nvim
       lspkind-nvim
       ## autocompletion
       {
