@@ -89,6 +89,10 @@
         plugin = nvim-treesitter.withAllGrammars;
         config = toLuaFile ./nvim-lua/plugins/treesitter.lua;
       }
+      {
+        plugin = no-neck-pain-nvim;
+        config = toLuaFile ./nvim-lua/plugins/noneck.lua;
+      }
       vim-which-key
       ## misc
       luasnip
@@ -97,7 +101,6 @@
       #TODO: Add codeium configurations
       # codeium-vim
       nvim-ts-autotag
-      no-neck-pain-nvim
       nvim-web-devicons
       vim-startify
       comment-nvim

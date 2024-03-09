@@ -25,7 +25,7 @@
   home = {
     username = "cavelasco";
     homeDirectory = "/home/cavelasco";
-    stateVersion = "23.05";
+    stateVersion = "23.11";
   };
   nixpkgs = {
 		config = {
