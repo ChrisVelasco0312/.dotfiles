@@ -54,8 +54,8 @@ require('trouble').setup {
     use_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
 }
 
-vim.keymap.set("n", "<Leader>,,", function() require("trouble").toggle() end)
-vim.keymap.set("n", "<Leader>,w", function() require("trouble").toggle("workspace_diagnostics") end)
-vim.keymap.set("n", "<Leader>,d", function() require("trouble").toggle("document_diagnostics") end)
-vim.keymap.set("n", "<Leader>,q", function() require("trouble").toggle("quickfix") end)
-vim.keymap.set("n", "<Leader>,l", function() require("trouble").toggle("loclist") end)
+vim.keymap.set("n", "<Leader>l", function() require("trouble").toggle() end)
+vim.keymap.set("n", "<Leader>lw", function() require("trouble").toggle("workspace_diagnostics") end)
+vim.keymap.set("n", "<Leader>ld", function() require("trouble").toggle("document_diagnostics") end)
+vim.keymap.set("n", "<Leader>lq", function() require("trouble").toggle("quickfix") end)
+vim.keymap.set("n", "<Leader>ll", function() require("trouble").toggle("loclist") end)

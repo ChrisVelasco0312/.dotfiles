@@ -49,9 +49,6 @@
     driSupport32Bit = true;
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.videoDrivers = [ "nvidia" ];
-
   hardware.nvidia = {
     modesetting.enable = true;
     powerManagement.enable = false;
@@ -62,8 +59,10 @@
   };
 
   services.xserver = {
+    videoDrivers = ["nvidia"];
     enable = true;
-    layout = "us";
+    layout = "us, es";
+    xkbOptions = "erosign:e, compose:menu, grp:alt_space_toggle";
     xkbVariant = "";
     desktopManager = {
         xfce = {

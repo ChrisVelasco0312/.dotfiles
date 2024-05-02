@@ -37,6 +37,7 @@
       ${builtins.readFile ./nvim-lua/plugins/autotag.lua }
       ${builtins.readFile ./nvim-lua/plugins/autopairs.lua }
       ${builtins.readFile ./nvim-lua/plugins/telescope.lua }
+      ${builtins.readFile ./nvim-lua/plugins/trouble.lua }
     '';
 
   plugins = with pkgs.vimPlugins; [
@@ -50,10 +51,7 @@
         config = toLuaFile ./nvim-lua/plugins/lsp.lua;
       }
       lsp-colors-nvim
-      {
-        plugin = trouble-nvim;
-        config = toLuaFile ./nvim-lua/plugins/trouble.lua;
-      }
+      trouble-nvim
       {
         plugin = bufferline-nvim;
         config = toLuaFile ./nvim-lua/plugins/bufferline.lua;
