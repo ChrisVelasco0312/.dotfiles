@@ -38,6 +38,7 @@
       ${builtins.readFile ./nvim-lua/plugins/autopairs.lua }
       ${builtins.readFile ./nvim-lua/plugins/telescope.lua }
       ${builtins.readFile ./nvim-lua/plugins/trouble.lua }
+      ${builtins.readFile ./nvim-lua/plugins/git.lua }
     '';
 
   plugins = with pkgs.vimPlugins; [
@@ -46,6 +47,10 @@
       telescope-fzf-native-nvim
       telescope-file-browser-nvim
       nvim-autopairs
+      {
+        plugin = oil-nvim;
+        config = toLuaFile ./nvim-lua/plugins/oil.lua;
+      }
       {
         plugin = nvim-lspconfig;
         config = toLuaFile ./nvim-lua/plugins/lsp.lua;
@@ -104,6 +109,8 @@
       comment-nvim
       vim-fugitive
       vim-rhubarb
+      gitv
+      gitsigns-nvim
     ];
   };
 }
