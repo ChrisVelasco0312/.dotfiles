@@ -109,7 +109,6 @@
       comment-nvim
       vim-fugitive
       vim-rhubarb
-      gitv
       gitsigns-nvim
     ];
   };
