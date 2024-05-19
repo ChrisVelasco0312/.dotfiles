@@ -18,7 +18,6 @@
   imports = [
     ./programs/tmux/tmux.nix
     ./programs/rofi
-    ./programs/alacritty/alacritty.nix
     ./programs/neovim
   ];
 
@@ -71,7 +70,6 @@
 		l = "eza";
 		ls = "eza";
 		cat = "bat";
-    codehere = "env -u WAYLAND_DISPLAY code .";
 	};
 
   #ZSH
@@ -93,7 +91,6 @@
   };
 
   ## CONFIGS
-	# xdg.configFile."hypr/hyprland.conf".source = ../dots/hypr/hyprland.conf;
   # waybar
   xdg.configFile."waybar/config".source = ../dots/waybar/config;
   xdg.configFile."waybar/style.css".source = ../dots/waybar/style.css;
