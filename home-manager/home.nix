@@ -17,8 +17,7 @@
 
   imports = [
     ./programs/tmux/tmux.nix
-    ./programs/rofi
-    ./programs/neovim
+    ./programs/rofi ./programs/neovim
   ];
 
   home = {
@@ -38,6 +37,7 @@
   home.packages = with pkgs; [
     nodejs_20
     nodejs_20.pkgs.pnpm
+    nodejs_20.pkgs.yarn
     bun
     bat
     fzf
@@ -60,6 +60,7 @@
     })
     guake
     obsidian
+    lazygit
   ];
 
 	home.sessionVariables = {
