@@ -107,7 +107,7 @@
     description = "cavelasco";
     extraGroups = [ "networkmanager" "wheel"];
     packages = with pkgs; [
-      brave 
+      librewolf
     ];
     shell = pkgs.zsh;
   };
@@ -130,7 +130,6 @@
      neovim
      ranger
      git
-     opera
      zsh
      xclip
      gnumake
