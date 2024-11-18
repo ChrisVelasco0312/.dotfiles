@@ -35,6 +35,7 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
   home.packages = with pkgs; [
+    racket
     nodejs_22
     nodejs_22.pkgs.pnpm
     nodejs_22.pkgs.yarn
