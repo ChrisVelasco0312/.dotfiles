@@ -23,7 +23,7 @@
   home = {
     username = "cavelasco";
     homeDirectory = "/home/cavelasco";
-    stateVersion = "23.11";
+    stateVersion = "24.05";
   };
   nixpkgs = {
 		config = {
@@ -35,9 +35,9 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
   home.packages = with pkgs; [
-    nodejs_20
-    nodejs_20.pkgs.pnpm
-    nodejs_20.pkgs.yarn
+    nodejs_22
+    nodejs_22.pkgs.pnpm
+    nodejs_22.pkgs.yarn
     bun
     bat
     fzf
@@ -77,7 +77,7 @@
 	programs.zsh = {
 		enable = true;
     enableCompletion = true;
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 	};
 	programs.zsh.oh-my-zsh= {

@@ -45,7 +45,6 @@
 
   hardware.opengl = {
     enable = true;
-    driSupport = true;
     driSupport32Bit = true;
   };
 
@@ -61,9 +60,9 @@
   services.xserver = {
     videoDrivers = ["nvidia"];
     enable = true;
-    layout = "us, es";
-    xkbOptions = "erosign:e, compose:menu, grp:alt_space_toggle";
-    xkbVariant = "";
+    xkb.layout = "us, es";
+    xkb.options = "erosign:e, compose:menu, grp:alt_space_toggle";
+    xkb.variant = "";
     desktopManager = {
         xfce = {
           enable = true;
@@ -72,16 +71,18 @@
         };
     };
     windowManager.awesome.enable = true;
-    libinput.enable = true;
-    libinput.mouse.naturalScrolling = true;
-    libinput.touchpad.naturalScrolling = true;
+  };
+
+  services.libinput = {
+    touchpad.naturalScrolling = true;
+    enable = true;
+    mouse.naturalScrolling = true;
   };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -107,7 +108,7 @@
     description = "cavelasco";
     extraGroups = [ "networkmanager" "wheel"];
     packages = with pkgs; [
-      librewolf
+      brave
     ];
     shell = pkgs.zsh;
   };
@@ -142,7 +143,7 @@
     fira-code-symbols
   ];
 
-  nix.package = pkgs.nixFlakes;
+  nix.package = pkgs.nixVersions.stable;
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
@@ -172,6 +173,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "24.05"; # Did you read the comment?
 
 }

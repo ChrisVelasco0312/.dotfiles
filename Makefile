@@ -7,8 +7,8 @@ update:
 home:
 	home-manager switch --flake .#cavelasco@nixos 
 build:
-	make build-flake
-	make build-home
+	make flake
+	make home
 backup-configs:
 	home-manager switch -b backup --flake .#cavelasco@nixos
 clean:

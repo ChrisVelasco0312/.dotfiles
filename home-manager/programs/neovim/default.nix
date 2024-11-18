@@ -25,7 +25,7 @@
       nodePackages.prettier
 
       luajitPackages.lua-lsp
-      rnix-lsp
+      # rnix-lsp
       nil
     ];
 
