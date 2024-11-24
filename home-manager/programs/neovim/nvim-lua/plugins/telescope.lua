@@ -22,28 +22,20 @@ telescope.setup {
       },
     },
     file_ignore_patterns = { "node_modules", ".git/", "dist", "build" },
-  },
-  extensions = {
-    file_browser = {
-      theme = "dropdown",
-      -- disables netrw and use telescope-file-browser in its place
-      hijack_netrw = true,
-      mappings = {
-        -- your custom insert mode mappings
-        ["i"] = {
-          ["<C-w>"] = function() vim.cmd('normal vbd') end,
-        },
-        ["n"] = {
-          -- your custom normal mode mappings
-          ["N"] = fb_actions.create,
-          ["h"] = fb_actions.goto_parent_dir,
-          ["/"] = function()
-            vim.cmd('startinsert')
-          end,
-        },
-      },
+    path_display = {
+      truncate = true
     },
   },
+  pickers = {
+    find_files = {
+      hidden = true,
+      no_ignore = true
+    },
+    live_grep = {
+      hidden = true,
+      no_ignore = true
+    }
+  }
 }
 
 telescope.load_extension("file_browser")
@@ -75,6 +67,7 @@ vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch curren
 vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', builtin.lsp_references, { desc = '[S]earch [R]eferences' })
+vim.keymap.set('n', '<leader>sc', builtin.keymaps, { desc = '[S]earch [C]ommands' })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)

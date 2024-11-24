@@ -22,7 +22,6 @@
       nodePackages.typescript
       nodePackages.typescript-language-server 
       nodePackages.eslint
-      nodePackages.prettier
 
       luajitPackages.lua-lsp
       # rnix-lsp
@@ -110,6 +109,14 @@
       vim-fugitive
       vim-rhubarb
       gitsigns-nvim
+      {
+        plugin = nvim-peekup;
+        config = toLuaFile ./nvim-lua/plugins/peekup.lua;
+      }
+      {
+        plugin = lspsaga-nvim;
+        config = toLuaFile ./nvim-lua/plugins/lsp-saga.lua;
+      }
     ];
   };
 }

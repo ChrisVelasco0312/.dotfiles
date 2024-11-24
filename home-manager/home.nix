@@ -39,6 +39,9 @@
     nodejs_22
     nodejs_22.pkgs.pnpm
     nodejs_22.pkgs.yarn
+    nodejs_22.pkgs.typescript
+    prettierd
+    lua-language-server
     bun
     bat
     fzf
