@@ -53,19 +53,16 @@
     fish
     pavucontrol
     mpd
-    rofi
     vscode-fhs
     nitrogen
-    picom
-    dmenu
     unzip
     (nerdfonts.override {
       fonts = ["JetBrainsMono" "Inconsolata"];
     })
-    guake
     obsidian
     lazygit
     xournalpp
+    nautilus
   ];
 
 	home.sessionVariables = {
