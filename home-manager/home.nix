@@ -65,6 +65,7 @@
     guake
     obsidian
     lazygit
+    xournalpp
   ];
 
 	home.sessionVariables = {
@@ -99,7 +100,10 @@
   # waybar
   xdg.configFile."waybar/config".source = ../dots/waybar/config;
   xdg.configFile."waybar/style.css".source = ../dots/waybar/style.css;
+  xdg.configFile."kitty/kitty.conf".source = ../dots/kitty/kitty.conf;
+  xdg.configFile."hypr/hyprland.conf".source = ../dots/hypr/hyprland.conf;
+  xdg.configFile."environment.d/cursor.conf".source = ../dots/hypr/cursor.conf;
 
-  #awesome
-  xdg.configFile.awesome.source = ../dots/awesome;
+  #awesome is the wm for emergency, because it is ugly
+  # xdg.configFile.awesome.source = ../dots/awesome;
 }

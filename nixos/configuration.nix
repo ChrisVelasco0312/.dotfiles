@@ -63,15 +63,17 @@
     xkb.layout = "us, es";
     xkb.options = "erosign:e, compose:menu, grp:alt_space_toggle";
     xkb.variant = "";
-    desktopManager = {
-        xfce = {
-          enable = true;
-          noDesktop = true;
-          enableXfwm = false;
-        };
-    };
-    windowManager.awesome.enable = true;
+    # desktopManager = {
+    #     xfce = {
+    #       enable = true;
+    #       noDesktop = true;
+    #       enableXfwm = false;
+    #     };
+    # };
+    # windowManager.awesome.enable = true;
   };
+
+  programs.hyprland.enable = true;
 
   services.libinput = {
     touchpad.naturalScrolling = true;
@@ -132,7 +134,6 @@
      ranger
      git
      zsh
-     xclip
      gnumake
   ];
 

@@ -36,7 +36,7 @@
              ];
            }
              ./nixos/configuration.nix
-            #  ./nixos/hyprland.nix
+             ./nixos/hyprland.nix
            ];
          };
        };

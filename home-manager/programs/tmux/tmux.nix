@@ -46,6 +46,8 @@ in
       set -g @dracula-show-flags true
       set -g @dracula-show-left-icon session
       set -g status-position bottom
+
+      set-option -sa terminal-features ',XXX:RGB'
     '';
   };
 }

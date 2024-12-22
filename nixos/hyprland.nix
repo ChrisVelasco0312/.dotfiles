@@ -1,9 +1,10 @@
 { config, pkgs, ...}:                                                                
-let                                                                                  
-in {                                                                                 
+{                                                                                 
   environment.systemPackages = with pkgs; [                                       
     dunst                                                                            
     kitty                                                                            
+    wl-clipboard
+    capitaine-cursors 
     libnotify                                                                        
     networkmanagerapplet                                                             
     rofi-wayland                                                                     
