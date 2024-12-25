@@ -2,7 +2,7 @@ local status, telescope = pcall(require, "telescope")
 if (not status) then return end
 local actions = require('telescope.actions')
 local builtin = require("telescope.builtin")
-local trouble = require("trouble.providers.telescope")
+local open_with_trouble = require("trouble.sources.telescope").open
 
 local function telescope_buffer_dir()
   return vim.fn.expand('%:p:h')
@@ -14,11 +14,11 @@ telescope.setup {
   defaults = {
     mappings = {
       i = {
-        ["<c-u>"] = trouble.open_with_trouble 
+        ["<c-u>"] = open_with_trouble
       },
       n = {
         ["q"] = actions.close,
-        ["<c-u>"] = trouble.open_with_trouble
+        ["<c-u>"] = open_with_trouble
       },
     },
     file_ignore_patterns = { "node_modules", ".git/", "dist", "build" },

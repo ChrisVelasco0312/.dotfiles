@@ -77,7 +77,7 @@ end
 setup_diags()
 
 local server_configs = {
-  tsserver = {
+  ts_ls = {
     filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
     cmd = { "typescript-language-server", "--stdio" }
   },
@@ -101,10 +101,10 @@ local server_configs = {
   }
 }
 
-lspconfig.tsserver.setup {
+lspconfig.ts_ls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
-  settings = server_configs.tsserver
+  settings = server_configs.ts_ls
 }
 
 lspconfig.nil_ls.setup {

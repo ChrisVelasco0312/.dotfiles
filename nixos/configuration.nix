@@ -65,6 +65,8 @@
     xkb.variant = "";
   };
 
+  services.blueman.enable = true;
+
   programs.hyprland.enable = true;
 
   services.libinput = {
@@ -131,7 +133,8 @@
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
-
+  hardware.bluetooth.enable = true; # enables support for Bluetooth
+  hardware.bluetooth.powerOnBoot = true;
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

@@ -51,6 +51,7 @@
     eza
     gcc
     fish
+    fd
     pavucontrol
     mpd
     vscode-fhs
@@ -63,6 +64,7 @@
     lazygit
     xournalpp
     nautilus
+    htop
   ];
 
 	home.sessionVariables = {
