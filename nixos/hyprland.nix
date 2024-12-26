@@ -3,6 +3,7 @@
   environment.systemPackages = with pkgs; [                                       
     dunst                                                                            
     kitty                                                                            
+    kitty-themes
     wl-clipboard
     capitaine-cursors 
     libnotify                                                                        
