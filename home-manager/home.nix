@@ -35,14 +35,21 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
   home.packages = with pkgs; [
+    # IDEs
+    vscode-fhs
+    # LANGUAGES
     racket
+    # NODE
     nodejs_22
     nodejs_22.pkgs.pnpm
     nodejs_22.pkgs.yarn
     nodejs_22.pkgs.typescript
+    bun
+    # TOOLS
+    lazygit
     prettierd
     lua-language-server
-    bun
+    unzip
     bat
     fzf
     ripgrep
@@ -52,19 +59,17 @@
     gcc
     fish
     fd
+    htop
     pavucontrol
-    mpd
-    vscode-fhs
-    nitrogen
-    unzip
+    #------
     (nerdfonts.override {
       fonts = ["JetBrainsMono" "Inconsolata"];
     })
-    obsidian
-    lazygit
-    xournalpp
-    nautilus
-    htop
+    obsidian # markdown note taking
+    xournalpp # handwritten note taking
+    nautilus # file explorer
+    okular # pdf viewer
+    feh # image viewer
   ];
 
 	home.sessionVariables = {
@@ -96,7 +101,6 @@
   };
 
   ## CONFIGS
-  # waybar
   xdg.configFile."waybar/config".source = ../dots/waybar/config;
   xdg.configFile."waybar/style.css".source = ../dots/waybar/style.css;
   xdg.configFile."kitty/kitty.conf".source = ../dots/kitty/kitty.conf;
