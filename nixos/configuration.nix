@@ -58,6 +58,32 @@
   services.blueman.enable = true;
   hardware.pulseaudio.enable = false;
 
+  security.sudo = {
+    enable = true;
+    extraRules = [{
+      commands = [
+        {
+          command = "${pkgs.systemd}/bin/systemctl suspend";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "${pkgs.systemd}/bin/reboot";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "${pkgs.systemd}/bin/poweroff";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+      groups = [ "wheel" ];
+    }];
+    extraConfig = with pkgs; ''
+      Defaults:picloud secure_path="${lib.makeBinPath [
+        systemd
+      ]}:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin"
+    '';
+  };
+
   services.greetd = {
     enable = true;
     vt = 3;
@@ -76,7 +102,14 @@
     xkb.options = "erosign:e, compose:menu, grp:alt_space_toggle";
     xkb.variant = "";
     wacom.enable = true;
+    displayManager.sddm.enable = true;
+    desktopManager.plasma5.enable = true;
   };
+  environment.plasma6.excludePackages = with pkgs.libsForQt5; [
+    plasma-browser-integration
+    konsole
+    oxygen
+  ];
   services.libinput = {
     touchpad.naturalScrolling = true;
     enable = true;

@@ -67,9 +67,9 @@
     })
     obsidian # markdown note taking
     xournalpp # handwritten note taking
-    nautilus # file explorer
     okular # pdf viewer
     feh # image viewer
+    gparted # Partition editor
   ];
 
 	home.sessionVariables = {

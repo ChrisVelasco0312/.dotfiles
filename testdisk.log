@@ -1,0 +1,80 @@
+
+
+Sat Dec 28 21:01:57 2024
+Command line: TestDisk
+
+TestDisk 7.1, Data Recovery Utility, July 2019
+Christophe GRENIER <grenier@cgsecurity.org>
+https://www.cgsecurity.org
+OS: Linux, kernel 6.6.67 (#1-NixOS SMP PREEMPT_DYNAMIC Thu Dec 19 17:11:37 UTC 2024) x86_64
+Compiler: GCC 13.3
+ext2fs lib: 1.47.1, ntfs lib: libntfs-3g, reiserfs lib: none, ewf lib: 20231119, curses lib: ncurses 6.4
+/dev/sda: LBA, HPA, LBA48, DCO support
+/dev/sda: size       3907029168 sectors
+/dev/sda: user_max   3907029168 sectors
+/dev/sda: native_max 3907029168 sectors
+/dev/sdb: LBA, HPA, LBA48 support
+/dev/sdb: size       937703088 sectors
+/dev/sdb: user_max   937703088 sectors
+/dev/sdb: native_max 937703088 sectors
+Warning: can't get size for Disk /dev/mapper/control - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop0 - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop1 - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop2 - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop3 - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop4 - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop5 - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop6 - 0 B - 0 sectors, sector size=512
+Warning: can't get size for Disk /dev/loop7 - 0 B - 0 sectors, sector size=512
+Hard disk list
+Disk /dev/sda - 2000 GB / 1863 GiB - CHS 243201 255 63, sector size=512 - ST2000DM001-9YN164, S/N:W1E0DC7R, FW:CC4B
+Disk /dev/sdb - 480 GB / 447 GiB - CHS 58369 255 63, sector size=512 - ADATA SU630, S/N:2J3320030962, FW:V8X01c86
+Disk /dev/nvme0n1 - 1000 GB / 931 GiB - CHS 953869 64 32, sector size=512
+
+Partition table type (auto): EFI GPT
+Disk /dev/sdb - 480 GB / 447 GiB - ADATA SU630
+Partition table type: EFI GPT
+New options :
+ Dump : No
+ Align partition: Yes
+ Expert mode : No
+
+Interface Advanced
+hdr_size=92
+hdr_lba_self=1
+hdr_lba_alt=937703087 (expected 937703087)
+hdr_lba_start=2048
+hdr_lba_end=937703054
+hdr_lba_table=2
+hdr_entries=128
+hdr_entsz=128
+ 1 P EFI System                  4096     618495     614400
+ 2 P Linux filesys. data       618496  919243046  918624551 [root]
+ 3 P Linux Swap             919243047  937697984   18454938
+file_pread(5,256,buffer,692992(43/34/56)) read err: Partial read
+file_pread(5,1,buffer,693040(43/35/41)) read err: Input/output error
+file_pread(5,16,buffer,712079(44/82/54)) read err: Input/output error
+file_pread(5,1,buffer,712079(44/82/54)) read err: Input/output error
+file_pread(5,256,buffer,713473(44/104/62)) read err: Partial read
+file_pread(5,16,buffer,732863(45/157/48)) read err: Input/output error
+file_pread(5,1,buffer,732863(45/157/48)) read err: Input/output error
+file_pread(5,256,buffer,735746(45/203/33)) read err: Partial read
+file_pread(5,1,buffer,735880(45/205/41)) read err: Input/output error
+file_pread(5,16,buffer,755647(47/9/26)) read err: Input/output error
+file_pread(5,1,buffer,755647(47/9/26)) read err: Input/output error
+file_pread(5,256,buffer,758275(47/51/8)) read err: Partial read
+file_pread(5,256,buffer,759299(47/67/24)) read err: Partial read
+file_pread(5,1,buffer,759344(47/68/6)) read err: Input/output error
+file_pread(5,16,buffer,778975(48/124/44)) read err: Input/output error
+file_pread(5,1,buffer,778975(48/124/44)) read err: Input/output error
+file_pread(5,256,buffer,780292(48/145/38)) read err: Partial read
+file_pread(5,1,buffer,780312(48/145/58)) read err: Input/output error
+file_pread(5,16,buffer,800103(49/205/4)) read err: Input/output error
+file_pread(5,1,buffer,800103(49/205/4)) read err: Input/output error
+file_pread(5,256,buffer,801541(49/227/56)) read err: Partial read
+file_pread(5,1,buffer,801552(49/228/4)) read err: Input/output error
+file_pread(5,16,buffer,820255(51/14/59)) read err: Input/output error
+file_pread(5,1,buffer,820255(51/14/59)) read err: Input/output error
+file_pread(5,256,buffer,828422(51/144/36)) read err: Partial read
+file_pread(5,1,buffer,828600(51/147/25)) read err: Input/output error
+SIGINT detected! TestDisk has been killed.
