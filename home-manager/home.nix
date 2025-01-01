@@ -68,7 +68,7 @@
     obsidian # markdown note taking
     xournalpp # handwritten note taking
     okular # pdf viewer
-    feh # image viewer
+    feh #image viewer
     gparted # Partition editor
   ];
 
@@ -83,8 +83,7 @@
 	};
 
   #ZSH
-	programs.zsh = {
-		enable = true;
+	programs.zsh = { enable = true;
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
@@ -104,8 +103,11 @@
   xdg.configFile."waybar/config".source = ../dots/waybar/config;
   xdg.configFile."waybar/style.css".source = ../dots/waybar/style.css;
   xdg.configFile."kitty/kitty.conf".source = ../dots/kitty/kitty.conf;
+  xdg.configFile."hypr/hyprland.conf".force = true;
   xdg.configFile."hypr/hyprland.conf".source = ../dots/hypr/hyprland.conf;
   xdg.configFile."environment.d/cursor.conf".source = ../dots/hypr/cursor.conf;
+  xdg.configFile."hypr/start.sh".source = ../dots/hypr/start.sh;
+  xdg.configFile."hypr/background.jpg".source = ../dots/hypr/background.jpg;
 
   #awesome is the wm for emergency, because it is ugly
   # xdg.configFile.awesome.source = ../dots/awesome;

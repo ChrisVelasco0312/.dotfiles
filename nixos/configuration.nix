@@ -3,7 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, lib, ... }:
-
 {
   imports =
     [ 
@@ -14,6 +13,7 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/nvme0n1";
   boot.loader.grub.useOSProber = true;
+  boot.supportedFilesystems = ["ntfs"];
   networking.hostName = "nixos"; # Define your hostname. networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -38,6 +38,12 @@
     LC_PAPER = "es_CO.UTF-8";
     LC_TELEPHONE = "es_CO.UTF-8";
     LC_TIME = "es_CO.UTF-8";
+  };
+
+  fileSystems."/mnt/myfiles" = {
+    device = "/dev/sda1";
+    fsType = "ntfs-3g";
+    options = [ "rw" ];
   };
 
   hardware.graphics = {
@@ -102,8 +108,10 @@
     xkb.options = "erosign:e, compose:menu, grp:alt_space_toggle";
     xkb.variant = "";
     wacom.enable = true;
-    displayManager.sddm.enable = true;
-    desktopManager.plasma5.enable = true;
+  };
+  services.displayManager.sddm.enable = true;
+  services.desktopManager = {
+    plasma6.enable = true;
   };
   environment.plasma6.excludePackages = with pkgs.libsForQt5; [
     plasma-browser-integration

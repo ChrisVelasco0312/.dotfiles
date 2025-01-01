@@ -37,6 +37,7 @@
            }
              ./nixos/configuration.nix
              ./nixos/hyprland.nix
+             ./nixos/brave.nix
            ];
          };
        };
