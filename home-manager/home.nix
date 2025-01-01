@@ -70,6 +70,7 @@
     okular # pdf viewer
     feh #image viewer
     gparted # Partition editor
+    vlc # Cross-platform media player
   ];
 
 	home.sessionVariables = {
@@ -91,7 +92,7 @@
 	programs.zsh.oh-my-zsh= {
 		enable = true;
 		plugins = ["git" "python" "docker" "fzf"];
-		theme = "dst";
+		theme = "intheloop";
 	};
 
   programs.fzf = {
