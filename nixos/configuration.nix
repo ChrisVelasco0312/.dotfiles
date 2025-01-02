@@ -3,10 +3,13 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, lib, ... }:
+let
+  envVars = import /home/cavelasco/env-vars.nix;
+in
 {
   imports =
     [ 
-      ./hardware-configuration.nix
+      /etc/nixos/hardware-configuration.nix
     ];
 
   # Bootloader.
@@ -51,11 +54,11 @@
     enable32Bit = true;
   };
   hardware.nvidia = {
-    modesetting.enable = true;
+    modesetting.enable = envVars.hardware-nvidea.modesetting;
     powerManagement.enable = false;
     powerManagement.finegrained = false;
     open = false;
-    nvidiaSettings = true;
+    nvidiaSettings = envVars.hardware-nvidea.settings;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
@@ -102,7 +105,7 @@
   };
 
   services.xserver = {
-    videoDrivers = ["nvidia"];
+    videoDrivers = envVars.xserver.videoDrivers;
     enable = true;
     xkb.layout = "us, es";
     xkb.options = "erosign:e, compose:menu, grp:alt_space_toggle";

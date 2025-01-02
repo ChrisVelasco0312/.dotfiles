@@ -1,7 +1,7 @@
 show-cmds:
 	cat Makefile
 flake:
-	sudo nixos-rebuild switch --flake .#nixos
+	sudo nixos-rebuild switch --flake .#nixos --impure
 update:
 	sudo nixos-rebuild switch --upgrade --flake .#nixos
 home:
