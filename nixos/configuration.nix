@@ -12,6 +12,10 @@ in
       /etc/nixos/hardware-configuration.nix
     ];
 
+  environment.variables = {
+    TERMINAL = "kitty";
+  };
+
   # Bootloader.
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/nvme0n1";
@@ -45,8 +49,8 @@ in
 
   fileSystems."/mnt/myfiles" = {
     device = "/dev/sda1";
-    fsType = "ntfs-3g";
-    options = [ "rw" ];
+    fsType = "ntfs3";
+    options = [ "rw" "uid=1000" ];
   };
 
   hardware.graphics = {
@@ -112,15 +116,6 @@ in
     xkb.variant = "";
     wacom.enable = true;
   };
-  services.displayManager.sddm.enable = true;
-  services.desktopManager = {
-    plasma6.enable = true;
-  };
-  environment.plasma6.excludePackages = with pkgs.libsForQt5; [
-    plasma-browser-integration
-    konsole
-    oxygen
-  ];
   services.libinput = {
     touchpad.naturalScrolling = true;
     enable = true;

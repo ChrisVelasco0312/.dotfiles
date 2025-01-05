@@ -61,6 +61,7 @@
     fd
     htop
     pavucontrol
+    ntfs3g
     #------
     (nerdfonts.override {
       fonts = ["JetBrainsMono" "Inconsolata"];
@@ -71,6 +72,8 @@
     feh #image viewer
     gparted # Partition editor
     vlc # Cross-platform media player
+    dolphin# file manager
+    breeze-icons # icons
   ];
 
 	home.sessionVariables = {
