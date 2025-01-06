@@ -66,6 +66,7 @@
     (nerdfonts.override {
       fonts = ["JetBrainsMono" "Inconsolata"];
     })
+    # APPS
     obsidian # markdown note taking
     xournalpp # handwritten note taking
     okular # pdf viewer
@@ -74,6 +75,7 @@
     vlc # Cross-platform media player
     dolphin# file manager
     breeze-icons # icons
+    spotify # music stream
   ];
 
 	home.sessionVariables = {
