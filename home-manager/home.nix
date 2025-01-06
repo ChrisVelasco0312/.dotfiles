@@ -49,6 +49,7 @@
     lazygit
     prettierd
     lua-language-server
+    evtest
     unzip
     bat
     fzf

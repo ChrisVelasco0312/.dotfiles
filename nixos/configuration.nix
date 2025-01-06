@@ -107,7 +107,7 @@ in
     videoDrivers = envVars.xserver.videoDrivers;
     enable = true;
     xkb.layout = "us, es";
-    xkb.options = "erosign:e, compose:menu, grp:alt_space_toggle";
+    xkb.options = "grp:win_space_toggle";
     xkb.variant = "";
     wacom.enable = true;
   };
