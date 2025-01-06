@@ -12,6 +12,10 @@ in
       /etc/nixos/hardware-configuration.nix
     ];
 
+  environment.variables = {
+    TERMINAL = "kitty";
+  };
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -41,12 +45,6 @@ in
     LC_TELEPHONE = "es_CO.UTF-8";
     LC_TIME = "es_CO.UTF-8";
   };
-
-  # fileSystems."/mnt/myfiles" = {
-  #   device = "/dev/sda1";
-  #   fsType = "ntfs-3g";
-  #   options = [ "rw" ];
-  # };
 
   hardware.graphics = {
     enable = true;
@@ -111,15 +109,6 @@ in
     xkb.variant = "";
     wacom.enable = true;
   };
-  services.displayManager.sddm.enable = true;
-  services.desktopManager = {
-    plasma6.enable = true;
-  };
-  environment.plasma6.excludePackages = with pkgs.libsForQt5; [
-    plasma-browser-integration
-    konsole
-    oxygen
-  ];
   services.libinput = {
     touchpad.naturalScrolling = true;
     enable = true;
