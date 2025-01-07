@@ -98,6 +98,16 @@
 		theme = "intheloop";
 	};
 
+  programs.git = {
+    enable = true;
+    extraConfig = {
+      credential.helper = "${
+          pkgs.git.override { withLibsecret = true; }
+        }/bin/git-credential-libsecret";
+      };
+
+  };
+
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
@@ -112,6 +122,7 @@
   xdg.configFile."environment.d/cursor.conf".source = ../dots/hypr/cursor.conf;
   xdg.configFile."hypr/start.sh".source = ../dots/hypr/start.sh;
   xdg.configFile."hypr/background.jpg".source = ../dots/hypr/background.jpg;
+
 
   #awesome is the wm for emergency, because it is ugly
   # xdg.configFile.awesome.source = ../dots/awesome;
