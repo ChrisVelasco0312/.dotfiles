@@ -5,8 +5,7 @@
   # inputs, 
   ... 
 }:
-{
-  programs.neovim = 
+{ programs.neovim = 
   let
     # toLua = str: "lua << EOF\n${str}\nEOF\n";
     toLuaFile = file: "lua << EOF\n${builtins.readFile file}\nEOF\n";
@@ -109,6 +108,8 @@
       vim-fugitive
       vim-rhubarb
       gitsigns-nvim
+      todo-comments-nvim
+      copilot-vim
       {
         plugin = nvim-peekup;
         config = toLuaFile ./nvim-lua/plugins/peekup.lua;
@@ -117,6 +118,11 @@
         plugin = lspsaga-nvim;
         config = toLuaFile ./nvim-lua/plugins/lsp-saga.lua;
       }
+      {
+        plugin = harpoon2;
+        config = toLuaFile ./nvim-lua/plugins/harpoon.lua;
+      }
+
     ];
   };
 }

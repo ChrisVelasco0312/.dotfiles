@@ -10,3 +10,5 @@ vim.keymap.set("n", "-", require("oil").open, { desc = "Open parent directory" }
 
 -- open in floating window
 vim.keymap.set("n", "sf", require("oil").open_float, { desc = "Open parent directory in floating window" })
+
+vim.keymap.set("n", "q", require("oil").close, { desc = "Close oil" })

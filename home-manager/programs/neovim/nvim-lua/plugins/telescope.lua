@@ -18,7 +18,8 @@ telescope.setup {
       },
       n = {
         ["q"] = actions.close,
-        ["<c-u>"] = open_with_trouble
+        ["<c-u>"] = open_with_trouble,
+        ["<C-d>"] = actions.delete_buffer
       },
     },
     file_ignore_patterns = { "node_modules", ".git/", "dist", "build" },
