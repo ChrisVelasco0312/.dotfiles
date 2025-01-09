@@ -62,6 +62,7 @@
     htop
     pavucontrol
     ntfs3g
+    brightnessctl # change brightness
     #------
     (nerdfonts.override {
       fonts = ["JetBrainsMono" "Inconsolata"];
