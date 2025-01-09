@@ -81,7 +81,7 @@ in
           options = [ "NOPASSWD" ];
         }
       ];
-      groups = [ "wheel" ];
+      groups = [ "wheel" "git" ];
     }];
     extraConfig = with pkgs; ''
       Defaults:picloud secure_path="${lib.makeBinPath [
@@ -130,7 +130,7 @@ in
   users.users.cavelasco = {
     isNormalUser = true;
     description = "cavelasco";
-    extraGroups = [ "networkmanager" "wheel"];
+    extraGroups = [ "networkmanager" "wheel" "git"];
     packages = with pkgs; [
       brave
     ];
