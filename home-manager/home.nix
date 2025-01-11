@@ -47,6 +47,7 @@
     bun
     # TOOLS
     lazygit
+    zoom-us
     prettierd
     lua-language-server
     evtest
