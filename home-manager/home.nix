@@ -39,6 +39,12 @@
     vscode-fhs
     # LANGUAGES
     racket
+    lua-language-server
+    markdown-oxide
+    #java
+    jdt-language-server
+    jdk23
+    lombok
     # NODE
     nodejs_22
     nodejs_22.pkgs.pnpm
@@ -49,8 +55,6 @@
     lazygit
     zoom-us
     prettierd
-    lua-language-server
-    markdown-oxide
     evtest
     unzip
     bat
@@ -128,6 +132,7 @@
   xdg.configFile."environment.d/cursor.conf".source = ../dots/hypr/cursor.conf;
   xdg.configFile."hypr/start.sh".source = ../dots/hypr/start.sh;
   xdg.configFile."hypr/background.jpg".source = ../dots/hypr/background.jpg;
+  xdg.configFile."nvim/ftplugin/java.lua".source = ./programs/neovim/nvim-lua/ftplugin/java.lua;
 
 
   #awesome is the wm for emergency, because it is ugly

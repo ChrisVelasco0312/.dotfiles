@@ -21,7 +21,6 @@
       nodePackages.typescript
       nodePackages.typescript-language-server 
       nodePackages.eslint
-
       luajitPackages.lua-lsp
       # rnix-lsp
       nil
@@ -99,8 +98,6 @@
       luasnip
       ##  lsp
       neodev-nvim
-      #TODO: Add codeium configurations
-      # codeium-vim
       nvim-ts-autotag
       nvim-web-devicons
       vim-startify
@@ -126,7 +123,9 @@
         plugin = harpoon2;
         config = toLuaFile ./nvim-lua/plugins/harpoon.lua;
       }
-
+      #JAVA 
+      nvim-dap
+      nvim-jdtls
     ];
   };
 }
