@@ -98,6 +98,10 @@ local server_configs = {
         enable = false,
       },
     } 
+  },
+  markdown_oxide = {
+    filetypes = { "markdown" },
+    cmd = { "markdown-oxide", "--stdio" }
   }
 }
 
@@ -118,6 +122,21 @@ lspconfig.eslint.setup {
   capabilities = capabilities,
   settings = server_configs.eslint
 }
+
+lspconfig.markdown_oxide.setup({
+  on_attach = on_attach, -- configure your on attach config
+  capabilities = vim.tbl_deep_extend(
+        'force',
+        capabilities,
+        {
+            workspace = {
+                didChangeWatchedFiles = {
+                    dynamicRegistration = true,
+                },
+            },
+        }
+    ),
+})
 
 -- Function to check if a floating dialog exists and if not
   -- then check for diagnostics under the cursor

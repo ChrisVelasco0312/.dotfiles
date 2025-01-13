@@ -50,6 +50,8 @@
     zoom-us
     prettierd
     lua-language-server
+    markdown-oxide
+    evtest
     unzip
     bat
     fzf
