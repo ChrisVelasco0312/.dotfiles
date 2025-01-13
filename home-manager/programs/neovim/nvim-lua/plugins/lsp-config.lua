@@ -5,8 +5,7 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 
 lspconfig.emmet_ls.setup({
-  -- on_attach = on_attach,
-  capabilities = capabilities,
+  -- on_attach = on_attach, capabilities = capabilities,
   filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'css', 'sass', 'scss', 'less', 'jsx' },
   init_options = {
     html = {
@@ -38,17 +37,3 @@ vim.diagnostic.config({
   },
 })
 
-lspconfig.markdown_oxide.setup({
-  capabilities = vim.tbl_deep_extend(
-        'force',
-        capabilities,
-        {
-            workspace = {
-                didChangeWatchedFiles = {
-                    dynamicRegistration = true,
-                },
-            },
-        }
-    ),
-    on_attach = on_attach -- configure your on attach config
-})
