@@ -37,3 +37,18 @@ vim.diagnostic.config({
     source = "always", -- Or "if_many"
   },
 })
+
+lspconfig.markdown_oxide.setup({
+  capabilities = vim.tbl_deep_extend(
+        'force',
+        capabilities,
+        {
+            workspace = {
+                didChangeWatchedFiles = {
+                    dynamicRegistration = true,
+                },
+            },
+        }
+    ),
+    on_attach = on_attach -- configure your on attach config
+})
