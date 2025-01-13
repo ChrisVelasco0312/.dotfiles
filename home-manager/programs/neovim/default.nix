@@ -17,6 +17,7 @@
 
     extraPackages = with pkgs; [
       tree-sitter
+      markdown-oxide
       nodePackages.vscode-langservers-extracted
       nodePackages.typescript
       nodePackages.typescript-language-server 
@@ -110,6 +111,7 @@
       gitsigns-nvim
       todo-comments-nvim
       copilot-vim
+      obsidian-nvim
       {
         plugin = nvim-peekup;
         config = toLuaFile ./nvim-lua/plugins/peekup.lua;
