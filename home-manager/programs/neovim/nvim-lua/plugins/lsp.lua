@@ -102,6 +102,10 @@ local server_configs = {
   markdown_oxide = {
     filetypes = { "markdown" },
     cmd = { "markdown-oxide", "--stdio" }
+  },
+  jdtls = {
+    filetypes = { "java" },
+    cmd = { "jdtls" },
   }
 }
 
@@ -137,6 +141,12 @@ lspconfig.markdown_oxide.setup({
         }
     ),
 })
+
+lspconfig.jdtls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = server_configs.jdtls
+}
 
 -- Function to check if a floating dialog exists and if not
   -- then check for diagnostics under the cursor
