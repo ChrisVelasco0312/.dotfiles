@@ -45,6 +45,7 @@
     jdt-language-server
     jdk23
     lombok
+    maven
     # NODE
     nodejs_22
     nodejs_22.pkgs.pnpm
