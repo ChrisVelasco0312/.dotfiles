@@ -108,6 +108,10 @@
       todo-comments-nvim
       copilot-vim
       {
+        plugin = markdown-preview-nvim;
+        config = toLuaFile ./nvim-lua/plugins/markdownpreview.lua;
+      }
+      {
         plugin = obsidian-nvim;
         config = toLuaFile ./nvim-lua/plugins/obsidian.lua;
       }
