@@ -69,7 +69,6 @@
     fd
     htop
     pavucontrol
-    ntfs3g
     brightnessctl # change brightness
     #------
     (nerdfonts.override {
