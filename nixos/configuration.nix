@@ -1,7 +1,6 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, lib, ... }:
 let
   envVars = import /home/cavelasco/env-vars.nix;
@@ -45,6 +44,12 @@ in
     LC_TELEPHONE = "es_CO.UTF-8";
     LC_TIME = "es_CO.UTF-8";
   };
+
+  # fileSystems."/mnt/myfiles" = {
+  #  device = "/dev/sdb1";
+  #  fsType = "ntfs3";
+  #  options = [ "rw" "uid=1000" ];
+  # };
 
   hardware.graphics = {
     enable = true;
@@ -108,9 +113,7 @@ in
     xkb.options = "grp:win_space_toggle";
     xkb.variant = "";
     wacom.enable = true;
-  };
-  services.libinput = {
-    touchpad.naturalScrolling = true;
+  }; services.libinput = { touchpad.naturalScrolling = true;
     enable = true;
     mouse.naturalScrolling = true;
   };
@@ -156,6 +159,7 @@ in
      git
      zsh
      gnumake
+     ntfs3g
   ];
 
   programs.zsh.enable = true;
