@@ -13,13 +13,16 @@
    plugin-lualine.url = "github:nvim-lualine/lualine.nvim";
    plugin-lualine.flake = false;
 
+   #ghostty
+   ghostty.url = "github:ghostty-org/ghostty";
+
 
    nixd.url = "github:nix-community/nixd";
    # Hardware
    hardware.url = "github:nixos/nixos-hardware";
  };
 
-  outputs = { self, nixpkgs, nixd, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, nixd, home-manager, ghostty, ... }@inputs:
     let 
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -33,6 +36,7 @@
              nixpkgs.overlays = [ nixd.overlays.default ];
              environment.systemPackages = with pkgs; [
                nixd
+               ghostty.packages.x86_64-linux.default
              ];
            }
              ./nixos/configuration.nix
