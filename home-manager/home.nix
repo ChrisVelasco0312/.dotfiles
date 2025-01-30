@@ -127,6 +127,8 @@
   xdg.configFile."waybar/config".source = ../dots/waybar/config;
   xdg.configFile."waybar/style.css".source = ../dots/waybar/style.css;
   xdg.configFile."kitty/kitty.conf".source = ../dots/kitty/kitty.conf;
+  xdg.configFile."ghostty/config".force = true;
+  xdg.configFile."ghostty/config".source = ../dots/ghostty/config;
   xdg.configFile."hypr/hyprland.conf".force = true;
   xdg.configFile."hypr/hyprland.conf".source = ../dots/hypr/hyprland.conf;
   xdg.configFile."environment.d/cursor.conf".source = ../dots/hypr/cursor.conf;
