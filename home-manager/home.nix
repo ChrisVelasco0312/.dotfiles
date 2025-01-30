@@ -75,7 +75,6 @@
       fonts = ["JetBrainsMono" "Inconsolata"];
     })
     # APPS
-    obsidian # markdown note taking
     xournalpp # handwritten note taking
     okular # pdf viewer
     feh #image viewer
@@ -84,6 +83,11 @@
     dolphin# file manager
     breeze-icons # icons
     spotify # music stream
+    #--OBSIDIAN--
+    (pkgs.writeShellScriptBin "obsidian" ''
+      exec ${pkgs.obsidian}/bin/obsidian --disable-gpu "$@"
+    '')
+    hyprshot # screenshot
   ];
 
 	home.sessionVariables = {
