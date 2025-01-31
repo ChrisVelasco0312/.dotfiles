@@ -75,7 +75,6 @@
       fonts = ["JetBrainsMono" "Inconsolata"];
     })
     # APPS
-    obsidian # markdown note taking
     xournalpp # handwritten note taking
     okular # pdf viewer
     feh #image viewer
@@ -84,6 +83,11 @@
     dolphin# file manager
     breeze-icons # icons
     spotify # music stream
+    #--OBSIDIAN--
+    (pkgs.writeShellScriptBin "obsidian" ''
+      exec ${pkgs.obsidian}/bin/obsidian --disable-gpu "$@"
+    '')
+    hyprshot # screenshot
   ];
 
 	home.sessionVariables = {
@@ -126,7 +130,6 @@
   ## CONFIGS
   xdg.configFile."waybar/config".source = ../dots/waybar/config;
   xdg.configFile."waybar/style.css".source = ../dots/waybar/style.css;
-  xdg.configFile."kitty/kitty.conf".source = ../dots/kitty/kitty.conf;
   xdg.configFile."ghostty/config".force = true;
   xdg.configFile."ghostty/config".source = ../dots/ghostty/config;
   xdg.configFile."hypr/hyprland.conf".force = true;
@@ -135,7 +138,6 @@
   xdg.configFile."hypr/start.sh".source = ../dots/hypr/start.sh;
   xdg.configFile."hypr/background.jpg".source = ../dots/hypr/background.jpg;
   xdg.configFile."nvim/ftplugin/java.lua".source = ./programs/neovim/nvim-lua/ftplugin/java.lua;
-
 
   #awesome is the wm for emergency, because it is ugly
   # xdg.configFile.awesome.source = ../dots/awesome;
