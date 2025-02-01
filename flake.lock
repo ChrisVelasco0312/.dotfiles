@@ -60,16 +60,17 @@
         "zig": "zig"
       },
       "locked": {
-        "lastModified": 1737762354,
-        "narHash": "sha256-mR673wK+bPVJ17yTqsQZuXjT3KqgfGdYCYRYJCRd5ws=",
+        "lastModified": 1738273428,
+        "narHash": "sha256-a2A/mt2xS19YEQB+cTPdew/a7xCnGWNvIOdO9QNqxm0=",
         "owner": "ghostty-org",
         "repo": "ghostty",
-        "rev": "e2e6770ed1ddbc3917bdc3f642b22965c8bda18e",
+        "rev": "facda0c3fb1310c7698fc77ba193165ef38cd58e",
         "type": "github"
       },
       "original": {
         "owner": "ghostty-org",
         "repo": "ghostty",
+        "rev": "facda0c3fb1310c7698fc77ba193165ef38cd58e",
         "type": "github"
       }
     },

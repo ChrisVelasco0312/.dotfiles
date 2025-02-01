@@ -14,7 +14,7 @@
    plugin-lualine.flake = false;
 
    #ghostty
-   ghostty.url = "github:ghostty-org/ghostty";
+   ghostty.url = "github:ghostty-org/ghostty/facda0c3fb1310c7698fc77ba193165ef38cd58e";
 
 
    nixd.url = "github:nix-community/nixd";
