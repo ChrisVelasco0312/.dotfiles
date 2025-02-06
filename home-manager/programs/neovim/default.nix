@@ -100,7 +100,6 @@
       neodev-nvim
       nvim-ts-autotag
       nvim-web-devicons
-      vim-startify
       comment-nvim
       vim-fugitive
       vim-rhubarb

@@ -88,6 +88,8 @@
       exec ${pkgs.obsidian}/bin/obsidian --disable-gpu "$@"
     '')
     hyprshot # screenshot
+    kitty
+    kitty-themes
   ];
 
 	home.sessionVariables = {
@@ -130,8 +132,11 @@
   ## CONFIGS
   xdg.configFile."waybar/config".source = ../dots/waybar/config;
   xdg.configFile."waybar/style.css".source = ../dots/waybar/style.css;
+  # -- TERMINALS --
   xdg.configFile."ghostty/config".force = true;
   xdg.configFile."ghostty/config".source = ../dots/ghostty/config;
+  xdg.configFile."kitty/kitty.conf".source = ../dots/kitty/kitty.conf;
+  #-----------------
   xdg.configFile."hypr/hyprland.conf".force = true;
   xdg.configFile."hypr/hyprland.conf".source = ../dots/hypr/hyprland.conf;
   xdg.configFile."environment.d/cursor.conf".source = ../dots/hypr/cursor.conf;
