@@ -128,7 +128,7 @@
   "hyprland/language": {
     "format": "{}",
     "format-en": "US",
-    "format-es": "ES" 
+    "format-latam": "ES" 
   },
   "custom/left-arrow-dark": {
     "format": "",

@@ -109,7 +109,7 @@ in
   services.xserver = {
     videoDrivers = envVars.xserver.videoDrivers;
     enable = true;
-    xkb.layout = "us, es";
+    xkb.layout = "us, latam";
     xkb.options = "grp:win_space_toggle";
     xkb.variant = "";
     wacom.enable = true;
