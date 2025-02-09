@@ -5,10 +5,10 @@
   # inputs, 
   ... 
 }:
-{ programs.neovim = 
+{ 
+  programs.neovim = 
   let
-    # toLua = str: "lua << EOF\n${str}\nEOF\n";
-    toLuaFile = file: "lua << EOF\n${builtins.readFile file}\nEOF\n";
+   toLuaFile = file: "lua << EOF\n${builtins.readFile file}\nEOF\n";
   in
   {
     enable = true;
@@ -16,6 +16,7 @@
     vimAlias = true;
 
     extraPackages = with pkgs; [
+      emmet-ls
       tree-sitter
       nodePackages.vscode-langservers-extracted
       nodePackages.typescript
@@ -105,7 +106,6 @@
       vim-rhubarb
       gitsigns-nvim
       todo-comments-nvim
-      copilot-vim
       {
         plugin = markdown-preview-nvim;
         config = toLuaFile ./nvim-lua/plugins/markdownpreview.lua;
@@ -125,6 +125,10 @@
       {
         plugin = harpoon2;
         config = toLuaFile ./nvim-lua/plugins/harpoon.lua;
+      }
+      {
+        plugin = nvim-ufo;
+        config = toLuaFile ./nvim-lua/plugins/ufo.lua;
       }
       #JAVA 
       nvim-dap
