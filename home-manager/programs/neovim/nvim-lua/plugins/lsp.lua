@@ -89,6 +89,27 @@ local server_configs = {
     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
     cmd = { "vscode-eslint-language-server", "--stdio" }
   },
+  emmet_ls = {
+    init_options = {
+    filetypes = { "css", "html", "javascript", "sass"},
+      html = {
+        options = {
+          -- For possible options, see: https://github.com/emmetio/emmet/blob/master/src/config.ts#L79-L267
+          ["bem.enabled"] = true,
+        },
+      },
+      jsx = {
+        options = {
+          ["jsx.enabled"] = true,
+          ["markup.attributes"] = {
+            ["class"] = "className",
+            ["for"] = "htmlFor",
+            ["tabindex"] = "tabIndex",
+          },
+        }
+      },
+    }
+  },
   lua_ls = {
    Lua = {
       workspace = {
@@ -146,6 +167,12 @@ lspconfig.jdtls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = server_configs.jdtls
+}
+
+lspconfig.emmet_ls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = server_configs.emmet_ls
 }
 
 -- Function to check if a floating dialog exists and if not

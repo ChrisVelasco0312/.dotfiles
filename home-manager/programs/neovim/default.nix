@@ -16,6 +16,7 @@
     vimAlias = true;
 
     extraPackages = with pkgs; [
+      emmet-ls
       tree-sitter
       nodePackages.vscode-langservers-extracted
       nodePackages.typescript
