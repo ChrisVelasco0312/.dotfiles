@@ -69,6 +69,28 @@ vim.keymap.set('n', '<Leader>ql', '<cmd>cclose<CR>',
 -- replace all occurences of word under cursor
 vim.keymap.set("n", "<leader>z", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
   { silent = true, desc = 'replace word under cursor' })
+-- Replace all occurrences of the word under the cursor from the cursor position to the end of the file
+vim.keymap.set("n", "<leader>Z", [[:.,$s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+  { silent = true, desc = 'replace word under cursor to end of file' })
+
+-- Replace word under cursor in a range
+vim.keymap.set("n", ";r", function()
+  local word = vim.fn.expand("<cword>")
+  local end_line = vim.fn.input("Replace until line (current line to " .. vim.fn.line("$") .. "): ")
+  if end_line == "" then
+    print("Command canceled.")
+    return
+  end
+  local replacement = vim.fn.input("Replace '" .. word .. "' with: ")
+  if replacement == "" then
+    print("Command canceled.")
+    return
+  end
+  local range = string.format(".,%s", end_line)
+  local cmd = string.format(":%ss/\\<%s\\>/%s/gI", range, word, replacement)
+  print("Executing: " .. cmd)
+  vim.cmd(cmd)
+end, { silent = true, desc = 'replace word under cursor in a range' })
 
 -- Make bash script executable
 vim.keymap.set('n', '<Leader>me', '<cmd>!chmod +x %<CR>', { silent = true, desc = 'make script executable' })
