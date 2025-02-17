@@ -51,6 +51,7 @@
     nodejs_22.pkgs.pnpm
     nodejs_22.pkgs.yarn
     nodejs_22.pkgs.typescript
+    live-server
     bun
     # TOOLS
     lazygit
@@ -75,6 +76,7 @@
       fonts = ["JetBrainsMono" "Inconsolata"];
     })
     # APPS
+    stremio # movies
     xournalpp # handwritten note taking
     okular # pdf viewer
     feh #image viewer
@@ -90,6 +92,7 @@
     hyprshot # screenshot
     kitty
     kitty-themes
+    inkscape
   ];
 
 	home.sessionVariables = {
