@@ -75,6 +75,7 @@
     (nerdfonts.override {
       fonts = ["JetBrainsMono" "Inconsolata"];
     })
+    nwg-look
     # APPS
     stremio # movies
     xournalpp # handwritten note taking
