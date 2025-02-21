@@ -1,2 +1,22 @@
 # .dotfiles
-my dotffiles nixos config
+
+This is my NixOS personal config.
+It is still a mess, but I'm still learning nix.
+
+# Main programs:
+
+- hyprland
+- waybar
+- rofi
+- neovim
+- tmux
+- kitty
+- ghostty
+
+# Todo:
+
+- [ ] Change waybar for AGS to improve the top panel.
+- [ ] Prepare some shells for legacy nodejs version projects.
+- [ ] Fix cursor before running any program.
+- [ ] Fix ghostty problems with special spanish characters.
+- [ ] Fix obsidian gpu problem.
