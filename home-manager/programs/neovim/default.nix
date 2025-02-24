@@ -23,8 +23,8 @@
       nodePackages.typescript-language-server 
       nodePackages.eslint
       luajitPackages.lua-lsp
-      # rnix-lsp
-      nil
+      nixd
+      nixpkgs-fmt
     ];
 
     extraLuaConfig = ''

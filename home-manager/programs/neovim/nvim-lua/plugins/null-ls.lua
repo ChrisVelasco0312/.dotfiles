@@ -16,6 +16,7 @@ local sources = {
     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "css", "scss", "json", "yaml",
       "markdown", "html", "vue" },
   }),
+  builtins.formatting.nixpkgs_fmt
 
 }
 

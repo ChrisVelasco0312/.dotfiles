@@ -66,6 +66,7 @@
     tree
     eza
     gcc
+    pandoc
     fish
     fd
     htop
@@ -75,7 +76,6 @@
     (nerdfonts.override {
       fonts = ["JetBrainsMono" "Inconsolata"];
     })
-    nwg-look
     # APPS
     stremio # movies
     xournalpp # handwritten note taking
@@ -93,7 +93,6 @@
     hyprshot # screenshot
     kitty
     kitty-themes
-    inkscape
   ];
 
 	home.sessionVariables = {
