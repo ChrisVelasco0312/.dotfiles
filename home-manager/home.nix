@@ -9,9 +9,7 @@
             own-lualine-nvim = prev.vimUtils.buildVimPlugin {
               name = "lualine";
               src = inputs.plugin-lualine;
-            };
-          };
-        })
+            }; }; })
       ];
     };
 
@@ -76,14 +74,20 @@
     (nerdfonts.override {
       fonts = ["JetBrainsMono" "Inconsolata"];
     })
+    hunspell
+    hunspellDicts.es_CO
+    hunspellDicts.es-es
     # APPS
+    ardour # audio editing
+    kdenlive # video editing
+    zotero # research management
     stremio # movies
     xournalpp # handwritten note taking
     okular # pdf viewer
     feh #image viewer
     gparted # Partition editor
     vlc # Cross-platform media player
-    dolphin# file manager
+    dolphin # file manager
     breeze-icons # icons
     spotify # music stream
     #--OBSIDIAN--
