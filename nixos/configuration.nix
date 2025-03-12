@@ -12,7 +12,7 @@ in
     ];
 
   environment.variables = {
-    TERMINAL = "ghostty";
+    TERMINAL = "kitty";
   };
 
   # Bootloader.

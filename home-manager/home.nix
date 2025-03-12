@@ -140,8 +140,6 @@
   xdg.configFile."waybar/config".source = ../dots/waybar/config;
   xdg.configFile."waybar/style.css".source = ../dots/waybar/style.css;
   # -- TERMINALS --
-  xdg.configFile."ghostty/config".force = true;
-  xdg.configFile."ghostty/config".source = ../dots/ghostty/config;
   xdg.configFile."kitty/kitty.conf".source = ../dots/kitty/kitty.conf;
   #-----------------
   xdg.configFile."hypr/hyprland.conf".force = true;
