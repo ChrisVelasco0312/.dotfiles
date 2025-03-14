@@ -65,6 +65,13 @@ in
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
+
+  boot.kernelParams = [
+    "nvidia.NVreg_UsePageAttributeTable=1"
+    "nvidia.NVreg_EnableMSI=1"
+    "nvidia-drm.modeset=1"
+  ];
+
   hardware.bluetooth.enable = true; # enables support for Bluetooth
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
