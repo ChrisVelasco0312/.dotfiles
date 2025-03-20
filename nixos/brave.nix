@@ -1,8 +1,4 @@
 {
-  # config,
-  # lib,
-  pkgs,
-  # flake-inputs,
   ...
 }:  
 {
@@ -11,7 +7,10 @@
     extensions = [
       "dbepggeogbaibhgnhhndojpepiihcmeb" #vimium
       "nngceckbapebfimnlniiiahkandclblb" #bitwarden pass manager
-      "cofdbpoegempjloogbagkncekinflcnj" #DeepL translator
+      "hoombieeljmmljlkjmnheibnpciblicm" #language reactor
+      "noagjioaihamoljcbelhdlldnmlgnkon" #definer translator
+      "gmhgdiamihghcepkeapfoeakphffcdkk" #merriam-webster dictionary
+
     ];
     defaultSearchProviderSuggestURL = "https://duckduckgo.com";
     defaultSearchProviderSearchURL = "https://duckduckgo.com";

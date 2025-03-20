@@ -12,7 +12,6 @@ local enable_format_on_save = function(_, bufnr)
 end
 
 local on_attach = function(_, bufnr)
-
   local nmap = function(keys, func, desc)
     if desc then
       desc = 'LSP: ' .. desc
@@ -46,18 +45,25 @@ local lspconfig = require('lspconfig')
 
 require('neodev').setup();
 lspconfig.lua_ls.setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-	root_dir = function()
-          return vim.loop.cwd()
-        end,
-	cmd = { "lua-lsp" },
-    settings = {
-        Lua = {
-            workspace = { checkThirdParty = false },
-            telemetry = { enable = false },
-        },
-    }
+  on_attach = on_attach,
+  capabilities = capabilities,
+  root_dir = function()
+    return vim.loop.cwd()
+  end,
+  cmd = { "lua-language-server" },
+  settings = {
+    Lua = {
+      format = { enable = true },
+      workspace = {
+        checkThirdParty = false,
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+      telemetry = { enable = false },
+      diagnostics = {
+        globals = { 'vim' }
+      }
+    },
+  }
 }
 
 
@@ -81,17 +87,13 @@ local server_configs = {
     filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
     cmd = { "typescript-language-server", "--stdio" }
   },
-  nil_ls = {
-    filetypes = { "nix" },
-    cmd = { "nixd", "--stdio" }
-  },
   eslint = {
     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
     cmd = { "vscode-eslint-language-server", "--stdio" }
   },
   emmet_ls = {
     init_options = {
-    filetypes = { "css", "html", "javascript", "sass"},
+      filetypes = { "css", "html", "javascript", "sass" },
       html = {
         options = {
           -- For possible options, see: https://github.com/emmetio/emmet/blob/master/src/config.ts#L79-L267
@@ -111,14 +113,14 @@ local server_configs = {
     }
   },
   lua_ls = {
-   Lua = {
+    Lua = {
       workspace = {
         checkThirdParty = false,
       },
       telemetry = {
         enable = false,
       },
-    } 
+    }
   },
   markdown_oxide = {
     filetypes = { "markdown" },
@@ -127,19 +129,19 @@ local server_configs = {
   jdtls = {
     filetypes = { "java" },
     cmd = { "jdtls" },
-  }
+  },
+  nixd = {
+    filetypes = { "nix" },
+    formatting = {
+      command = { "nixpkgs-fmt" }
+    },
+  },
 }
 
 lspconfig.ts_ls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = server_configs.ts_ls
-}
-
-lspconfig.nil_ls.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  settings = server_configs.nil_ls
 }
 
 lspconfig.eslint.setup {
@@ -151,16 +153,16 @@ lspconfig.eslint.setup {
 lspconfig.markdown_oxide.setup({
   on_attach = on_attach, -- configure your on attach config
   capabilities = vim.tbl_deep_extend(
-        'force',
-        capabilities,
-        {
-            workspace = {
-                didChangeWatchedFiles = {
-                    dynamicRegistration = true,
-                },
-            },
-        }
-    ),
+    'force',
+    capabilities,
+    {
+      workspace = {
+        didChangeWatchedFiles = {
+          dynamicRegistration = true,
+        },
+      },
+    }
+  ),
 })
 
 lspconfig.jdtls.setup {
@@ -175,31 +177,38 @@ lspconfig.emmet_ls.setup {
   settings = server_configs.emmet_ls
 }
 
+lspconfig.nixd.setup {
+  autostart = true,
+  capabilities = capabilities,
+  settings = server_configs.nixd
+}
+
 -- Function to check if a floating dialog exists and if not
-  -- then check for diagnostics under the cursor
-  function OpenDiagnosticIfNoFloat()
-    for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
-      if vim.api.nvim_win_get_config(winid).zindex then
-        return
-      end
+-- then check for diagnostics under the cursor
+function OpenDiagnosticIfNoFloat()
+  for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+    if vim.api.nvim_win_get_config(winid).zindex then
+      return
     end
-    -- THIS IS FOR BUILTIN LSP
-    vim.diagnostic.open_float(0, {
-      scope = "cursor",
-      focusable = false,
-      close_events = {
-        "CursorMoved",
-        "CursorMovedI",
-        "BufHidden",
-        "InsertCharPre",
-        "WinLeave",
-      },
-    })
   end
-  -- Show diagnostics under the cursor when holding position
-  vim.api.nvim_create_augroup("lsp_diagnostics_hold", { clear = true })
-  vim.api.nvim_create_autocmd({ "CursorHold" }, {
-    pattern = "*",
-    command = "lua OpenDiagnosticIfNoFloat()",
-    group = "lsp_diagnostics_hold",
+  -- THIS IS FOR BUILTIN LSP
+  vim.diagnostic.open_float(0, {
+    scope = "cursor",
+    focusable = false,
+    close_events = {
+      "CursorMoved",
+      "CursorMovedI",
+      "BufHidden",
+      "InsertCharPre",
+      "WinLeave",
+    },
   })
+end
+
+-- Show diagnostics under the cursor when holding position
+vim.api.nvim_create_augroup("lsp_diagnostics_hold", { clear = true })
+vim.api.nvim_create_autocmd({ "CursorHold" }, {
+  pattern = "*",
+  command = "lua OpenDiagnosticIfNoFloat()",
+  group = "lsp_diagnostics_hold",
+})

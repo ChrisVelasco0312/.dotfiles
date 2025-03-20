@@ -12,7 +12,7 @@ in
     ];
 
   environment.variables = {
-    TERMINAL = "ghostty";
+    TERMINAL = "kitty";
   };
 
   # Bootloader.
@@ -61,8 +61,14 @@ in
     powerManagement.finegrained = false;
     open = false;
     nvidiaSettings = envVars.hardware-nvidea.settings;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
   };
+
+
+  boot.kernelParams = [
+    "nvidia.NVreg_UsePageAttributeTable=1"
+    "nvidia-drm.modeset=1"
+  ];
 
   hardware.bluetooth.enable = true; # enables support for Bluetooth
   hardware.bluetooth.powerOnBoot = true;

@@ -26,6 +26,7 @@ vim.opt.smarttab = true
 vim.opt.breakindent = true
 vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
 vim.opt.wrap = false         -- No Wrap lines
 vim.opt.backspace = { 'start', 'eol', 'indent' }
 vim.opt.path:append { '**' } -- Finding files - Search down into subfolders
@@ -89,12 +90,3 @@ vim.cmd [[
     autocmd BufRead,BufNewFile Jenkinsfile set filetype=groovy
   augroup END
 ]]
-
--- vim.opt.textwidth = 80 -- Default textwidth
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "markdown",
-  callback = function()
-    vim.opt_local.wrap = true
-  end,
-})
