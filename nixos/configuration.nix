@@ -62,13 +62,12 @@ in
     powerManagement.finegrained = false;
     open = false;
     nvidiaSettings = envVars.hardware-nvidea.settings;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
   };
 
 
   boot.kernelParams = [
     "nvidia.NVreg_UsePageAttributeTable=1"
-    "nvidia.NVreg_EnableMSI=1"
     "nvidia-drm.modeset=1"
   ];
 
