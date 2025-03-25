@@ -80,6 +80,7 @@
     hunspellDicts.es_CO
     hunspellDicts.es-es
     # APPS
+    anki # spaced repetition cards
     ardour # audio editing
     kdenlive # video editing
     zotero # research management
