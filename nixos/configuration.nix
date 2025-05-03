@@ -24,6 +24,14 @@ in
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
+  # KVM kernel modules
+  boot.kernelModules = [ "kbm-intel" "kvm-amd"];
+
+  virtualisation.libvirtd.enable = true;
+  virtualisation.virtualbox.host.enable = false;
+
+  networking.firewall.checkReversePath = "loose";
+
   # Enable networking
   networking.networkmanager.enable = true;
 
@@ -139,7 +147,7 @@ in
   users.users.cavelasco = {
     isNormalUser = true;
     description = "cavelasco";
-    extraGroups = [ "networkmanager" "wheel" "git"];
+    extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "kvm"];
     packages = with pkgs; [
       brave
     ];
