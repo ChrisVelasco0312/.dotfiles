@@ -19,6 +19,7 @@
     ./programs/tmux/tmux.nix
     ./programs/rofi
     ./programs/neovim
+    ./programs/firefox/firefox.nix
   ];
 
   home = {
@@ -40,6 +41,13 @@
     racket
     lua-language-server
     markdown-oxide
+    #virtualization
+    virt-manager #GUI for virtual machines
+    qemu # Core QEMU tools
+    libvirt # Libvirt tools
+    virt-viewer # remote viewing
+    spice-gtk # Spice support
+    dnsmasq # Virtual network bridges
     #java
     jdt-language-server
     jdk23
@@ -94,9 +102,7 @@
     breeze-icons # icons
     spotify # music stream
     #--OBSIDIAN--
-    (pkgs.writeShellScriptBin "obsidian" ''
-      exec ${pkgs.obsidian}/bin/obsidian --disable-gpu "$@"
-    '')
+    obsidian
     hyprshot # screenshot
     kitty
     kitty-themes
@@ -167,4 +173,12 @@
 
   #awesome is the wm for emergency, because it is ugly
   # xdg.configFile.awesome.source = ../dots/awesome;
+
+  # VIRTUALIZATION
+  dconf.settings = {
+    "org/virt-manager/virt-manager/connections" = {
+      autoconnect = ["qemu:///system"];
+      uris = ["qemu:///system"];
+    };
+  };
 }
