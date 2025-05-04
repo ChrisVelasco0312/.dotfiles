@@ -148,9 +148,9 @@ in
     isNormalUser = true;
     description = "cavelasco";
     extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "kvm"];
-    packages = with pkgs; [
-      brave
-    ];
+    # packages = with pkgs; [
+    #   brave
+    # ];
     shell = pkgs.zsh;
   };
   #docker
