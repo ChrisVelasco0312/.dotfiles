@@ -7,7 +7,9 @@ let
     package = pkgs.capitaine-cursors;
   };
   githubKeyPath = "${config.home.homeDirectory}/.ssh/id_ed25519_personal";
-in {
+  workKeyPath = "${config.home.homeDirectory}/.ssh/id_ed25519_work";
+in
+{
 
   nixpkgs = {
     overlays = [
@@ -82,9 +84,9 @@ in {
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
-    devenv
     brave
     # LANGUAGES
+    devbox
     racket
     lua-language-server
     markdown-oxide
@@ -158,21 +160,44 @@ in {
       hostname = "github.com";
       identityFile = githubKeyPath;
     };
+    "github-work" = {
+      user = "git";
+      hostname = "github.com";
+      identityFile = workKeyPath;
+      identitiesOnly = true;
+    };
   };
   programs.ssh.addKeysToAgent = "yes";
-    systemd.user.services.add-github-ssh-key = {
-    Unit = {
-      Description = "Add GitHub SSH key to ssh-agent";
-      After = [ "ssh-agent.service" ]; 
+  systemd.user.services = {
+    add-github-ssh-key = {
+      Unit = {
+        Description = "Add GitHub SSH key to ssh-agent";
+        After = [ "ssh-agent.service" ];
+      };
+      Service = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.openssh}/bin/ssh-add ${githubKeyPath}";
+      };
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
     };
-    Service = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.openssh}/bin/ssh-add ${githubKeyPath}";
+    add-work-ssh-key = {
+      Unit = {
+        Description = "Add Work (GitHub Alias) SSH key to ssh-agent";
+        After = [ "ssh-agent.service" ];
+      };
+      Service = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.openssh}/bin/ssh-add ${workKeyPath}"; # Uses workKeyPath
+      };
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
     };
-    Install = {
-      WantedBy = [ "default.target" ];
-    };
-  }; 
+  };
+
+
 
   programs.zsh = {
     enable = true;
