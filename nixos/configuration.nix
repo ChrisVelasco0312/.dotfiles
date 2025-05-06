@@ -2,9 +2,6 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 { config, pkgs, lib, ... }:
-let
-  envVars = import /home/cavelasco/env-vars.nix;
-in
 {
   imports =
     [ 
@@ -16,9 +13,11 @@ in
   };
 
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/nvme0n1";
-  boot.loader.grub.useOSProber = true;
+  boot.loader = {
+    grub.enable = true; 
+    grub.device = "/dev/nvme0n1";
+    grub.useOSProber = true;
+  };
   boot.supportedFilesystems = ["ntfs"];
   networking.hostName = "nixos"; # Define your hostname. networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # Configure network proxy if necessary
@@ -57,18 +56,19 @@ in
     enable32Bit = true;
   };
   hardware.nvidia = {
-    modesetting.enable = envVars.hardware-nvidea.modesetting;
+    modesetting.enable = true;
     powerManagement.enable = false;
     powerManagement.finegrained = false;
     open = false;
-    nvidiaSettings = envVars.hardware-nvidea.settings;
+    nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
   };
-
 
   boot.kernelParams = [
     "nvidia.NVreg_UsePageAttributeTable=1"
     "nvidia-drm.modeset=1"
+    # "amd_iommu=on"
+    # "iommu=pt"
   ];
 
   hardware.bluetooth.enable = true; # enables support for Bluetooth
@@ -114,7 +114,7 @@ in
   };
 
   services.xserver = {
-    videoDrivers = envVars.xserver.videoDrivers;
+    videoDrivers = ["nvidea"];
     enable = true;
     xkb.layout = "us, es";
     xkb.options = "erosign:e, compose:menu, grp:alt_space_toggle";
@@ -136,6 +136,7 @@ in
     alsa.support32Bit = true;
     pulse.enable = true;
   };
+  services.openssh.enable = true;
 
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -143,9 +144,9 @@ in
     isNormalUser = true;
     description = "cavelasco";
     extraGroups = [ "networkmanager" "wheel" "git"];
-    packages = with pkgs; [
-      brave
-    ];
+    # packages = with pkgs; [
+    #   brave
+    # ];
     shell = pkgs.zsh;
   };
   #docker
