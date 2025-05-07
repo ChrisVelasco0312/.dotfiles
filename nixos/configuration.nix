@@ -51,6 +51,8 @@
   #  options = [ "rw" "uid=1000" ];
   # };
 
+  # boot.blacklistedKernelModules = [ "nouveau" ];
+
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -61,14 +63,12 @@
     powerManagement.finegrained = false;
     open = false;
     nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
+    package = config.boot.kernelPackages.nvidiaPackages.production;
   };
 
   boot.kernelParams = [
     "nvidia.NVreg_UsePageAttributeTable=1"
     "nvidia-drm.modeset=1"
-    # "amd_iommu=on"
-    # "iommu=pt"
   ];
 
   hardware.bluetooth.enable = true; # enables support for Bluetooth

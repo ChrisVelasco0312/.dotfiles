@@ -84,7 +84,8 @@ in
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
-    brave
+    # editors
+    vscode
     # LANGUAGES
     devbox
     racket
@@ -131,9 +132,6 @@ in
     hunspellDicts.es_CO
     hunspellDicts.es-es
     # APPS
-    anki
-    ardour
-    kdenlive
     zotero
     stremio
     xournalpp
