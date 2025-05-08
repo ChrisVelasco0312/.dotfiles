@@ -123,6 +123,7 @@ in
     htop
     pavucontrol
     brightnessctl
+    mission-center
     # Fonts & Cursors
     (nerdfonts.override {
       fonts = [ "JetBrainsMono" "Inconsolata" ];
