@@ -86,6 +86,7 @@ in
   home.packages = with pkgs; [
     # editors
     vscode
+    code-cursor
     # LANGUAGES
     devbox
     racket
@@ -135,6 +136,7 @@ in
     # APPS
     zotero
     stremio
+    qbittorrent
     xournalpp
     okular
     feh
@@ -150,7 +152,8 @@ in
     kitty
     kitty-themes
   ];
-
+  
+  # ---- GITHUB SSH -------#
   programs.ssh.enable = true;
   services.ssh-agent.enable = true;
   programs.ssh.matchBlocks = {
