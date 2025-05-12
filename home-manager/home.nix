@@ -86,12 +86,13 @@ in
   home.packages = with pkgs; [
     # editors
     vscode
-    code-cursor
+    # code-cursor
     # LANGUAGES
     devbox
     racket
     lua-language-server
     markdown-oxide
+    docker-compose
     # java
     jdt-language-server
     jdk23
@@ -145,6 +146,7 @@ in
     nautilus
     breeze-icons
     spotify
+    obs-studio
     (pkgs.writeShellScriptBin "obsidian" ''
       exec ${pkgs.obsidian}/bin/obsidian --disable-gpu "$@"
     '')

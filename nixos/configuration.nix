@@ -2,7 +2,10 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 { config, pkgs, lib, ... }:
-
+let
+  useCursorAppImage = true;
+  cursorPackage = if useCursorAppImage then null else pkgs.code-cursor;
+in
 {
   imports =
     [
@@ -18,14 +21,9 @@
   # Environment variables specific to user sessions (e.g., graphical sessions like Hyprland)
   environment.sessionVariables = {
     TERMINAL = "kitty"; # Moved here for clarity as it's usually a session-specific variable.
-    # For hardware video acceleration (e.g., in browsers like Firefox or mpv)
-    NIXOS_OZONE_WL = "1"; # Enables Ozone Wayland backend for Chromium-based apps
-    LIBVA_DRIVER_NAME = "nvidia"; # Specifies NVIDIA as the VA-API driver for hardware decoding
-    # __GLX_VENDOR_LIBRARY_NAME = "nvidia"; # Generally not needed with newer drivers/Wayland,
-                                            # but uncomment if you face issues with specific apps.
-    # GBM_BACKEND = "nvidia-drm"; # May be needed for some specific setups or older drivers,
-                                  # but hardware.nvidia.modesetting.enable = true; should handle this.
+    # For hardware video acceleration (e.g., in browsers like Firefox or mpv) NIXOS_OZONE_WL = "1"; # Enables Ozone Wayland backend for Chromium-based apps LIBVA_DRIVER_NAME = "nvidia"; # Specifies NVIDIA as the VA-API driver for hardware decoding
   };
+
 
   # Bootloader.
   boot.loader = {
@@ -33,17 +31,14 @@
     grub.device = "/dev/nvme0n1";
     grub.useOSProber = true;
   };
-  boot.supportedFilesystems = ["ntfs"];
+  boot.supportedFilesystems = [ "ntfs" ];
 
   # Explicitly load NVIDIA kernel modules early during boot.
   # This helps ensure the proprietary driver is ready before the display manager starts.
   boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_drm" ];
 
-  # Blacklist the nouveau driver to prevent it from loading at all.
-  # This ensures there are no conflicts with the proprietary NVIDIA driver.
   boot.kernelParams = [
     "modprobe.blacklist=nouveau"
-    "nvidia.NVreg_UsePageAttributeTable=1" # Keep this if it was explicitly added by you
   ];
 
   # --- NVIDIA Proprietary Driver Configuration ---
@@ -61,10 +56,10 @@
     powerManagement.finegrained = false; # User preference
     open = false; # Use the traditional proprietary driver, not the open-source kernel modules.
     nvidiaSettings = true; # Enable the NVIDIA Settings utility.
-    package = config.boot.kernelPackages.nvidiaPackages.production; # Specify the production driver package.
+    package = config.boot.kernelPackages.nvidiaPackages.stable; # Specify the production driver package.
   };
   # --- END NVIDIA Proprietary Driver Configuration ---
-
+  nixpkgs.config.nvidia.acceptLicense = true;
 
   networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager.enable = true; # Enable networking
@@ -131,7 +126,7 @@
   services.xserver = {
     # Corrected typo: "nvidea" should be "nvidia".
     # This tells X.org (used by XWayland) to use the NVIDIA driver.
-    videoDrivers = ["nvidia"];
+    videoDrivers = [ "nvidia" ];
     enable = true;
     xkb.layout = "us, es";
     xkb.options = "erosign:e, compose:menu, grp:alt_space_toggle";
@@ -190,13 +185,86 @@
     gnumake
     ntfs3g
     # Hyprland-specific dependencies for better Wayland compatibility:
-    xdg-desktop-portal         # Essential for Wayland portals (screen sharing, file dialogs etc.)
+    xdg-desktop-portal # Essential for Wayland portals (screen sharing, file dialogs etc.)
     xdg-desktop-portal-hyprland # Hyprland's specific implementation for xdg-desktop-portal
-    xdg-desktop-portal-gtk     # Recommended for better compatibility with GTK apps (e.g., Firefox, GNOME apps)
+    xdg-desktop-portal-gtk # Recommended for better compatibility with GTK apps (e.g., Firefox, GNOME apps)
+
+    appimage-run
+    curl
+    jq
   ];
+
+  system.activationScripts.createApplicationsDir = {
+    text = ''
+      mkdir -p /home/cavelasco/Applications
+      chown cavelasco:users /home/cavelasco/Applications
+      chmod 755 /home/cavelasco/Applications
+    '';
+    deps = [ ];
+  };
+
+  system.activationScripts.installCursor = {
+    text = ''
+          # Create desktop entry for AppImage version
+          DESKTOP_FILE="/home/cavelasco/.local/share/applications/cursor.desktop"
+          mkdir -p "$(dirname "$DESKTOP_FILE")"
+    
+          # Ensure Applications directory exists
+          mkdir -p "/home/cavelasco/Applications"
+          chown cavelasco:users "/home/cavelasco/Applications"
+          chmod 755 "/home/cavelasco/Applications"
+    
+          # Fetch the latest Cursor AppImage
+          echo "Fetching latest Cursor AppImage..."
+          CURSOR_INFO=$(${pkgs.curl}/bin/curl -sSfL "https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest")
+          DOWNLOAD_URL=$(${pkgs.jq}/bin/jq -r '.downloadUrl' <<< "$CURSOR_INFO")
+    
+          if [ -n "$DOWNLOAD_URL" ] && [ "$DOWNLOAD_URL" != "null" ]; then
+            echo "Downloading from $DOWNLOAD_URL..."
+            ${pkgs.curl}/bin/curl -sSfL "$DOWNLOAD_URL" -o "/home/cavelasco/Applications/Cursor.AppImage.tmp"
+            if [ $? -eq 0 ]; then
+              chmod +x "/home/cavelasco/Applications/Cursor.AppImage.tmp"
+              mv "/home/cavelasco/Applications/Cursor.AppImage.tmp" "/home/cavelasco/Applications/Cursor.AppImage"
+              chown cavelasco:users "/home/cavelasco/Applications/Cursor.AppImage"
+              echo "Cursor AppImage downloaded successfully."
+            else
+              echo "ERROR: Failed to download Cursor AppImage."
+              rm -f "/home/cavelasco/Applications/Cursor.AppImage.tmp"
+            fi
+          else
+            echo "WARNING: Could not retrieve Cursor download URL. Skipping download."
+          fi
+    
+          # Create desktop entry for the AppImage
+          cat > "$DESKTOP_FILE" << EOF
+      [Desktop Entry]
+      Name=Cursor
+      Exec=${pkgs.appimage-run}/bin/appimage-run /home/cavelasco/Applications/Cursor.AppImage
+      Icon=code
+      Type=Application
+      Categories=Development;IDE;
+      Comment=AI-first code editor
+      Terminal=false
+      EOF
+    '';
+    deps = [ ];
+  };
+
 
   programs.zsh.enable = true;
   programs.hyprland.enable = true;
+
+  programs.nix-ld.enable =  true;
+  programs.nix-ld.libraries = with pkgs; [
+    libdrm
+    mesa
+    libxkbcommon
+    libsecret
+    gtk3
+    nss
+    nspr
+    glib
+  ];
 
   fonts.packages = with pkgs; [
     fira-code
