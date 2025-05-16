@@ -136,6 +136,34 @@ local server_configs = {
       command = { "nixpkgs-fmt" }
     },
   },
+  pylsp = {
+    plugins = {
+      pycodestyle = {
+        enabled = false,
+      },
+      flake8 = {
+        enabled = false,
+      },
+      ruff = {
+        enabled = true,
+      },
+      mypy = {
+        enabled = true,
+      },
+      black = {
+        enabled = true,
+      },
+      isort = {
+        enabled = true,
+      },
+      rope_autoimport = {
+        enabled = true,
+      },
+      rope_completion = {
+        enabled = true,
+      },
+    },
+  }
 }
 
 lspconfig.ts_ls.setup {
@@ -148,6 +176,12 @@ lspconfig.eslint.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = server_configs.eslint
+}
+
+lspconfig.pylsp.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = server_configs.pylsp
 }
 
 lspconfig.markdown_oxide.setup({

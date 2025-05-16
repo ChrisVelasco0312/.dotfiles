@@ -12,7 +12,7 @@
 
       settings = {
         "browser.startup.homepage" = "https://duckduckgo.com";
-        "privacy.donottrackheader.enabled" = true;
+        # "privacy.donottrackheader.enabled" = true;
         "browser.search.suggest.enabled" = false;
         "extensions.autoDisableScopes" = 0;
         "extensions.enabledScopes" = 15;
@@ -27,24 +27,24 @@
     };
 
     policies = {
-      DisableTelemetry = true;
-      DisableFirefoxStudies = true;
-      EnableTrackingProtection = {
-        Value = true;
-        Locked = true;
-        Cryptomining = true;
-        Fingerprinting = true;
-      };
-      DisablePocket = true;
-      DisableFirefoxAccounts = true;
-      DisableAccounts = true;
-      DisableFirefoxScreenshots = true;
-      OverrideFirstRunPage = "";
-      OverridePostUpdatePage = "";
-      DontCheckDefaultBrowser = true;
-      DisplayBookmarksToolbar = "never";
-      DisplayMenuBar = "default-off";
-      SearchBar = "unified";
+      # DisableTelemetry = true;
+      # DisableFirefoxStudies = true;
+      # EnableTrackingProtection = {
+      #   Value = true;
+      #   Locked = true;
+      #   Cryptomining = true;
+      #   Fingerprinting = true;
+      # };
+      # DisablePocket = true;
+      # DisableFirefoxAccounts = true;
+      # DisableAccounts = true;
+      # DisableFirefoxScreenshots = true;
+      # OverrideFirstRunPage = "";
+      # OverridePostUpdatePage = "";
+      # DontCheckDefaultBrowser = true;
+      # DisplayBookmarksToolbar = "never";
+      # DisplayMenuBar = "default-off";
+      # SearchBar = "unified";
       ExtensionSettings = {
         "uBlock0@raymondhill.net" = {
           installation_mode = "force_installed";

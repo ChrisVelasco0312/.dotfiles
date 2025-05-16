@@ -117,7 +117,11 @@ in
     nodejs_22.pkgs.prettier
     live-server
     bun
+    # PYTHON
+    python312
+    python312Packages.pip
     # TOOLS
+    direnv
     lazygit
     zoom-us
     prettierd
