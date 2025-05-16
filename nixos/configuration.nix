@@ -3,44 +3,54 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 { config, pkgs, lib, ... }:
 let
-  envVars = import /home/cavelasco/env-vars.nix;
+  useCursorAppImage = true;
+  cursorPackage = if useCursorAppImage then null else pkgs.code-cursor;
 in
 {
   imports =
-    [ 
+    [
       /etc/nixos/hardware-configuration.nix
     ];
 
-  environment.variables = {
-    TERMINAL = "kitty";
+  # Environment variables specific to user sessions (e.g., graphical sessions like Hyprland)
+  environment.sessionVariables = {
+    TERMINAL = "kitty"; 
+    LIBVA_DRIVER_NAME = "iHD";         # Use "iHD" for Intel Media Driver
+    VDPAU_DRIVER = "va_gl";            # Needed for some VDPAU backends
+    NIXOS_OZONE_WL = "1";              # Improves support for Chromium apps under Wayland
   };
 
+
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.supportedFilesystems = ["ntfs"];
-  networking.hostName = "nixos"; # Define your hostname. networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  boot.loader = {
+    grub.enable = true;
+    grub.device = "/dev/nvme0n1";
+    grub.useOSProber = true;
+  };
+  boot.supportedFilesystems = [ "ntfs" ];
 
-  # KVM kernel modules
-  boot.kernelModules = [ "kbm-intel" "kvm-amd"];
+  # Explicitly load NVIDIA kernel modules early during boot.
+  # This helps ensure the proprietary driver is ready before the display manager starts.
+  boot.kernelParams = [
+    "modprobe.blacklist=nouveau"
+  ];
 
-  virtualisation.libvirtd.enable = true;
-  virtualisation.virtualbox.host.enable = false;
+  # --- NVIDIA Proprietary Driver Configuration ---
+  # Enable the NVIDIA proprietary drivers (this was the main missing switch).
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
 
-  networking.firewall.checkReversePath = "loose";
 
-  # Enable networking
-  networking.networkmanager.enable = true;
+  networking.hostName = "nixos"; # Define your hostname.
+  networking.networkmanager.enable = true; # Enable networking
 
   # Set your time zone.
   time.timeZone = "America/Bogota";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "es_CO.UTF-8";
     LC_IDENTIFICATION = "es_CO.UTF-8";
@@ -53,35 +63,10 @@ in
     LC_TIME = "es_CO.UTF-8";
   };
 
-  # fileSystems."/mnt/myfiles" = {
-  #  device = "/dev/sdb1";
-  #  fsType = "ntfs3";
-  #  options = [ "rw" "uid=1000" ];
-  # };
-
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-  };
-  hardware.nvidia = {
-    modesetting.enable = envVars.hardware-nvidea.modesetting;
-    powerManagement.enable = false;
-    powerManagement.finegrained = false;
-    open = false;
-    nvidiaSettings = envVars.hardware-nvidea.settings;
-    package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
-  };
-
-
-  boot.kernelParams = [
-    "nvidia.NVreg_UsePageAttributeTable=1"
-    "nvidia-drm.modeset=1"
-  ];
-
   hardware.bluetooth.enable = true; # enables support for Bluetooth
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
-  hardware.pulseaudio.enable = false;
+  hardware.pulseaudio.enable = false; # Disabled in favor of PipeWire
 
   security.sudo = {
     enable = true;
@@ -120,8 +105,20 @@ in
     };
   };
 
+  hardware.opengl = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver  # For newer Intel iGPUs
+      vaapiIntel          # Legacy support, just in case
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
+  };
+
   services.xserver = {
-    videoDrivers = envVars.xserver.videoDrivers;
+    # Corrected typo: "nvidea" should be "nvidia".
+    # This tells X.org (used by XWayland) to use the NVIDIA driver.
+    videoDrivers = [ "intel" ];
     enable = true;
     xkb.layout = "us, latam";
     xkb.options = "grp:win_space_toggle";
@@ -131,8 +128,10 @@ in
     enable = true;
     mouse.naturalScrolling = true;
   };
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
+
   # Enable sound with pipewire
   security.rtkit.enable = true;
   services.pipewire = {
@@ -141,19 +140,20 @@ in
     alsa.support32Bit = true;
     pulse.enable = true;
   };
-
+  services.openssh.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.cavelasco = {
     isNormalUser = true;
     description = "cavelasco";
-    extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "kvm"];
+    extraGroups = [ "networkmanager" "wheel" "git" ];
     # packages = with pkgs; [
     #   brave
     # ];
     shell = pkgs.zsh;
   };
-  #docker
+
+  # Docker configuration
   virtualisation.docker.enable = true;
   virtualisation.docker.rootless = {
     enable = true;
@@ -161,23 +161,100 @@ in
   };
   users.extraGroups.docker.members = [ "cavelasco" ];
 
-  # Allow unfree packages
+  # Allow unfree packages (necessary for NVIDIA proprietary drivers)
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-     wget
-     neovim
-     ranger
-     git
-     zsh
-     gnumake
-     ntfs3g
+    wget
+    neovim
+    ranger
+    git
+    zsh
+    gnumake
+    ntfs3g
+    # Hyprland-specific dependencies for better Wayland compatibility:
+    xdg-desktop-portal # Essential for Wayland portals (screen sharing, file dialogs etc.)
+    xdg-desktop-portal-hyprland # Hyprland's specific implementation for xdg-desktop-portal
+    xdg-desktop-portal-gtk # Recommended for better compatibility with GTK apps (e.g., Firefox, GNOME apps)
+
+    appimage-run
+    curl
+    jq
   ];
+
+  system.activationScripts.createApplicationsDir = {
+    text = ''
+      mkdir -p /home/cavelasco/Applications
+      chown cavelasco:users /home/cavelasco/Applications
+      chmod 755 /home/cavelasco/Applications
+    '';
+    deps = [ ];
+  };
+
+  system.activationScripts.installCursor = {
+    text = ''
+          # Create desktop entry for AppImage version
+          DESKTOP_FILE="/home/cavelasco/.local/share/applications/cursor.desktop"
+          mkdir -p "$(dirname "$DESKTOP_FILE")"
+    
+          # Ensure Applications directory exists
+          mkdir -p "/home/cavelasco/Applications"
+          chown cavelasco:users "/home/cavelasco/Applications"
+          chmod 755 "/home/cavelasco/Applications"
+    
+          # Fetch the latest Cursor AppImage
+          echo "Fetching latest Cursor AppImage..."
+          CURSOR_INFO=$(${pkgs.curl}/bin/curl -sSfL "https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest")
+          DOWNLOAD_URL=$(${pkgs.jq}/bin/jq -r '.downloadUrl' <<< "$CURSOR_INFO")
+    
+          if [ -n "$DOWNLOAD_URL" ] && [ "$DOWNLOAD_URL" != "null" ]; then
+            echo "Downloading from $DOWNLOAD_URL..."
+            ${pkgs.curl}/bin/curl -sSfL "$DOWNLOAD_URL" -o "/home/cavelasco/Applications/Cursor.AppImage.tmp"
+            if [ $? -eq 0 ]; then
+              chmod +x "/home/cavelasco/Applications/Cursor.AppImage.tmp"
+              mv "/home/cavelasco/Applications/Cursor.AppImage.tmp" "/home/cavelasco/Applications/Cursor.AppImage"
+              chown cavelasco:users "/home/cavelasco/Applications/Cursor.AppImage"
+              echo "Cursor AppImage downloaded successfully."
+            else
+              echo "ERROR: Failed to download Cursor AppImage."
+              rm -f "/home/cavelasco/Applications/Cursor.AppImage.tmp"
+            fi
+          else
+            echo "WARNING: Could not retrieve Cursor download URL. Skipping download."
+          fi
+    
+          # Create desktop entry for the AppImage
+          cat > "$DESKTOP_FILE" << EOF
+      [Desktop Entry]
+      Name=Cursor
+      Exec=${pkgs.appimage-run}/bin/appimage-run /home/cavelasco/Applications/Cursor.AppImage
+      Icon=code
+      Type=Application
+      Categories=Development;IDE;
+      Comment=AI-first code editor
+      Terminal=false
+      EOF
+    '';
+    deps = [ ];
+  };
+
 
   programs.zsh.enable = true;
   programs.hyprland.enable = true;
+
+  programs.nix-ld.enable =  true;
+  programs.nix-ld.libraries = with pkgs; [
+    libdrm
+    mesa
+    libxkbcommon
+    libsecret
+    gtk3
+    nss
+    nspr
+    glib
+  ];
 
   fonts.packages = with pkgs; [
     fira-code
@@ -188,6 +265,6 @@ in
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
-  system.stateVersion = "24.11"; 
 
+  system.stateVersion = "24.11"; # Ensure this matches your NixOS channel
 }

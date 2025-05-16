@@ -1,5 +1,14 @@
 { config, pkgs, inputs, lib, vimUtils, ... }:
 
+let
+  cursorTheme = {
+    name = "capitaine-cursors";
+    size = 24;
+    package = pkgs.capitaine-cursors;
+  };
+  githubKeyPath = "${config.home.homeDirectory}/.ssh/id_ed25519_personal";
+  workKeyPath = "${config.home.homeDirectory}/.ssh/id_ed25519_work";
+in
 {
 
   nixpkgs = {
@@ -15,6 +24,14 @@
     ];
   };
 
+
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      allowUnfreePredicate = (_: true);
+    };
+  };
+
   imports = [
     ./programs/tmux/tmux.nix
     ./programs/rofi
@@ -26,18 +43,55 @@
     username = "cavelasco";
     homeDirectory = "/home/cavelasco";
     stateVersion = "24.11";
-  };
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      allowUnfreePredicate = (_: true);
+
+    pointerCursor = {
+      gtk.enable = true;
+      x11.enable = true;
+      name = cursorTheme.name;
+      size = cursorTheme.size;
+      package = cursorTheme.package;
+    };
+
+    sessionVariables = {
+      EDITOR = "nvim";
+      XCURSOR_THEME = cursorTheme.name;
+      XCURSOR_SIZE = toString cursorTheme.size;
+    };
+
+    shellAliases = {
+      l = "eza";
+      ls = "eza";
+      cat = "bat";
     };
   };
 
-  # Let Home Manager install and manage itself.
+  gtk = {
+    enable = true;
+    gtk3.extraConfig = {
+      gtk-cursor-theme-name = cursorTheme.name;
+      gtk-cursor-theme-size = cursorTheme.size;
+    };
+    gtk4.extraConfig = {
+      gtk-cursor-theme-name = cursorTheme.name;
+      gtk-cursor-theme-size = cursorTheme.size;
+    };
+  };
+
+  wayland.windowManager.hyprland.settings = {
+    env = [
+      "XCURSOR_THEME,${cursorTheme.name}"
+      "XCURSOR_SIZE,${toString cursorTheme.size}"
+    ];
+  };
+
   programs.home-manager.enable = true;
+
   home.packages = with pkgs; [
+    # editors
+    vscode
+    # code-cursor
     # LANGUAGES
+    devbox
     racket
     lua-language-server
     markdown-oxide
@@ -49,6 +103,8 @@
     spice-gtk # Spice support
     dnsmasq # Virtual network bridges
     #java
+    docker-compose
+    # java
     jdt-language-server
     jdk23
     lombok
@@ -79,11 +135,13 @@
     fd
     htop
     pavucontrol
-    brightnessctl # change brightness
-    #------
+    brightnessctl
+    mission-center
+    # Fonts & Cursors
     (nerdfonts.override {
       fonts = [ "JetBrainsMono" "Inconsolata" ];
     })
+    capitaine-cursors
     hunspell
     hunspellDicts.es_CO
     hunspellDicts.es-es
@@ -104,21 +162,73 @@
     #--OBSIDIAN--
     obsidian
     hyprshot # screenshot
+    zotero
+    stremio
+    qbittorrent
+    xournalpp
+    okular
+    feh
+    gparted
+    vlc
+    nautilus
+    breeze-icons
+    spotify
+    obs-studio
+    (pkgs.writeShellScriptBin "obsidian" ''
+      exec ${pkgs.obsidian}/bin/obsidian --disable-gpu "$@"
+    '')
     kitty
     kitty-themes
   ];
-
-  home.sessionVariables = {
-    EDITOR = "nvim";
+  
+  # ---- GITHUB SSH -------#
+  programs.ssh.enable = true;
+  services.ssh-agent.enable = true;
+  programs.ssh.matchBlocks = {
+    "github.com" = {
+      user = "git";
+      hostname = "github.com";
+      identityFile = githubKeyPath;
+    };
+    "github-work" = {
+      user = "git";
+      hostname = "github.com";
+      identityFile = workKeyPath;
+      identitiesOnly = true;
+    };
+  };
+  programs.ssh.addKeysToAgent = "yes";
+  systemd.user.services = {
+    add-github-ssh-key = {
+      Unit = {
+        Description = "Add GitHub SSH key to ssh-agent";
+        After = [ "ssh-agent.service" ];
+      };
+      Service = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.openssh}/bin/ssh-add ${githubKeyPath}";
+      };
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
+    };
+    add-work-ssh-key = {
+      Unit = {
+        Description = "Add Work (GitHub Alias) SSH key to ssh-agent";
+        After = [ "ssh-agent.service" ];
+      };
+      Service = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.openssh}/bin/ssh-add ${workKeyPath}"; # Uses workKeyPath
+      };
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
+    };
   };
 
-  home.shellAliases = {
-    l = "eza";
-    ls = "eza";
-    cat = "bat";
-  };
 
-  #ZSH
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -147,10 +257,9 @@
     enable = true;
     extraConfig = {
       credential.helper = "${
-          pkgs.git.override { withLibsecret = true; }
-        }/bin/git-credential-libsecret";
+        pkgs.git.override { withLibsecret = true; }
+      }/bin/git-credential-libsecret";
     };
-
   };
 
   programs.fzf = {
@@ -158,20 +267,17 @@
     enableZshIntegration = true;
   };
 
-  ## CONFIGS
+  ## CONFIG FILES
   xdg.configFile."waybar/config".source = ../dots/waybar/config;
   xdg.configFile."waybar/style.css".source = ../dots/waybar/style.css;
-  # -- TERMINALS --
   xdg.configFile."kitty/kitty.conf".source = ../dots/kitty/kitty.conf;
-  #-----------------
   xdg.configFile."hypr/hyprland.conf".force = true;
   xdg.configFile."hypr/hyprland.conf".source = ../dots/hypr/hyprland.conf;
-  xdg.configFile."environment.d/cursor.conf".source = ../dots/hypr/cursor.conf;
   xdg.configFile."hypr/start.sh".source = ../dots/hypr/start.sh;
   xdg.configFile."hypr/background.jpg".source = ../dots/hypr/background.jpg;
   xdg.configFile."nvim/ftplugin/java.lua".source = ./programs/neovim/nvim-lua/ftplugin/java.lua;
 
-  #awesome is the wm for emergency, because it is ugly
+  # Optional fallback WM config
   # xdg.configFile.awesome.source = ../dots/awesome;
 
   # VIRTUALIZATION

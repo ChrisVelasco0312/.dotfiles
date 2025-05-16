@@ -11,7 +11,7 @@
       isDefault = true;
 
       settings = {
-        "browser.startup.homepage" = "https://nixos.org";
+        "browser.startup.homepage" = "https://duckduckgo.com";
         "privacy.donottrackheader.enabled" = true;
         "browser.search.suggest.enabled" = false;
         "extensions.autoDisableScopes" = 0;
@@ -53,10 +53,6 @@
         "{446900e4-71c2-419f-a6a7-df9c091e268b}" = {
           installation_mode = "force_installed";
           install_url = "https://addons.mozilla.org/firefox/downloads/latest/bitwarden-password-manager/latest.xpi";
-        };
-        "addon@darkreader.org" = {
-          installation_mode = "force_installed";
-          install_url = "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
         };
         "{d7742d87-e61d-4b78-b8a1-b469842139fa}" = {
           installation_mode = "force_installed";

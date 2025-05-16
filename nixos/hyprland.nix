@@ -3,7 +3,6 @@
   environment.systemPackages = with pkgs; [                                       
     dunst                                                                            
     wl-clipboard
-    capitaine-cursors 
     libnotify                                                                        
     networkmanagerapplet                                                             
     rofi-wayland                                                                     
