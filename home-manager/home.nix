@@ -151,9 +151,9 @@ in
     breeze-icons
     spotify
     obs-studio
-    (pkgs.writeShellScriptBin "obsidian" ''
-      exec ${pkgs.obsidian}/bin/obsidian --disable-gpu "$@"
-    '')
+    inkscape
+    kdenlive
+    obsidian
     hyprshot
     kitty
     kitty-themes

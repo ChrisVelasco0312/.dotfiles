@@ -156,7 +156,7 @@ in
   users.users.cavelasco = {
     isNormalUser = true;
     description = "cavelasco";
-    extraGroups = [ "networkmanager" "wheel" "git" ];
+    extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "render" "video"];
     # packages = with pkgs; [
     #   brave
     # ];
@@ -188,12 +188,45 @@ in
     xdg-desktop-portal # Essential for Wayland portals (screen sharing, file dialogs etc.)
     xdg-desktop-portal-hyprland # Hyprland's specific implementation for xdg-desktop-portal
     xdg-desktop-portal-gtk # Recommended for better compatibility with GTK apps (e.g., Firefox, GNOME apps)
+    
+    #virtualization packages
+    mesa
+    mesa.drivers
+    libglvnd
+    vulkan-loader
+    vulkan-tools
+    nvidia-vaapi-driver
+    glxinfo
+    (
+      pkgs.qemu.override {
+        gtkSupport = true;
+        sdlSupport = true;
+        openGLSupport = true;
+        spiceSupport = true;
+      }
+    )
+    qemu_full
+    virt-manager
+    spice-gtk
+    spice-protocol
+    OVMF
 
     appimage-run
     curl
     jq
   ];
 
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      vhostUserPackages = [ pkgs.virtiofsd ];
+      runAsRoot = true;
+    };
+    onBoot = "start";
+    onShutdown = "shutdown";
+  };
+
+  
   system.activationScripts.createApplicationsDir = {
     text = ''
       mkdir -p /home/cavelasco/Applications
