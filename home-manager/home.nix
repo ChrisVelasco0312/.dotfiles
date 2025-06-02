@@ -93,6 +93,16 @@ in
     lua-language-server
     markdown-oxide
     docker-compose
+
+    python312Packages.pylsp-mypy
+    python312Packages.python-lsp-black
+    python312Packages.python-lsp-ruff
+    python312Packages.pyls-isort
+    python312Packages.pylsp-rope
+    ruff
+    mypy
+    black
+    isort
     # java
     jdt-language-server
     jdk23
@@ -158,7 +168,7 @@ in
     kitty
     kitty-themes
   ];
-  
+
   # ---- GITHUB SSH -------#
   programs.ssh.enable = true;
   services.ssh-agent.enable = true;

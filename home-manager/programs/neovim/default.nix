@@ -26,15 +26,6 @@
         nixd
         nixpkgs-fmt
         python312Packages.python-lsp-server
-        python312Packages.pylsp-mypy
-        python312Packages.python-lsp-black
-        python312Packages.python-lsp-ruff
-        python312Packages.pyls-isort
-        python312Packages.pylsp-rope
-        ruff
-        mypy
-        black
-        isort
 
       ];
 
