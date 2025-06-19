@@ -167,6 +167,7 @@ in
     hyprshot
     kitty
     kitty-themes
+    ffmpeg
   ];
 
   # ---- GITHUB SSH -------#

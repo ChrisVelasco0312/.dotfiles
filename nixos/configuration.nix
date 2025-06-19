@@ -35,8 +35,14 @@ in
 
   # Explicitly load NVIDIA kernel modules early during boot.
   # This helps ensure the proprietary driver is ready before the display manager starts.
-  boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_drm" ];
-  boot.kernelParams = ["processor.max_cstate=1"];
+  boot.initrd.kernelModules = [ "nvidia" ];
+  boot.kernelParams = ["processor.max_cstate=1" "nvidia_drm.modeset=1" "idle=nomwait"];
+  boot.kernel.sysctl."kernel.sysrq" = 1;
+  boot.kernelModules = [ "pstore" ];
+
+  services.journald.extraConfig = ''
+    Storage=persistent
+  '';
 
   # --- NVIDIA Proprietary Driver Configuration ---
   # Enable the NVIDIA proprietary drivers (this was the main missing switch).
@@ -49,7 +55,7 @@ in
     # Enable kernel mode setting (KMS) for the NVIDIA driver.
     # This is CRUCIAL for Wayland compositors like Hyprland.
     modesetting.enable = true;
-    powerManagement.enable = true; # User preference
+    powerManagement.enable = false; # User preference
     powerManagement.finegrained = false; # User preference
     open = false; # Use the traditional proprietary driver, not the open-source kernel modules.
     nvidiaSettings = true; # Enable the NVIDIA Settings utility.
