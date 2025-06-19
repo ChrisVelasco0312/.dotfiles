@@ -178,6 +178,7 @@ in
       user = "git";
       hostname = "github.com";
       identityFile = githubKeyPath;
+      identitiesOnly = true;
     };
     "github-work" = {
       user = "git";
