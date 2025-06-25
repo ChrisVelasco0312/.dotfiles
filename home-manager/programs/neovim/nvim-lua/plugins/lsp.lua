@@ -1,6 +1,13 @@
 local augroup_format = vim.api.nvim_create_augroup("Format", { clear = true })
 
+-- Global variable to track format on save state
+vim.g.format_on_save_enabled = false
+
 local enable_format_on_save = function(_, bufnr)
+  if not vim.g.format_on_save_enabled then
+    return
+  end
+  
   vim.api.nvim_clear_autocmds({ group = augroup_format, buffer = bufnr })
   vim.api.nvim_create_autocmd("BufWritePre", {
     group = augroup_format,
@@ -10,6 +17,38 @@ local enable_format_on_save = function(_, bufnr)
     end,
   })
 end
+
+local disable_format_on_save = function(bufnr)
+  vim.api.nvim_clear_autocmds({ group = augroup_format, buffer = bufnr })
+end
+
+-- Create global commands to toggle format on save
+vim.api.nvim_create_user_command('FormatOnSaveEnable', function()
+  vim.g.format_on_save_enabled = true
+  local bufnr = vim.api.nvim_get_current_buf()
+  enable_format_on_save(nil, bufnr)
+  vim.notify('Format on save enabled', vim.log.levels.INFO)
+end, { desc = 'Enable format on save for current buffer' })
+
+vim.api.nvim_create_user_command('FormatOnSaveDisable', function()
+  vim.g.format_on_save_enabled = false
+  local bufnr = vim.api.nvim_get_current_buf()
+  disable_format_on_save(bufnr)
+  vim.notify('Format on save disabled', vim.log.levels.INFO)
+end, { desc = 'Disable format on save for current buffer' })
+
+vim.api.nvim_create_user_command('FormatOnSaveToggle', function()
+  vim.g.format_on_save_enabled = not vim.g.format_on_save_enabled
+  local bufnr = vim.api.nvim_get_current_buf()
+  
+  if vim.g.format_on_save_enabled then
+    enable_format_on_save(nil, bufnr)
+    vim.notify('Format on save enabled', vim.log.levels.INFO)
+  else
+    disable_format_on_save(bufnr)
+    vim.notify('Format on save disabled', vim.log.levels.INFO)
+  end
+end, { desc = 'Toggle format on save for current buffer' })
 
 local on_attach = function(_, bufnr)
   local nmap = function(keys, func, desc)
@@ -35,7 +74,11 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
-  enable_format_on_save(_, bufnr)
+  
+  -- Only enable format on save if it's globally enabled
+  if vim.g.format_on_save_enabled then
+    enable_format_on_save(_, bufnr)
+  end
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()

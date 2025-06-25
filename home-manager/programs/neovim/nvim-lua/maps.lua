@@ -18,6 +18,11 @@ vim.keymap.set('n', '<Space>so', ':so<Enter>', { silent = true })
 -- Toggle neckpain
 vim.keymap.set('n', '<Space>np', ':NoNeckPain<Enter>', { silent = true })
 
+-- Format on save toggle
+vim.keymap.set('n', '<Leader>fs', ':FormatOnSaveToggle<CR>', { silent = true, desc = 'toggle format on save' })
+vim.keymap.set('n', '<Leader>fse', ':FormatOnSaveEnable<CR>', { silent = true, desc = 'enable format on save' })
+vim.keymap.set('n', '<Leader>fsd', ':FormatOnSaveDisable<CR>', { silent = true, desc = 'disable format on save' })
+
 --Primeagen's keymaps
 
 -- Move selected line / block of text in visual modes

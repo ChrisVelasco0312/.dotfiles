@@ -84,16 +84,15 @@ in
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
+    brave
     # editors
     vscode
-    # code-cursor
     # LANGUAGES
     devbox
     racket
     lua-language-server
     markdown-oxide
     docker-compose
-
     python312Packages.pylsp-mypy
     python312Packages.python-lsp-black
     python312Packages.python-lsp-ruff
