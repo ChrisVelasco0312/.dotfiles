@@ -1,75 +1,127 @@
 * {
-	font-size: 16px;
-	font-family: monospace;
-	font-weight: bold;
+	border: none;
+	border-radius: 0;
+	min-height: 0;
+	font-family: "JetBrains Mono", "Noto Sans", sans-serif;
+	font-size: 14px;
+	font-weight: 500;
 }
 
 window#waybar {
-	background: #292b2e;
-	color: #fdf6e3;
+	background-color: transparent;
+	color: #ffffff;
 }
 
-#custom-right-arrow-dark,
-#custom-left-arrow-dark {
-	color: #1a1a1a;
-}
-#custom-right-arrow-light,
-#custom-left-arrow-light {
-	color: #292b2e;
-	background: #1a1a1a;
-}
-
+/* Individual module styling */
 #workspaces,
-#clock.1,
-#clock.2,
-#clock.3,
+#clock,
 #pulseaudio,
-#memory,
-#cpu,
 #battery,
-#disk,
-#tray {
-	background: #1a1a1a;
+#cpu,
+#memory,
+#network {
+	background-color: rgba(40, 42, 54, 0.9);
+	color: #f8f8f2;
+	border-radius: 10px;
+	padding: 6px 12px;
+	margin: 4px;
+	border: 1px solid rgba(68, 71, 90, 0.8);
+}
+
+/* Workspaces */
+#workspaces {
+	padding: 4px 8px;
 }
 
 #workspaces button {
-	padding: 0 2px;
-	color: #fdf6e3;
-}
-#workspaces button.focused {
-	color: #268bd2;
-}
-#workspaces button:hover {
-	box-shadow: inherit;
-	text-shadow: inherit;
-}
-#workspaces button:hover {
-	background: #1a1a1a;
-	border: #1a1a1a;
-	padding: 0 3px;
+	background-color: transparent;
+	color: #6272a4;
+	border: none;
+	border-radius: 6px;
+	padding: 4px 8px;
+	margin: 0 2px;
+	min-width: 20px;
+	transition: all 0.2s ease;
 }
 
+#workspaces button.active {
+	background-color: #bd93f9;
+	color: #282a36;
+	font-weight: bold;
+}
+
+#workspaces button:hover {
+	background-color: rgba(189, 147, 249, 0.3);
+	color: #f8f8f2;
+}
+
+/* Clock */
+#clock {
+	color: #8be9fd;
+	font-weight: 600;
+}
+
+/* Volume */
 #pulseaudio {
-	color: #268bd2;
-}
-#memory {
-	color: #2aa198;
-}
-#cpu {
-	color: #6c71c4;
-}
-#battery {
-	color: #859900;
-}
-#disk {
-	color: #b58900;
+	color: #50fa7b;
 }
 
+#pulseaudio.muted {
+	color: #ff5555;
+}
+
+/* Battery */
+#battery {
+	color: #ffb86c;
+}
+
+#battery.charging {
+	color: #50fa7b;
+}
+
+#battery.warning:not(.charging) {
+	color: #f1fa8c;
+}
+
+#battery.critical:not(.charging) {
+	color: #ff5555;
+}
+
+/* CPU */
+#cpu {
+	color: #ff79c6;
+}
+
+/* Memory */
+#memory {
+	color: #bd93f9;
+}
+
+/* Network */
+#network {
+	color: #8be9fd;
+}
+
+#network.disconnected {
+	color: #ff5555;
+}
+
+/* Hover effects */
+#workspaces,
 #clock,
 #pulseaudio,
-#memory,
-#cpu,
 #battery,
-#disk {
-	padding: 0 10px;
+#cpu,
+#memory,
+#network {
+	transition: all 0.2s ease;
+}
+
+#clock:hover,
+#pulseaudio:hover,
+#battery:hover,
+#cpu:hover,
+#memory:hover,
+#network:hover {
+	background-color: rgba(68, 71, 90, 0.9);
 }

@@ -1,233 +1,87 @@
-// -*- mode: json -*-
-
 {
   "layer": "top",
   "position": "top",
+  "height": 40,
+  "spacing": 8,
+  
   "modules-left": [
-    "hyprland/workspaces",
-    "custom/right-arrow-dark",
-    "hyprland/language"
+    "hyprland/workspaces"
   ],
   "modules-center": [
-    "custom/left-arrow-dark",
-    "clock#1", "custom/left-arrow-light",
-    "custom/left-arrow-dark",
-    "clock#2",
-    "custom/right-arrow-dark",
-    "custom/right-arrow-light",
-    "clock#3", "custom/right-arrow-dark"
+    "clock"
   ],
   "modules-right": [
-    "custom/left-arrow-dark",
     "pulseaudio",
-    "custom/left-arrow-light",
-    "custom/left-arrow-dark",
-    "memory",
-    "custom/left-arrow-light",
-    "custom/left-arrow-dark",
+    "battery", 
     "cpu",
-    "network",
-    "custom/left-arrow-light",
-    "custom/left-arrow-dark",
-    "battery",
-    "custom/left-arrow-light",
-    "custom/left-arrow-dark",
-    "custom/left-arrow-light",
-    "custom/left-arrow-dark",
-    "backlight",
-    "tray"
+    "memory",
+    "network"
   ],
-	"custom/left-arrow-dark": {
-		"format": "",
-		"tooltip": false
-	},
-	"custom/left-arrow-light": {
-		"format": "",
-		"tooltip": false
-	},
-	"custom/right-arrow-dark": {
-		"format": "",
-		"tooltip": false
-	},
-	"custom/right-arrow-light": {
-		"format": "",
-		"tooltip": false
-	},
-	"clock#1": {
-		"format": "{:%a}",
-		"tooltip": false
-	},
-	"clock#2": {
-		"format": "{:%H:%M}",
-		"tooltip": false
-	},
-	"clock#3": {
-		"format": "{:%m-%d}",
-		"tooltip": false
-	},
-	"pulseaudio": {
-		"format": "{icon} {volume:2}%",
-		"format-bluetooth": "{icon}  {volume}%",
-		"format-muted": "MUTE",
-		"format-icons": {
-			"headphones": "",
-			"default": [
-				"",
-				""
-			]
-		},
-		"scroll-step": 5,
-		"on-click": "pavucontrol",
-		"on-click-right": "pamixer -t"	
-	},
-	"memory": {
-		"interval": 5,
-		"format": "Mem {}%"
-	},
-	"cpu": {
-		"interval": 5,
-		"on-click": "emacsclient -c -e '(proced)'",
-		"format": "CPU {usage:2}%"
-	},
-	"battery": {
-		"states": {
-			"good": 95,
-			"warning": 30,
-			"critical": 15
-		},
-		"format": "{icon} {capacity}%",
-		"format-icons": [
-			"",
-			"",
-			"",
-			"",
-			""
-		]
-	},
-	"tray": {
-		"icon-size": 20
-	},
-	"network": {
-		"interface": "wlp6s0",
-		"format": "{ifname}",
-		"format-wifi": "({signalStrength}%) ",
-		"format-ethernet": "{ifname} ",
-		"format-disconnected": "", //An empty format will hide the module.
-		"tooltip-format": "{ifname}",
-		"tooltip-format-wifi": "{essid} ({signalStrength}%) ",
-		"tooltip-format-ethernet": "{ifname} ",
-		"tooltip-format-disconnected": "Disconnected",
-		"on-click": "emacsclient -c -e '(view-file \"~/Documents/tech-personal-notes/nmcli-help.org\")'",
-		"max-length": 50
-	},
-	"backlight": {
-	 	"device": "intel_backlight",
-	  "format": "{percent}% {icon}",
-		"format-icons": ["", ""]
-	},
-  "hyprland/language": {
-    "format": "{}",
-    "format-en": "US",
-    "format-latam": "ES" 
-  },
-  "custom/left-arrow-dark": {
-    "format": "",
-    "tooltip": false
-  },
-  "custom/left-arrow-light": {
-    "format": "",
-    "tooltip": false
-  },
-  "custom/right-arrow-dark": {
-    "format": "",
-    "tooltip": false
-  },
-  "custom/right-arrow-light": {
-    "format": "",
-    "tooltip": false
-  },
+
   "hyprland/workspaces": {
     "format": "{icon}",
     "format-icons": {
-      "1": "",
-      "2": "",
-      "3": "",
-      "4": "󰖟",
-      "5": "",
-      "6": "",
-      "7": "",
-      "8": "",
-      "9": "",
-      "10": "",
-      "default": ""
+      "1": "1",
+      "2": "2", 
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "10": "10",
+      "default": ""
     },
-    "on-click": "activate"
+    "on-click": "activate",
+    "persistent-workspaces": {
+      "*": 5
+    }
   },
-  "clock#1": {
-    "format": "{:%a}",
-    "tooltip": false
+
+  "clock": {
+    "format": "{:%H:%M   %a %b %d}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
   },
-  "clock#2": {
-    "format": "{:%H:%M}",
-    "tooltip": false
-  },
-  "clock#3": {
-    "format": "{:%m-%d}",
-    "tooltip": false
-  },
+
   "pulseaudio": {
-    "format": "{icon} {volume:2}%",
-    "format-bluetooth": "{icon}  {volume}%",
-    "format-muted": "MUTE",
-    "format-icons": {
-      "headphones": "",
-      "default": [
-        "",
-        ""
-      ]
-    },
+    "format": "🔊 {volume}%",
+    "format-bluetooth": "🎧 {volume}%",
+    "format-muted": "🔇 Muted",
     "scroll-step": 5,
     "on-click": "pavucontrol",
-    "on-click-right": "pamixer -t"	
+    "on-click-right": "pamixer -t",
+    "max-volume": 100
   },
-  "memory": {
-    "interval": 5,
-    "format": "Mem {}%"
-  },
-  "cpu": {
-    "interval": 5,
-    "on-click": "emacsclient -c -e '(proced)'",
-    "format": "CPU {usage:2}%"
-  },
+
   "battery": {
     "states": {
-      "good": 95,
       "warning": 30,
       "critical": 15
     },
     "format": "{icon} {capacity}%",
-    "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      ""
-    ]
+    "format-charging": "⚡ {capacity}%",
+    "format-plugged": "🔌 {capacity}%",
+    "format-icons": ["", "", "", "", ""]
   },
-  "tray": {
-    "icon-size": 20
+
+  "cpu": {
+    "interval": 10,
+    "format": "💻 {usage}%",
+    "max-length": 10
   },
+
+  "memory": {
+    "interval": 10,
+    "format": "🧠 {used:0.1f}G"
+  },
+
   "network": {
-    "interface": "wlp6s0",
-    "format": "{ifname}",
-    "format-wifi": "({signalStrength}%) ",
-    "format-ethernet": "{ifname} ",
-    "format-disconnected": "", //An empty format will hide the module.
-    "tooltip-format": "{ifname}",
-    "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
-    "tooltip-format-ethernet": "{ifname} ",
-    "tooltip-format-disconnected": "Disconnected",
-    "on-click": "emacsclient -c -e '(view-file \"~/Documents/tech-personal-notes/nmcli-help.org\")'",
-    "max-length": 50
-  },
+    "format-wifi": "📶 {signalStrength}%",
+    "format-ethernet": "🌐 Connected", 
+    "format-disconnected": "❌ Offline",
+    "tooltip-format": "{ifname} via {gwaddr}",
+    "tooltip-format-wifi": "{essid} ({signalStrength}%)",
+    "on-click": "nm-connection-editor"
+  }
 }
