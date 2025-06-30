@@ -19,7 +19,8 @@ window#waybar {
 #battery,
 #cpu,
 #memory,
-#network {
+#network,
+#custom-power {
 	background-color: rgba(40, 42, 54, 0.9);
 	color: #f8f8f2;
 	border-radius: 10px;
@@ -106,6 +107,13 @@ window#waybar {
 	color: #ff5555;
 }
 
+/* Power Menu */
+#custom-power {
+	color: #ff6b6b;
+	font-size: 16px;
+	font-weight: bold;
+}
+
 /* Hover effects */
 #workspaces,
 #clock,
@@ -113,7 +121,8 @@ window#waybar {
 #battery,
 #cpu,
 #memory,
-#network {
+#network,
+#custom-power {
 	transition: all 0.2s ease;
 }
 
@@ -122,6 +131,7 @@ window#waybar {
 #battery:hover,
 #cpu:hover,
 #memory:hover,
-#network:hover {
+#network:hover,
+#custom-power:hover {
 	background-color: rgba(68, 71, 90, 0.9);
 }

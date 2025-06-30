@@ -15,7 +15,8 @@
     "battery", 
     "cpu",
     "memory",
-    "network"
+    "network",
+    "custom/power"
   ],
 
   "hyprland/workspaces": {
@@ -83,5 +84,12 @@
     "tooltip-format": "{ifname} via {gwaddr}",
     "tooltip-format-wifi": "{essid} ({signalStrength}%)",
     "on-click": "nm-connection-editor"
+  },
+
+  "custom/power": {
+    "format": "⏻",
+    "tooltip": "Power Menu",
+    "on-click": "~/.dotfiles/dots/waybar/scripts/power_menu.sh",
+    "escape": true
   }
 }
