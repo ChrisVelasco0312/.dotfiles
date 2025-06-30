@@ -23,10 +23,10 @@ window#waybar {
 #custom-power {
 	background-color: rgba(40, 42, 54, 0.9);
 	color: #f8f8f2;
-	border-radius: 10px;
+	border-radius: 0;
 	padding: 6px 12px;
 	margin: 4px;
-	border: 1px solid rgba(68, 71, 90, 0.8);
+	border: 1px solid #3a3a3a;
 }
 
 /* Workspaces */
@@ -38,7 +38,7 @@ window#waybar {
 	background-color: transparent;
 	color: #6272a4;
 	border: none;
-	border-radius: 6px;
+	border-radius: 0;
 	padding: 4px 8px;
 	margin: 0 2px;
 	min-width: 20px;
@@ -133,5 +133,5 @@ window#waybar {
 #memory:hover,
 #network:hover,
 #custom-power:hover {
-	background-color: rgba(68, 71, 90, 0.9);
+	background-color: rgba(58, 58, 58, 0.9);
 }

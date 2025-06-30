@@ -28,9 +28,9 @@
     
     window {
         background-color: @background-color;
-        border: 2;
+        border: 1;
         border-color: @border-color;
-        border-radius: 8;
+        border-radius: 0;
         padding: 8;
     }
     
