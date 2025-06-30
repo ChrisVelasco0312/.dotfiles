@@ -1,6 +1,6 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# and in the NixOS manual (accessible by running 'nixos-help').
 { config, pkgs, lib, ... }:
 let
   useCursorAppImage = true;
@@ -20,12 +20,16 @@ in
     NIXOS_OZONE_WL = "1";              # Improves support for Chromium apps under Wayland
   };
 
+  boot.loader.systemd-boot.enable = false;
+  boot.loader.efi.canTouchEfiVariables =  true;
+
 
   # Bootloader.
   boot.loader = {
     grub.enable = true;
-    grub.device = "/dev/nvme0n1";
+    grub.device = "nodev";
     grub.useOSProber = true;
+    grub.efiSupport = true;
   };
   boot.supportedFilesystems = [ "ntfs" ];
 
@@ -40,6 +44,12 @@ in
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
+    extraPackages = with pkgs; [
+      intel-media-driver  # For newer Intel iGPUs
+      vaapiIntel          # Legacy support, just in case
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
   };
 
 
@@ -88,7 +98,7 @@ in
       groups = [ "wheel" "git" ];
     }];
     extraConfig = with pkgs; ''
-      Defaults:picloud secure_path="${lib.makeBinPath [
+      Defaults secure_path="${lib.makeBinPath [
         systemd
       ]}:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin"
     '';
@@ -103,16 +113,6 @@ in
         command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time -cmd Hyprland";
       };
     };
-  };
-
-  hardware.opengl = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver  # For newer Intel iGPUs
-      vaapiIntel          # Legacy support, just in case
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
   };
 
   services.xserver = {
@@ -142,7 +142,7 @@ in
   };
   services.openssh.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.cavelasco = {
     isNormalUser = true;
     description = "cavelasco";
@@ -257,14 +257,16 @@ in
   ];
 
   fonts.packages = with pkgs; [
-    fira-code
-    fira-code-symbols
+    nerd-fonts.fira-code
   ];
-
-  nix.package = pkgs.nixVersions.stable;
+  
+  nix.settings = {
+    download-buffer-size =  524288000;
+  } ;
+  nix.package = pkgs.nix;
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
 
-  system.stateVersion = "24.11"; # Ensure this matches your NixOS channel
+  system.stateVersion = "25.05"; # Ensure this matches your NixOS channel
 }

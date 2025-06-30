@@ -137,6 +137,9 @@ local server_configs = {
     },
   },
   pylsp = {
+    flags = {
+      debounce_text_changes = 300,
+    },
     plugins = {
       pycodestyle = {
         enabled = false,

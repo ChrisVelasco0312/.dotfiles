@@ -22,10 +22,6 @@ in
         };
       })
     ];
-  };
-
-
-  nixpkgs = {
     config = {
       allowUnfree = true;
       allowUnfreePredicate = (_: true);
@@ -42,7 +38,7 @@ in
   home = {
     username = "cavelasco";
     homeDirectory = "/home/cavelasco";
-    stateVersion = "24.11";
+    stateVersion = "25.05";
 
     pointerCursor = {
       gtk.enable = true;
@@ -142,49 +138,45 @@ in
     brightnessctl
     mission-center
     # Fonts & Cursors
-    (nerdfonts.override {
-      fonts = [ "JetBrainsMono" "Inconsolata" ];
-    })
+    # (nerdfonts.override {
+    #   fonts = [ "JetBrainsMono" "Inconsolata" ];
+    # })
     capitaine-cursors
     hunspell
     hunspellDicts.es_CO
     hunspellDicts.es-es
+    # Fonts
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.inconsolata
     # APPS
     anki # spaced repetition cards
     ardour # audio editing
-    kdenlive # video editing
     zotero # research management
-    stremio # movies
     xournalpp # handwritten note taking
-    okular # pdf viewer
+    kdePackages.okular 
     feh #image viewer
     gparted # Partition editor
     vlc # Cross-platform media player
-    dolphin # file manager
-    breeze-icons # icons
+    libsForQt5.dolphin # file manager
+    libsForQt5.dolphin-plugins
+    libsForQt5.breeze-icons # icons
     spotify # music stream
     #--OBSIDIAN--
     obsidian
     hyprshot # screenshot
     zotero
-    stremio
     qbittorrent
     xournalpp
-    okular
     feh
     gparted
     vlc
     nautilus
-    breeze-icons
     spotify
     obs-studio
-    (pkgs.writeShellScriptBin "obsidian" ''
-      exec ${pkgs.obsidian}/bin/obsidian --disable-gpu "$@"
-    '')
     kitty
     kitty-themes
   ];
-  
+
   # ---- GITHUB SSH -------#
   programs.ssh.enable = true;
   services.ssh-agent.enable = true;

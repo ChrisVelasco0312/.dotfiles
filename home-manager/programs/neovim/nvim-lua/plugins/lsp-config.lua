@@ -6,7 +6,7 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 lspconfig.emmet_ls.setup({
   -- on_attach = on_attach, capabilities = capabilities,
-  filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'css', 'sass', 'scss', 'less', 'jsx' },
+  filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'jsx' },
   init_options = {
     html = {
       options = {
@@ -33,7 +33,6 @@ vim.diagnostic.config({
   },
   update_in_insert = true,
   float = {
-    source = "always", -- Or "if_many"
+    source = 'if_many', -- Or "if_many"
   },
 })
-

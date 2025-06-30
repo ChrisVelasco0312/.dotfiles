@@ -13,8 +13,19 @@ local sources = {
   }),
   builtins.diagnostics.fish,
   builtins.formatting.prettierd.with({
-    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "css", "scss", "json", "yaml",
-      "markdown", "html", "vue" },
+    filetypes = {
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+      "css",
+      "scss",
+      "json",
+      "yaml",
+      "markdown",
+      "html",
+      "vue"
+    },
   }),
   builtins.formatting.nixpkgs_fmt
 

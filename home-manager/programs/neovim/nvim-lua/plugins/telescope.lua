@@ -4,11 +4,11 @@ local actions = require('telescope.actions')
 local builtin = require("telescope.builtin")
 local open_with_trouble = require("trouble.sources.telescope").open
 
-local function telescope_buffer_dir()
-  return vim.fn.expand('%:p:h')
-end
+-- local function telescope_buffer_dir()
+-- return vim.fn.expand('%:p:h')
+-- end
 
-local fb_actions = require "telescope".extensions.file_browser.actions
+-- local fb_actions = require "telescope".extensions.file_browser.actions
 
 telescope.setup {
   defaults = {
