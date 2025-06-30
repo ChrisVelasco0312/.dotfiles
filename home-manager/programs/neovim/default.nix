@@ -94,7 +94,7 @@
           config = toLuaFile ./nvim-lua/plugins/prettier.lua;
         }
         {
-          plugin = null-ls-nvim;
+          plugin = none-ls-nvim;
           config = toLuaFile ./nvim-lua/plugins/null-ls.lua;
         }
         {
