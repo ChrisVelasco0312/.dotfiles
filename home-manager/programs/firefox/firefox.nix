@@ -16,6 +16,15 @@
         "browser.search.suggest.enabled" = false;
         "extensions.autoDisableScopes" = 0;
         "extensions.enabledScopes" = 15;
+        
+        # Dark theme settings
+        "ui.systemUsesDarkTheme" = 1;
+        "browser.theme.dark-private-browsing" = true;
+        "browser.theme.content-theme" = 0; # 0 = dark, 1 = light, 2 = system
+        "layout.css.prefers-color-scheme.content-override" = 0; # Force dark mode for websites
+        "devtools.theme" = "dark";
+        "browser.in-content.dark-mode" = true;
+        "ui.prefersReducedMotion" = 0;
       };
 
       userChrome = ''

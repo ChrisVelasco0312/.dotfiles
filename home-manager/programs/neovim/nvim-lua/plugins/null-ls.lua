@@ -1,5 +1,5 @@
-local status, null_ls = pcall(require, "null-ls")
-local builtins = null_ls.builtins
+local status, none_ls = pcall(require, "none-ls")
+local builtins = none_ls.builtins
 if (not status) then return end
 
 -- local group = vim.api.nvim_create_augroup("lsp_format_on_save", { clear = false })
@@ -13,11 +13,21 @@ local sources = {
   }),
   builtins.diagnostics.fish,
   builtins.formatting.prettierd.with({
-    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "css", "scss", "json", "yaml",
-      "markdown", "html", "vue" },
+    filetypes = {
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+      "css",
+      "scss",
+      "json",
+      "yaml",
+      "markdown",
+      "html",
+      "vue"
+    },
   }),
   builtins.formatting.nixpkgs_fmt
-
 }
 
 local on_attach = function(client, bufnr)
@@ -34,7 +44,7 @@ local on_attach = function(client, bufnr)
   end
 end
 
-null_ls.setup({
+none_ls.setup({
   debug = true,
   on_attach = on_attach,
   sources = sources,

@@ -19,7 +19,7 @@ update:
 	sudo nixos-rebuild switch --upgrade --flake .#nixos --impure
 
 home: .i-home
-	home-manager switch --flake .#cavelasco@nixos
+	home-manager switch --flake .#cavelasco@nixos 
 
 build:
 	make flake

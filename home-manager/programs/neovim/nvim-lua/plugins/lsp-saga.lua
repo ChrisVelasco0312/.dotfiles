@@ -1,6 +1,17 @@
 local status, saga = pcall(require, "lspsaga")
 if (not status) then return end
 
+-- Add safety check for LSP capabilities
+local function safe_lsp_request(method, params, callback)
+  local clients = vim.lsp.get_active_clients()
+  for _, client in pairs(clients) do
+    if client.supports_method(method) then
+      vim.lsp.buf_request(0, method, params, callback)
+      return
+    end
+  end
+end
+
 saga.setup({
   ui = {
     winblend = 10,
@@ -14,6 +25,9 @@ saga.setup({
   },
   server_filetype_map = {
     typescript = 'typescript',
+  },
+  lightbulb = {
+    enable = false, -- Disable lightbulb to prevent the error
   }
 })
 

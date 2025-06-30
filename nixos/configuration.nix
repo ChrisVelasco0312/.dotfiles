@@ -1,6 +1,6 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# and in the NixOS manual (accessible by running 'nixos-help').
 { config, pkgs, lib, ... }:
 let
   useCursorAppImage = true;
@@ -12,24 +12,24 @@ in
       /etc/nixos/hardware-configuration.nix
     ];
 
-  # System-wide environment variables (less common for user-specific settings)
-  # Moved TERMINAL to environment.sessionVariables below for user session scope.
-  environment.variables = {
-    # Example: MY_GLOBAL_VAR = "value";
-  };
-
   # Environment variables specific to user sessions (e.g., graphical sessions like Hyprland)
   environment.sessionVariables = {
-    TERMINAL = "kitty"; # Moved here for clarity as it's usually a session-specific variable.
-    # For hardware video acceleration (e.g., in browsers like Firefox or mpv) NIXOS_OZONE_WL = "1"; # Enables Ozone Wayland backend for Chromium-based apps LIBVA_DRIVER_NAME = "nvidia"; # Specifies NVIDIA as the VA-API driver for hardware decoding
+    TERMINAL = "kitty"; 
+    LIBVA_DRIVER_NAME = "iHD";         # Use "iHD" for Intel Media Driver
+    VDPAU_DRIVER = "va_gl";            # Needed for some VDPAU backends
+    NIXOS_OZONE_WL = "1";              # Improves support for Chromium apps under Wayland
   };
+
+  boot.loader.systemd-boot.enable = false;
+  boot.loader.efi.canTouchEfiVariables =  true;
 
 
   # Bootloader.
   boot.loader = {
     grub.enable = true;
-    grub.device = "/dev/nvme0n1";
+    grub.device = "nodev";
     grub.useOSProber = true;
+    grub.efiSupport = true;
   };
   boot.supportedFilesystems = [ "ntfs" ];
 
@@ -49,20 +49,14 @@ in
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
+    extraPackages = with pkgs; [
+      intel-media-driver  # For newer Intel iGPUs
+      vaapiIntel          # Legacy support, just in case
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
   };
 
-  hardware.nvidia = {
-    # Enable kernel mode setting (KMS) for the NVIDIA driver.
-    # This is CRUCIAL for Wayland compositors like Hyprland.
-    modesetting.enable = true;
-    powerManagement.enable = false; # User preference
-    powerManagement.finegrained = false; # User preference
-    open = false; # Use the traditional proprietary driver, not the open-source kernel modules.
-    nvidiaSettings = true; # Enable the NVIDIA Settings utility.
-    package = config.boot.kernelPackages.nvidiaPackages.stable; # Specify the production driver package.
-  };
-  # --- END NVIDIA Proprietary Driver Configuration ---
-  nixpkgs.config.nvidia.acceptLicense = true;
 
   networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager.enable = true; # Enable networking
@@ -109,7 +103,7 @@ in
       groups = [ "wheel" "git" ];
     }];
     extraConfig = with pkgs; ''
-      Defaults:picloud secure_path="${lib.makeBinPath [
+      Defaults secure_path="${lib.makeBinPath [
         systemd
       ]}:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin"
     '';
@@ -129,15 +123,13 @@ in
   services.xserver = {
     # Corrected typo: "nvidea" should be "nvidia".
     # This tells X.org (used by XWayland) to use the NVIDIA driver.
-    videoDrivers = [ "nvidia" ];
+    videoDrivers = [ "intel" ];
     enable = true;
-    xkb.layout = "us, es";
-    xkb.options = "erosign:e, compose:menu, grp:alt_space_toggle";
+    xkb.layout = "us, latam";
+    xkb.options = "grp:win_space_toggle";
     xkb.variant = "";
     wacom.enable = true;
-  };
-  services.libinput = {
-    touchpad.naturalScrolling = true;
+  }; services.libinput = { touchpad.naturalScrolling = true;
     enable = true;
     mouse.naturalScrolling = true;
   };
@@ -155,7 +147,7 @@ in
   };
   services.openssh.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.cavelasco = {
     isNormalUser = true;
     description = "cavelasco";
@@ -296,14 +288,16 @@ in
   ];
 
   fonts.packages = with pkgs; [
-    fira-code
-    fira-code-symbols
+    nerd-fonts.fira-code
   ];
-
-  nix.package = pkgs.nixVersions.stable;
+  
+  nix.settings = {
+    download-buffer-size =  524288000;
+  } ;
+  nix.package = pkgs.nix;
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
 
-  system.stateVersion = "24.11"; # Ensure this matches your NixOS channel
+  system.stateVersion = "25.05"; # Ensure this matches your NixOS channel
 }

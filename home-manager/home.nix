@@ -22,7 +22,6 @@ in
         };
       })
     ];
-
     config = {
       allowUnfree = true;
       allowUnfreePredicate = (_: true);
@@ -39,7 +38,7 @@ in
   home = {
     username = "cavelasco";
     homeDirectory = "/home/cavelasco";
-    stateVersion = "24.11";
+    stateVersion = "25.05";
 
     pointerCursor = {
       gtk.enable = true;
@@ -92,6 +91,14 @@ in
     racket
     lua-language-server
     markdown-oxide
+    #virtualization
+    virt-manager #GUI for virtual machines
+    qemu # Core QEMU tools
+    libvirt # Libvirt tools
+    virt-viewer # remote viewing
+    spice-gtk # Spice support
+    dnsmasq # Virtual network bridges
+    #java
     docker-compose
     python312Packages.pylsp-mypy
     python312Packages.python-lsp-black
@@ -140,28 +147,42 @@ in
     brightnessctl
     mission-center
     # Fonts & Cursors
-    (nerdfonts.override {
-      fonts = [ "JetBrainsMono" "Inconsolata" ];
-    })
+    # (nerdfonts.override {
+    #   fonts = [ "JetBrainsMono" "Inconsolata" ];
+    # })
     capitaine-cursors
     hunspell
     hunspellDicts.es_CO
     hunspellDicts.es-es
+    # Fonts
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.inconsolata
     # APPS
+    anki # spaced repetition cards
+    ardour # audio editing
+    zotero # research management
+    xournalpp # handwritten note taking
+    kdePackages.okular 
+    feh #image viewer
+    gparted # Partition editor
+    vlc # Cross-platform media player
+    libsForQt5.dolphin # file manager
+    libsForQt5.dolphin-plugins
+    libsForQt5.breeze-icons # icons
+    spotify # music stream
+    #--OBSIDIAN--
+    obsidian
+    hyprshot # screenshot
     zotero
-    stremio
     qbittorrent
     xournalpp
-    okular
     feh
     gparted
     vlc
     nautilus
-    breeze-icons
     spotify
     obs-studio
     inkscape
-    kdenlive
     obsidian
     hyprshot
     kitty
@@ -268,4 +289,12 @@ in
 
   # Optional fallback WM config
   # xdg.configFile.awesome.source = ../dots/awesome;
+
+  # VIRTUALIZATION
+  dconf.settings = {
+    "org/virt-manager/virt-manager/connections" = {
+      autoconnect = ["qemu:///system"];
+      uris = ["qemu:///system"];
+    };
+  };
 }
