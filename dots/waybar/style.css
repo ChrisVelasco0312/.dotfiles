@@ -20,6 +20,7 @@ window#waybar {
 #cpu,
 #memory,
 #network,
+#language,
 #custom-power {
 	background-color: rgba(40, 42, 54, 0.9);
 	color: #f8f8f2;
@@ -107,6 +108,11 @@ window#waybar {
 	color: #ff5555;
 }
 
+/* Keyboard Layout */
+#language {
+	color: #f1fa8c;
+}
+
 /* Power Menu */
 #custom-power {
 	color: #ff6b6b;
@@ -122,6 +128,7 @@ window#waybar {
 #cpu,
 #memory,
 #network,
+#language,
 #custom-power {
 	transition: all 0.2s ease;
 }
@@ -132,6 +139,7 @@ window#waybar {
 #cpu:hover,
 #memory:hover,
 #network:hover,
+#language:hover,
 #custom-power:hover {
 	background-color: rgba(58, 58, 58, 0.9);
 }

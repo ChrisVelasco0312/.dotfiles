@@ -41,8 +41,8 @@ in
 
       ## THEME CONFIG
       set -g @dracula-show-powerline true
-      set -g @dracula-fixed-location "NYC"
-      set -g @dracula-plugins "weather"
+      # set -g @dracula-fixed-location "NYC"
+      # set -g @dracula-plugins "weather"
       set -g @dracula-show-flags true
       set -g @dracula-show-left-icon session
       set -g status-position bottom

@@ -16,6 +16,7 @@
     "cpu",
     "memory",
     "network",
+    "hyprland/language",
     "custom/power"
   ],
 
@@ -84,6 +85,13 @@
     "tooltip-format": "{ifname} via {gwaddr}",
     "tooltip-format-wifi": "{essid} ({signalStrength}%)",
     "on-click": "nm-connection-editor"
+  },
+
+  "hyprland/language": {
+    "format": "⌨️ {}",
+    "format-en": "🇺🇸 EN",
+    "format-es": "🇪🇸 ES",
+    "tooltip-format": "Keyboard layout: {}"
   },
 
   "custom/power": {
