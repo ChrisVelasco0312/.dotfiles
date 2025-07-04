@@ -14,7 +14,6 @@
   "modules-right": [
     "pulseaudio",
     "battery", 
-    "custom/cpu-ram",
     "network",
     "custom/power"
   ],
@@ -65,11 +64,6 @@
     "format-charging": "CHG {capacity}%",
     "format-plugged": "AC {capacity}%",
     "format-icons": ["", "", "", "", ""]
-  },
-
-  "custom/cpu-ram": {
-    "interval": 10,
-    "exec": "~/.dotfiles/dots/waybar/scripts/cpu_ram.sh"
   },
 
   "network": {
