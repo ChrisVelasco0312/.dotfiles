@@ -22,21 +22,7 @@ local disable_format_on_save = function(bufnr)
   vim.api.nvim_clear_autocmds({ group = augroup_format, buffer = bufnr })
 end
 
--- Create global commands to toggle format on save
-vim.api.nvim_create_user_command('FormatOnSaveEnable', function()
-  vim.g.format_on_save_enabled = true
-  local bufnr = vim.api.nvim_get_current_buf()
-  enable_format_on_save(nil, bufnr)
-  vim.notify('Format on save enabled', vim.log.levels.INFO)
-end, { desc = 'Enable format on save for current buffer' })
-
-vim.api.nvim_create_user_command('FormatOnSaveDisable', function()
-  vim.g.format_on_save_enabled = false
-  local bufnr = vim.api.nvim_get_current_buf()
-  disable_format_on_save(bufnr)
-  vim.notify('Format on save disabled', vim.log.levels.INFO)
-end, { desc = 'Disable format on save for current buffer' })
-
+-- Create global command to toggle format on save
 vim.api.nvim_create_user_command('FormatOnSaveToggle', function()
   vim.g.format_on_save_enabled = not vim.g.format_on_save_enabled
   local bufnr = vim.api.nvim_get_current_buf()
@@ -136,7 +122,7 @@ local server_configs = {
   },
   emmet_ls = {
     init_options = {
-      filetypes = { "css", "html", "javascript", "sass" },
+      filetypes = { "html" },
       html = {
         options = {
           -- For possible options, see: https://github.com/emmetio/emmet/blob/master/src/config.ts#L79-L267

@@ -20,8 +20,6 @@ vim.keymap.set('n', '<Space>np', ':NoNeckPain<Enter>', { silent = true })
 
 -- Format on save toggle
 vim.keymap.set('n', '<Leader>fs', ':FormatOnSaveToggle<CR>', { silent = true, desc = 'toggle format on save' })
-vim.keymap.set('n', '<Leader>fse', ':FormatOnSaveEnable<CR>', { silent = true, desc = 'enable format on save' })
-vim.keymap.set('n', '<Leader>fsd', ':FormatOnSaveDisable<CR>', { silent = true, desc = 'disable format on save' })
 
 --Primeagen's keymaps
 
@@ -105,3 +103,8 @@ vim.keymap.set('n', '<C-z>', '<Nop>', { silent = true, desc = 'dont do anything'
 
 -- <Leader>k to save every buffer and quit
 vim.keymap.set('n', '<Leader>k', '<cmd>wa<CR>:qa<CR>', { silent = true, desc = 'save and quit' })
+
+-- Global format keymap
+vim.keymap.set('n', '<leader>f', function()
+  vim.lsp.buf.format()
+end, { desc = '[LSP] Format buffer' })

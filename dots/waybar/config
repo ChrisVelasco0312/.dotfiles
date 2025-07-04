@@ -5,7 +5,8 @@
   "spacing": 8,
   
   "modules-left": [
-    "hyprland/workspaces"
+    "hyprland/workspaces",
+    "hyprland/language"
   ],
   "modules-center": [
     "clock"
@@ -13,10 +14,8 @@
   "modules-right": [
     "pulseaudio",
     "battery", 
-    "cpu",
-    "memory",
+    "custom/cpu-ram",
     "network",
-    "hyprland/language",
     "custom/power"
   ],
 
@@ -36,9 +35,10 @@
       "default": ""
     },
     "on-click": "activate",
-    "persistent-workspaces": {
-      "*": 5
-    }
+    "all-outputs": false,
+    "disable-scroll": false,
+    "sort-by-number": true,
+    "show-special": false
   },
 
   "clock": {
@@ -47,9 +47,9 @@
   },
 
   "pulseaudio": {
-    "format": "🔊 {volume}%",
-    "format-bluetooth": "🎧 {volume}%",
-    "format-muted": "🔇 Muted",
+    "format": "VOL {volume}%",
+    "format-bluetooth": "BT {volume}%",
+    "format-muted": "MUTED",
     "scroll-step": 5,
     "on-click": "pavucontrol",
     "on-click-right": "pamixer -t",
@@ -61,41 +61,35 @@
       "warning": 30,
       "critical": 15
     },
-    "format": "{icon} {capacity}%",
-    "format-charging": "⚡ {capacity}%",
-    "format-plugged": "🔌 {capacity}%",
+    "format": "BAT {capacity}%",
+    "format-charging": "CHG {capacity}%",
+    "format-plugged": "AC {capacity}%",
     "format-icons": ["", "", "", "", ""]
   },
 
-  "cpu": {
+  "custom/cpu-ram": {
     "interval": 10,
-    "format": "💻 {usage}%",
-    "max-length": 10
-  },
-
-  "memory": {
-    "interval": 10,
-    "format": "🧠 {used:0.1f}G"
+    "exec": "~/.dotfiles/dots/waybar/scripts/cpu_ram.sh"
   },
 
   "network": {
-    "format-wifi": "📶 {signalStrength}%",
-    "format-ethernet": "🌐 Connected", 
-    "format-disconnected": "❌ Offline",
+    "format-wifi": "WIFI {signalStrength}%",
+    "format-ethernet": "ETH", 
+    "format-disconnected": "OFF",
     "tooltip-format": "{ifname} via {gwaddr}",
     "tooltip-format-wifi": "{essid} ({signalStrength}%)",
     "on-click": "nm-connection-editor"
   },
 
   "hyprland/language": {
-    "format": "⌨️ {}",
-    "format-en": "🇺🇸 EN",
-    "format-es": "🇪🇸 ES",
+    "format": "{}",
+    "format-en": "EN",
+    "format-es": "ES",
     "tooltip-format": "Keyboard layout: {}"
   },
 
   "custom/power": {
-    "format": "⏻",
+    "format": "PWR",
     "tooltip": "Power Menu",
     "on-click": "~/.dotfiles/dots/waybar/scripts/power_menu.sh",
     "escape": true

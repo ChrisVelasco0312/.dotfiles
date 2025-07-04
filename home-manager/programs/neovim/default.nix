@@ -26,7 +26,7 @@
         nixd
         nixpkgs-fmt
         python312Packages.python-lsp-server
-
+        nodePackages.prettier
       ];
 
       extraLuaConfig = ''
@@ -79,10 +79,6 @@
         {
           plugin = onedark-nvim;
           config = toLuaFile ./nvim-lua/plugins/onedark.lua;
-        }
-        {
-          plugin = vim-prettier;
-          config = toLuaFile ./nvim-lua/plugins/prettier.lua;
         }
         {
           plugin = none-ls-nvim;

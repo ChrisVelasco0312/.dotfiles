@@ -2,7 +2,7 @@
 
 # Power menu script for waybar
 
-options="🔒 Lock\n🚪 Logout\n💤 Suspend\n🔄 Restart\n⏻ Shutdown"
+options="󰌾 Lock\n󰍃 Logout\n󰤄 Suspend\n󰜉 Restart\n󰐥 Shutdown"
 
 chosen=$(echo -e "$options" | rofi -dmenu -i -p "Power Menu" \
     -theme-str 'window {width: 340px; height: 250px;}' \
@@ -14,20 +14,20 @@ chosen=$(echo -e "$options" | rofi -dmenu -i -p "Power Menu" \
     -theme-str 'entry {placeholder: "Power Menu";}')
 
 case $chosen in
-    "🔒 Lock")
+    "󰌾 Lock")
         # Adjust lock command based on your lock screen setup
         swaylock -f -c 000000 || hyprctl dispatch dpms off
         ;;
-    "🚪 Logout")
+    "󰍃 Logout")
         hyprctl dispatch exit
         ;;
-    "💤 Suspend")
+    "󰤄 Suspend")
         systemctl suspend
         ;;
-    "🔄 Restart")
+    "󰜉 Restart")
         systemctl reboot
         ;;
-    "⏻ Shutdown")
+    "󰐥 Shutdown")
         systemctl poweroff
         ;;
 esac 
