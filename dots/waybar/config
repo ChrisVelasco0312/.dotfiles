@@ -1,8 +1,8 @@
 {
   "layer": "top",
   "position": "top",
-  "height": 40,
-  "spacing": 8,
+  "height": 30,
+  "spacing": 4,
   
   "modules-left": [
     "hyprland/workspaces",
@@ -41,14 +41,14 @@
   },
 
   "clock": {
-    "format": "{:%H:%M   %a %b %d}",
+    "format": "{:%H:%M %a %b %d}",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
   },
 
   "pulseaudio": {
-    "format": "VOL {volume}%",
-    "format-bluetooth": "BT {volume}%",
-    "format-muted": "MUTED",
+    "format": "󰕾 {volume}%",
+    "format-bluetooth": "󰂯 {volume}%",
+    "format-muted": "󰖁",
     "scroll-step": 5,
     "on-click": "pavucontrol",
     "on-click-right": "pamixer -t",
@@ -60,30 +60,30 @@
       "warning": 30,
       "critical": 15
     },
-    "format": "BAT {capacity}%",
-    "format-charging": "CHG {capacity}%",
-    "format-plugged": "AC {capacity}%",
-    "format-icons": ["", "", "", "", ""]
+    "format": "󰁹 {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-plugged": "󰚥 {capacity}%",
+    "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
   },
 
   "network": {
-    "format-wifi": "WIFI {signalStrength}%",
-    "format-ethernet": "ETH", 
-    "format-disconnected": "OFF",
+    "format-wifi": "󰤨 {signalStrength}%",
+    "format-ethernet": "󰈀", 
+    "format-disconnected": "󰤭",
     "tooltip-format": "{ifname} via {gwaddr}",
     "tooltip-format-wifi": "{essid} ({signalStrength}%)",
     "on-click": "nm-connection-editor"
   },
 
   "hyprland/language": {
-    "format": "{}",
+    "format": "󰌌 {}",
     "format-en": "EN",
     "format-es": "ES",
     "tooltip-format": "Keyboard layout: {}"
   },
 
   "custom/power": {
-    "format": "PWR",
+    "format": "󰐥",
     "tooltip": "Power Menu",
     "on-click": "~/.dotfiles/dots/waybar/scripts/power_menu.sh",
     "escape": true
