@@ -36,7 +36,7 @@ in
   # Explicitly load NVIDIA kernel modules early during boot.
   # This helps ensure the proprietary driver is ready before the display manager starts.
   boot.initrd.kernelModules = [ "nvidia" ];
-  boot.kernelParams = ["processor.max_cstate=1" "nvidia_drm.modeset=1" "idle=nomwait"];
+  boot.kernelParams = [ "processor.max_cstate=1" "nvidia_drm.modeset=1" "idle=nomwait" ];
   boot.kernel.sysctl."kernel.sysrq" = 1;
   boot.kernelModules = [ "pstore" ];
 
@@ -159,7 +159,7 @@ in
   users.users.cavelasco = {
     isNormalUser = true;
     description = "cavelasco";
-    extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "render" "video"];
+    extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "render" "video" ];
     # packages = with pkgs; [
     #   brave
     # ];
@@ -191,7 +191,7 @@ in
     xdg-desktop-portal # Essential for Wayland portals (screen sharing, file dialogs etc.)
     xdg-desktop-portal-hyprland # Hyprland's specific implementation for xdg-desktop-portal
     xdg-desktop-portal-gtk # Recommended for better compatibility with GTK apps (e.g., Firefox, GNOME apps)
-    
+
     #virtualization packages
     (
       pkgs.qemu.override {
@@ -210,6 +210,21 @@ in
     appimage-run
     curl
     jq
+
+    # Gaming packages
+    heroic # Heroic Games Launcher for Epic Games, GOG, and Amazon Prime Games
+    wineWowPackages.stable # Wine for running Windows games
+    winetricks # Wine configuration utility
+    vulkan-tools # Vulkan utilities
+    vulkan-loader # Vulkan loader
+    gamemode # Optimization daemon for games
+    mangohud # Performance overlay for games
+    protontricks # Proton configuration utility
+    
+    # Additional gaming dependencies
+    xorg.xhost # For X11 forwarding in wine
+    mesa # OpenGL implementation
+    openal # Audio library for games
   ];
 
   virtualisation.libvirtd = {
@@ -222,68 +237,21 @@ in
     onShutdown = "shutdown";
   };
 
-  
-  system.activationScripts.createApplicationsDir = {
-    text = ''
-      mkdir -p /home/cavelasco/Applications
-      chown cavelasco:users /home/cavelasco/Applications
-      chmod 755 /home/cavelasco/Applications
-    '';
-    deps = [ ];
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
   };
-
-  system.activationScripts.installCursor = {
-    text = ''
-          # Create desktop entry for AppImage version
-          DESKTOP_FILE="/home/cavelasco/.local/share/applications/cursor.desktop"
-          mkdir -p "$(dirname "$DESKTOP_FILE")"
-    
-          # Ensure Applications directory exists
-          mkdir -p "/home/cavelasco/Applications"
-          chown cavelasco:users "/home/cavelasco/Applications"
-          chmod 755 "/home/cavelasco/Applications"
-    
-          # Fetch the latest Cursor AppImage
-          echo "Fetching latest Cursor AppImage..."
-          CURSOR_INFO=$(${pkgs.curl}/bin/curl -sSfL "https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest")
-          DOWNLOAD_URL=$(${pkgs.jq}/bin/jq -r '.downloadUrl' <<< "$CURSOR_INFO")
-    
-          if [ -n "$DOWNLOAD_URL" ] && [ "$DOWNLOAD_URL" != "null" ]; then
-            echo "Downloading from $DOWNLOAD_URL..."
-            ${pkgs.curl}/bin/curl -sSfL "$DOWNLOAD_URL" -o "/home/cavelasco/Applications/Cursor.AppImage.tmp"
-            if [ $? -eq 0 ]; then
-              chmod +x "/home/cavelasco/Applications/Cursor.AppImage.tmp"
-              mv "/home/cavelasco/Applications/Cursor.AppImage.tmp" "/home/cavelasco/Applications/Cursor.AppImage"
-              chown cavelasco:users "/home/cavelasco/Applications/Cursor.AppImage"
-              echo "Cursor AppImage downloaded successfully."
-            else
-              echo "ERROR: Failed to download Cursor AppImage."
-              rm -f "/home/cavelasco/Applications/Cursor.AppImage.tmp"
-            fi
-          else
-            echo "WARNING: Could not retrieve Cursor download URL. Skipping download."
-          fi
-    
-          # Create desktop entry for the AppImage
-          cat > "$DESKTOP_FILE" << EOF
-      [Desktop Entry]
-      Name=Cursor
-      Exec=${pkgs.appimage-run}/bin/appimage-run /home/cavelasco/Applications/Cursor.AppImage
-      Icon=code
-      Type=Application
-      Categories=Development;IDE;
-      Comment=AI-first code editor
-      Terminal=false
-      EOF
-    '';
-    deps = [ ];
-  };
-
 
   programs.zsh.enable = true;
   programs.hyprland.enable = true;
+  
+  # Gaming optimizations
+  programs.gamemode.enable = true; # GameMode for performance optimization
+  programs.gamescope.enable = true; # Gamescope for micro-compositor
 
-  programs.nix-ld.enable =  true;
+  programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
     libdrm
     mesa

@@ -84,6 +84,7 @@ in
 
   home.packages = with pkgs; [
     brave
+    qutebrowser
     # editors
     vscode
     # LANGUAGES
@@ -295,6 +296,103 @@ in
     "org/virt-manager/virt-manager/connections" = {
       autoconnect = ["qemu:///system"];
       uris = ["qemu:///system"];
+    };
+  };
+
+  # CURSOR APPIMAGE INSTALLATION - using systemd service for better network access
+  home.activation.createCursorDirectories = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    # Create Applications directory
+    mkdir -p "$HOME/Applications"
+    
+    # Create desktop entry directory
+    mkdir -p "$HOME/.local/share/applications"
+  '';
+
+  systemd.user.services.install-cursor = {
+    Unit = {
+      Description = "Download and install Cursor AppImage";
+      After = [ "network-online.target" ];
+      Wants = [ "network-online.target" ];
+    };
+    Service = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = pkgs.writeShellScript "install-cursor" ''
+        # Ensure directories exist
+        mkdir -p "$HOME/Applications"
+        mkdir -p "$HOME/.local/share/applications"
+        
+        # Check if Cursor already exists and is recent (less than 7 days old)
+        if [ -f "$HOME/Applications/Cursor.AppImage" ]; then
+          if [ $(find "$HOME/Applications/Cursor.AppImage" -mtime -7 2>/dev/null | wc -l) -gt 0 ]; then
+            echo "Cursor AppImage is recent, skipping download."
+            exit 0
+          fi
+        fi
+        
+        echo "Fetching latest Cursor AppImage..."
+        
+        # Add retry logic with timeout
+        for i in {1..3}; do
+          echo "Attempt $i/3..."
+          CURSOR_INFO=$(${pkgs.curl}/bin/curl --connect-timeout 30 --max-time 120 -sSfL "https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest" 2>/dev/null)
+          if [ $? -eq 0 ] && [ -n "$CURSOR_INFO" ]; then
+            break
+          fi
+          echo "Attempt $i failed, waiting 10 seconds..."
+          sleep 10
+        done
+        
+        if [ -z "$CURSOR_INFO" ]; then
+          echo "ERROR: Failed to fetch Cursor download information after 3 attempts."
+          exit 1
+        fi
+        
+        DOWNLOAD_URL=$(${pkgs.jq}/bin/jq -r '.downloadUrl' <<< "$CURSOR_INFO")
+        
+        if [ -n "$DOWNLOAD_URL" ] && [ "$DOWNLOAD_URL" != "null" ]; then
+          echo "Downloading from $DOWNLOAD_URL..."
+          
+          # Download with retry logic
+          for i in {1..3}; do
+            echo "Download attempt $i/3..."
+            if ${pkgs.curl}/bin/curl --connect-timeout 30 --max-time 300 -sSfL "$DOWNLOAD_URL" -o "$HOME/Applications/Cursor.AppImage.tmp"; then
+              chmod +x "$HOME/Applications/Cursor.AppImage.tmp"
+              mv "$HOME/Applications/Cursor.AppImage.tmp" "$HOME/Applications/Cursor.AppImage"
+              echo "Cursor AppImage downloaded successfully."
+              break
+            else
+              echo "Download attempt $i failed, waiting 10 seconds..."
+              rm -f "$HOME/Applications/Cursor.AppImage.tmp"
+              if [ $i -eq 3 ]; then
+                echo "ERROR: Failed to download Cursor AppImage after 3 attempts."
+                exit 1
+              fi
+              sleep 10
+            fi
+          done
+        else
+          echo "ERROR: Could not retrieve Cursor download URL."
+          exit 1
+        fi
+        
+        # Create desktop entry for the AppImage
+        cat > "$HOME/.local/share/applications/cursor.desktop" << 'EOF'
+[Desktop Entry]
+Name=Cursor
+Exec=${pkgs.appimage-run}/bin/appimage-run %h/Applications/Cursor.AppImage
+Icon=code
+Type=Application
+Categories=Development;IDE;
+Comment=AI-first code editor
+Terminal=false
+EOF
+        
+        echo "Cursor installation completed successfully."
+      '';
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
     };
   };
 }
