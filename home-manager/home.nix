@@ -189,6 +189,7 @@ in
     kitty
     kitty-themes
     ffmpeg
+    droidcam
   ];
 
   # ---- GITHUB SSH -------#

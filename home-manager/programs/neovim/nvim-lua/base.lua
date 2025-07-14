@@ -6,6 +6,13 @@ vim.scriptencoding = 'utf-8'
 vim.opt.encoding = 'utf-8'
 vim.opt.fileencoding = 'utf-8'
 
+-- Auto-reload files when they change on disk
+vim.o.autoread = true
+vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGained" }, {
+  command = "if &buftype != 'prompt' | checktime | endif",
+  pattern = "*",
+})
+
 vim.wo.number = true
 
 vim.opt.title = true
