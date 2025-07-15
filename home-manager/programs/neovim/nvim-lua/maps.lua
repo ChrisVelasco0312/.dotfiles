@@ -15,8 +15,8 @@ vim.keymap.set('n', '<Space>q', ':q!<Enter>', { silent = true })
 --source
 vim.keymap.set('n', '<Space>so', ':so<Enter>', { silent = true })
 
--- Toggle neckpain
-vim.keymap.set('n', '<Space>np', ':NoNeckPain<Enter>', { silent = true })
+-- Toggle zen mode
+vim.keymap.set('n', '<Space>np', ':ZenMode<Enter>', { silent = true })
 
 -- Format on save toggle
 vim.keymap.set('n', '<Leader>fs', ':FormatOnSaveToggle<CR>', { silent = true, desc = 'toggle format on save' })

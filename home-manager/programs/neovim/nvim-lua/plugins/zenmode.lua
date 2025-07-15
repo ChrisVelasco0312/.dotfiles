@@ -5,26 +5,28 @@ zenmode.setup({
     backdrop = 0.95, -- shade the backdrop of the Zen window
     width = 120, -- width of the Zen window (matching your noneck config)
     height = 1, -- height of the Zen window
+    -- by default, no options are changed for the Zen window
+    -- keeping all UI elements visible for centered functionality only
     options = {
-      signcolumn = "no", -- disable signcolumn
-      number = false, -- disable number column
-      relativenumber = false, -- disable relative numbers
-      cursorline = false, -- disable cursorline
-      cursorcolumn = false, -- disable cursor column
-      foldcolumn = "0", -- disable fold column
+      -- signcolumn = "yes", -- keep signcolumn visible
+      -- number = true, -- keep line numbers visible
+      -- relativenumber = true, -- keep relative numbers if enabled
+      -- cursorline = true, -- keep cursorline visible
+      -- cursorcolumn = false, -- keep cursor column setting
+      -- foldcolumn = "auto", -- keep fold column visible
     },
   },
   plugins = {
     options = {
-      enabled = true,
-      ruler = false, -- disables the ruler text in the cmd line area
-      showcmd = false, -- disables the command in the last line of the screen
-      laststatus = 0, -- turn off the statusline in zen mode
+      enabled = false, -- disable global vim options changes to keep UI
+      -- ruler = true, -- keep ruler visible
+      -- showcmd = true, -- keep command visible
+      -- laststatus = 2, -- keep statusline visible
     },
     twilight = { enabled = false }, -- disable twilight integration
-    gitsigns = { enabled = false }, -- disables git signs
-    tmux = { enabled = false }, -- disables the tmux statusline
-    todo = { enabled = false }, -- disable todo-comments highlights
+    gitsigns = { enabled = true }, -- keep git signs visible
+    tmux = { enabled = false }, -- keep tmux statusline
+    todo = { enabled = true }, -- keep todo-comments highlights
   },
   -- callback where you can add custom code when the Zen window opens
   on_open = function(win)
