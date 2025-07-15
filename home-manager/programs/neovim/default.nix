@@ -128,6 +128,10 @@
           plugin = nvim-ufo;
           config = toLuaFile ./nvim-lua/plugins/ufo.lua;
         }
+        {
+          plugin = windsurf-nvim;
+          config = toLuaFile ./nvim-lua/plugins/windsurf.lua;
+        }
         #JAVA 
         nvim-dap
         nvim-jdtls
