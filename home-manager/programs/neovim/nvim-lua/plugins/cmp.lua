@@ -39,6 +39,7 @@ cmp.setup({
     end, { 'i', 's' }),
   }),
   sources = cmp.config.sources({
+    { name = 'codeium' },
     { name = 'nvim_lsp' },
     { name = 'buffer' },
     {
@@ -51,7 +52,7 @@ cmp.setup({
     },
   }),
   formatting = {
-    format = lspkind.cmp_format({ with_text = false, maxwidth = 50 })
+    format = lspkind.cmp_format({ maxwidth = 50, symbol_map = { Codeium = "" } })
   }
 })
 

@@ -218,6 +218,7 @@ in
       };
       Service = {
         Type = "oneshot";
+        Environment = [ "SSH_AUTH_SOCK=%t/ssh-agent" ];
         ExecStart = "${pkgs.openssh}/bin/ssh-add ${githubKeyPath}";
       };
       Install = {
@@ -231,6 +232,7 @@ in
       };
       Service = {
         Type = "oneshot";
+        Environment = [ "SSH_AUTH_SOCK=%t/ssh-agent" ];
         ExecStart = "${pkgs.openssh}/bin/ssh-add ${workKeyPath}"; # Uses workKeyPath
       };
       Install = {
