@@ -34,6 +34,7 @@
         ${builtins.readFile ./nvim-lua/base.lua } 
         ${builtins.readFile ./nvim-lua/maps.lua }
         -- plugins config
+        ${builtins.readFile ./nvim-lua/plugins/alpha.lua}
         ${builtins.readFile ./nvim-lua/plugins/autotag.lua }
         ${builtins.readFile ./nvim-lua/plugins/autopairs.lua }
         ${builtins.readFile ./nvim-lua/plugins/telescope.lua }
@@ -42,6 +43,7 @@
       '';
 
       plugins = with pkgs.vimPlugins; [
+        alpha-nvim # dashboard
         ## telescope dependencies
         telescope-nvim
         telescope-fzf-native-nvim
@@ -89,8 +91,8 @@
           config = toLuaFile ./nvim-lua/plugins/treesitter.lua;
         }
         {
-          plugin = no-neck-pain-nvim;
-          config = toLuaFile ./nvim-lua/plugins/noneck.lua;
+          plugin = zen-mode-nvim;
+          config = toLuaFile ./nvim-lua/plugins/zenmode.lua;
         }
         vim-which-key
         ## misc
