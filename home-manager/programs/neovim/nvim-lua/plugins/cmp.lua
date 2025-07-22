@@ -5,6 +5,10 @@ local luasnip = require 'luasnip'
 
 
 cmp.setup({
+  enabled = function()
+    local ft = vim.api.nvim_buf_get_option(0, "filetype")
+    return ft ~= "oil"
+  end,
   snippet = {
     expand = function(args)
       require('luasnip').lsp_expand(args.body)

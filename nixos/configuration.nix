@@ -154,13 +154,69 @@ in
     alsa.support32Bit = true;
     pulse.enable = true;
   };
+
+  # Mumble server for phone microphone streaming
+  services.murmur = {
+    enable = true;
+    bandwidth = 540000;
+    bonjour = true;
+    password = "phone_mic_password";  # Change this to your preferred password
+    autobanTime = 0;
+  };
+
+  # PipeWire configuration for virtual audio devices
+  services.pipewire.extraConfig.pipewire."97-null-sink" = {
+    "context.objects" = [
+      {
+        factory = "adapter";
+        args = {
+          "factory.name" = "support.null-audio-sink";
+          "node.name" = "Null-Sink";
+          "node.description" = "Null Sink";
+          "media.class" = "Audio/Sink";
+          "audio.position" = "FL,FR";
+        };
+      }
+      {
+        factory = "adapter";
+        args = {
+          "factory.name" = "support.null-audio-sink";
+          "node.name" = "Null-Source";
+          "node.description" = "Null Source";
+          "media.class" = "Audio/Source";
+          "audio.position" = "FL,FR";
+        };
+      }
+    ];
+  };
+
+  services.pipewire.extraConfig.pipewire."98-virtual-mic" = {
+    "context.modules" = [
+      {
+        name = "libpipewire-module-loopback";
+        args = {
+          "audio.position" = "FL,FR";
+          "node.description" = "Mumble as Microphone";
+          "capture.props" = {
+            # Mumble's output node name.
+            "node.target" = "Mumble";
+            "node.passive" = true;
+          };
+          "playback.props" = {
+            "node.name" = "Virtual-Mumble-Microphone";
+            "media.class" = "Audio/Source";
+          };
+        };
+      }
+    ];
+  };
   services.openssh.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.cavelasco = {
     isNormalUser = true;
     description = "cavelasco";
-    extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "render" "video" ];
+    extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "render" "video" "input" "plugdev" ];
     # packages = with pkgs; [
     #   brave
     # ];
@@ -226,6 +282,10 @@ in
     xorg.xhost # For X11 forwarding in wine
     mesa # OpenGL implementation
     openal # Audio library for games
+    
+    # Controller support packages
+    linuxConsoleTools # Tools for gamepad support
+    jstest-gtk # Joystick testing tool
   ];
 
   virtualisation.libvirtd = {
@@ -243,7 +303,19 @@ in
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+    gamescopeSession.enable = true; # Enable gamescope session for Steam
+    extraCompatPackages = with pkgs; [
+      proton-ge-bin
+    ];
   };
+
+  # Open ports in the firewall for Mumble server (phone microphone)
+  networking.firewall.allowedTCPPorts = [
+    64738  # Mumble Murmur server port
+  ];
+  networking.firewall.allowedUDPPorts = [
+    64738  # Mumble Murmur server port
+  ];
 
   programs.zsh.enable = true;
   programs.hyprland.enable = true;
@@ -251,6 +323,9 @@ in
   # Gaming optimizations
   programs.gamemode.enable = true; # GameMode for performance optimization
   programs.gamescope.enable = true; # Gamescope for micro-compositor
+  
+  # Enable hardware support for game controllers
+  hardware.steam-hardware.enable = true;
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [

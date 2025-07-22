@@ -189,7 +189,9 @@ in
     kitty
     kitty-themes
     ffmpeg
-    droidcam
+    # Phone microphone streaming
+    mumble
+    pulseaudio
   ];
 
   # ---- GITHUB SSH -------#
@@ -264,6 +266,7 @@ in
         fi
       }
       alias ranger="ranger-cd"
+      alias gemini="npx https://github.com/google-gemini/gemini-cli"
     '';
   };
 
