@@ -33,12 +33,31 @@ in
   };
   boot.supportedFilesystems = [ "ntfs" ];
 
+  # Auto-mount additional storage drives
+  fileSystems."/mnt/myfiles" = {
+    device = "/dev/disk/by-uuid/6088266F5FF8E75C";
+    fsType = "ntfs";
+    options = [ "defaults" "uid=1000" "gid=100" "dmask=022" "fmask=133" ];
+  };
+
+  fileSystems."/mnt/storage" = {
+    device = "/dev/disk/by-uuid/8EB68508B684F24F";
+    fsType = "ntfs";
+    options = [ "defaults" "uid=1000" "gid=100" "dmask=022" "fmask=133" ];
+  };
+
+  # Create mount point directories
+  systemd.tmpfiles.rules = [
+    "d /mnt/myfiles 0755 cavelasco users -"
+    "d /mnt/storage 0755 cavelasco users -"
+  ];
+
   # Explicitly load NVIDIA kernel modules early during boot.
   # This helps ensure the proprietary driver is ready before the display manager starts.
   boot.initrd.kernelModules = [ "nvidia" ];
   boot.kernelParams = [ "processor.max_cstate=1" "nvidia_drm.modeset=1" "idle=nomwait" ];
   boot.kernel.sysctl."kernel.sysrq" = 1;
-  boot.kernelModules = [ "pstore" ];
+  boot.kernelModules = [ "pstore" "snd-seq" "snd-rawmidi" ];
 
   services.journald.extraConfig = ''
     Storage=persistent
@@ -153,6 +172,13 @@ in
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    jack.enable = true;  # Enable JACK support in PipeWire
+  };
+
+  # JACK configuration for low-latency audio and MIDI
+  # Using PipeWire's JACK emulation instead of traditional JACK daemon
+  services.jack = {
+    jackd.enable = false; # Disable traditional JACK since we use PipeWire's implementation
   };
 
   # Mumble server for phone microphone streaming
@@ -212,11 +238,11 @@ in
   };
   services.openssh.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.cavelasco = {
     isNormalUser = true;
     description = "cavelasco";
-    extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "render" "video" "input" "plugdev" ];
+    extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "render" "video" "input" "plugdev" "audio" ];
     # packages = with pkgs; [
     #   brave
     # ];
@@ -248,6 +274,15 @@ in
     xdg-desktop-portal # Essential for Wayland portals (screen sharing, file dialogs etc.)
     xdg-desktop-portal-hyprland # Hyprland's specific implementation for xdg-desktop-portal
     xdg-desktop-portal-gtk # Recommended for better compatibility with GTK apps (e.g., Firefox, GNOME apps)
+
+    # MIDI support packages for Wine/Proton applications
+    alsa-utils          # ALSA utilities including aconnect, amidi
+    alsa-oss           # ALSA OSS compatibility layer  
+    timidity           # Software synthesizer and MIDI player
+    qjackctl           # JACK control application
+    a2jmidid           # ALSA to JACK MIDI bridge
+    jack2              # JACK audio connection kit
+    wineasio           # ASIO driver for Wine
 
     #virtualization packages
     (

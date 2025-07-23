@@ -63,13 +63,19 @@ in
 
   gtk = {
     enable = true;
+    iconTheme = {
+      name = "Papirus";
+      package = pkgs.papirus-icon-theme;
+    };
     gtk3.extraConfig = {
       gtk-cursor-theme-name = cursorTheme.name;
       gtk-cursor-theme-size = cursorTheme.size;
+      gtk-icon-theme-name = "Papirus";
     };
     gtk4.extraConfig = {
       gtk-cursor-theme-name = cursorTheme.name;
       gtk-cursor-theme-size = cursorTheme.size;
+      gtk-icon-theme-name = "Papirus";
     };
   };
 
@@ -170,6 +176,17 @@ in
     libsForQt5.dolphin # file manager
     libsForQt5.dolphin-plugins
     libsForQt5.breeze-icons # icons
+    # GNOME/GTK theming and thumbnails
+    papirus-icon-theme # Modern icon theme
+    adwaita-icon-theme # Default GNOME icons (fallback)
+    gst_all_1.gstreamer # Video thumbnail generation
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav # FFmpeg integration for GStreamer
+    ffmpegthumbnailer # Video thumbnail generator
+    webp-pixbuf-loader # WebP image support
     spotify # music stream
     #--OBSIDIAN--
     obsidian
