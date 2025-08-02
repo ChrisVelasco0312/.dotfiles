@@ -355,6 +355,10 @@ in
   programs.zsh.enable = true;
   programs.hyprland.enable = true;
   
+  # Enable flatpak support
+  services.flatpak.enable = true;
+  xdg.portal.enable = true;
+  
   # Gaming optimizations
   programs.gamemode.enable = true; # GameMode for performance optimization
   programs.gamescope.enable = true; # Gamescope for micro-compositor

@@ -52,6 +52,7 @@ in
       EDITOR = "nvim";
       XCURSOR_THEME = cursorTheme.name;
       XCURSOR_SIZE = toString cursorTheme.size;
+      XDG_DATA_DIRS = "$XDG_DATA_DIRS:$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share";
     };
 
     shellAliases = {
@@ -165,6 +166,7 @@ in
     nerd-fonts.jetbrains-mono
     nerd-fonts.inconsolata
     # APPS
+    insomnia # API testing
     anki # spaced repetition cards
     ardour # audio editing
     zotero # research management
@@ -209,6 +211,8 @@ in
     # Phone microphone streaming
     mumble
     pulseaudio
+    # DAW
+    reaper
   ];
 
   # ---- GITHUB SSH -------#
