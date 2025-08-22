@@ -166,7 +166,7 @@ in
     nerd-fonts.jetbrains-mono
     nerd-fonts.inconsolata
     # APPS
-    insomnia # API testing
+    postman # API testing
     anki # spaced repetition cards
     ardour # audio editing
     zotero # research management
@@ -213,6 +213,8 @@ in
     pulseaudio
     # DAW
     reaper
+    # Cloud
+    google-cloud-sdk
   ];
 
   # ---- GITHUB SSH -------#
@@ -276,7 +278,7 @@ in
       plugins = [ "git" "python" "docker" "fzf" ];
       theme = "intheloop";
     };
-    initExtra = ''
+    initContent = ''
       function ranger-cd {
         local tmp="$(mktemp -t "ranger_cd.XXXXXXXXXX")"
         ranger --choosedir="$tmp" "$@"

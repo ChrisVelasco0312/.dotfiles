@@ -84,7 +84,7 @@ local config = {
         runtimes = {
           {
             name = "JavaSE-23",
-            path = home .. "/.nix-profile/bin/java",
+            path = "/home/cavelasco/.nix-profile/bin/java",
           }
         }
       }
@@ -97,28 +97,8 @@ local config = {
   -- for the full list of options
   cmd = {
     "jdtls",
-    -- '-Declipse.application=org.eclipse.jdt.ls.core.id1',
-    -- '-Dosgi.bundles.defaultStartLevel=4',
-    -- '-Declipse.product=org.eclipse.jdt.ls.core.product',
-    -- '-Dlog.protocol=true',
-    -- '-Dlog.level=ALL',
-    -- '-Xmx4g',
-    -- '--add-modules=ALL-SYSTEM',
-    -- '--add-opens', 'java.base/java.util=ALL-UNNAMED',
-    -- '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
-    -- -- If you use lombok, download the lombok jar and place it in ~/.local/share/eclipse
-    -- '-javaagent:/nix/store/iqf693m55jdkmjx9msq4w73yhckbjdfb-lombok-1.18.34/share/java/lombok.jar',
-    --
-    -- -- The jar file is located where jdtls was installed. This will need to be updated
-    -- -- to the location where you installed jdtls
-    -- '-jar', vim.fn.glob('/nix/store/l05jjpqa7wam5xyi93fxw0l1rwn3ix5n-jdt-language-server-1.40.0/share/java/jdtls/plugins/org.eclipse.equinox.launcher_1.6.900.v20240613-2009.jar'),
-    --
-    -- -- The configuration for jdtls is also placed where jdtls was installed. This will
-    -- -- need to be updated depending on your environment
-    -- '-configuration', '/nix/store/l05jjpqa7wam5xyi93fxw0l1rwn3ix5n-jdt-language-server-1.40.0/share/java/jdtls/config_linux',
-    --
-    -- -- Use the workspace_folder defined above to store data for this project
-    -- '-data', workspace_folder,
+    "--java-executable", "/home/cavelasco/.nix-profile/bin/java",
+    "-data", workspace_folder,
   },
 }
 

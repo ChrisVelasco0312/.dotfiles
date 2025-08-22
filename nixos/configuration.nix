@@ -85,7 +85,7 @@ in
 
   networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager.enable = true; # Enable networking
-  networking.nameservers = ["1.1.1.1"  "8.0.0.0"];
+  networking.nameservers = [ "1.1.1.1" "8.0.0.0" ];
 
   # Set your time zone.
   time.timeZone = "America/Bogota";
@@ -107,7 +107,8 @@ in
   hardware.bluetooth.enable = true; # enables support for Bluetooth
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
-  hardware.pulseaudio.enable = false; # Disabled in favor of PipeWire
+  # hardware.pulseaudio.enable = false; # Disabled in favor of PipeWire
+  services.pulseaudio.enable = false;
 
   security.sudo = {
     enable = true;
@@ -172,7 +173,7 @@ in
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    jack.enable = true;  # Enable JACK support in PipeWire
+    jack.enable = true; # Enable JACK support in PipeWire
   };
 
   # JACK configuration for low-latency audio and MIDI
@@ -186,7 +187,7 @@ in
     enable = true;
     bandwidth = 540000;
     bonjour = true;
-    password = "phone_mic_password";  # Change this to your preferred password
+    password = "phone_mic_password"; # Change this to your preferred password
     autobanTime = 0;
   };
 
@@ -243,9 +244,6 @@ in
     isNormalUser = true;
     description = "cavelasco";
     extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "render" "video" "input" "plugdev" "audio" ];
-    # packages = with pkgs; [
-    #   brave
-    # ];
     shell = pkgs.zsh;
   };
 
@@ -276,13 +274,13 @@ in
     xdg-desktop-portal-gtk # Recommended for better compatibility with GTK apps (e.g., Firefox, GNOME apps)
 
     # MIDI support packages for Wine/Proton applications
-    alsa-utils          # ALSA utilities including aconnect, amidi
-    alsa-oss           # ALSA OSS compatibility layer  
-    timidity           # Software synthesizer and MIDI player
-    qjackctl           # JACK control application
-    a2jmidid           # ALSA to JACK MIDI bridge
-    jack2              # JACK audio connection kit
-    wineasio           # ASIO driver for Wine
+    alsa-utils # ALSA utilities including aconnect, amidi
+    alsa-oss # ALSA OSS compatibility layer  
+    timidity # Software synthesizer and MIDI player
+    qjackctl # JACK control application
+    a2jmidid # ALSA to JACK MIDI bridge
+    jack2 # JACK audio connection kit
+    wineasio # ASIO driver for Wine
 
     #virtualization packages
     (
@@ -312,12 +310,12 @@ in
     gamemode # Optimization daemon for games
     mangohud # Performance overlay for games
     protontricks # Proton configuration utility
-    
+
     # Additional gaming dependencies
     xorg.xhost # For X11 forwarding in wine
     mesa # OpenGL implementation
     openal # Audio library for games
-    
+
     # Controller support packages
     linuxConsoleTools # Tools for gamepad support
     jstest-gtk # Joystick testing tool
@@ -346,23 +344,23 @@ in
 
   # Open ports in the firewall for Mumble server (phone microphone)
   networking.firewall.allowedTCPPorts = [
-    64738  # Mumble Murmur server port
+    64738 # Mumble Murmur server port
   ];
   networking.firewall.allowedUDPPorts = [
-    64738  # Mumble Murmur server port
+    64738 # Mumble Murmur server port
   ];
 
   programs.zsh.enable = true;
   programs.hyprland.enable = true;
-  
+
   # Enable flatpak support
   services.flatpak.enable = true;
   xdg.portal.enable = true;
-  
+
   # Gaming optimizations
   programs.gamemode.enable = true; # GameMode for performance optimization
   programs.gamescope.enable = true; # Gamescope for micro-compositor
-  
+
   # Enable hardware support for game controllers
   hardware.steam-hardware.enable = true;
 
