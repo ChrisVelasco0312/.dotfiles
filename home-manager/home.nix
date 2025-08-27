@@ -116,6 +116,113 @@ EOF
             maintainers = [ "cavelasco" ];
           };
         };
+
+        # Custom gemini-cli package that automatically fetches the latest version
+        gemini-cli = prev.stdenv.mkDerivation rec {
+          pname = "gemini-cli";
+          version = "latest";
+          
+          # No source needed - we create wrapper scripts
+          src = null;
+          dontUnpack = true;
+          
+          nativeBuildInputs = with prev; [ makeWrapper ];
+          
+          installPhase = ''
+            mkdir -p $out/bin
+            
+            # Create the installer script
+            cat > $out/bin/gemini-cli-install << 'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+GEMINI_CLI_DIR="$HOME/.local/bin"
+GEMINI_CLI_PATH="$GEMINI_CLI_DIR/gemini"
+
+# Create directory if it doesn't exist
+mkdir -p "$GEMINI_CLI_DIR"
+
+# Check if gemini exists and is recent (less than 7 days old)
+if [ -f "$GEMINI_CLI_PATH" ]; then
+  if [ $(find "$GEMINI_CLI_PATH" -mtime -7 2>/dev/null | wc -l) -gt 0 ]; then
+    echo "gemini-cli is up to date (less than 7 days old)"
+    exit 0
+  fi
+  echo "gemini-cli found but older than 7 days, updating..."
+fi
+
+echo "Installing/updating gemini-cli..."
+
+# Fetch the latest release information
+LATEST_RELEASE=$(curl -s https://api.github.com/repos/google-gemini/gemini-cli/releases/latest)
+LATEST_VERSION=$(echo "$LATEST_RELEASE" | jq -r '.tag_name')
+DOWNLOAD_URL=$(echo "$LATEST_RELEASE" | jq -r '.assets[0].browser_download_url')
+
+if [ "$DOWNLOAD_URL" = "null" ] || [ -z "$DOWNLOAD_URL" ]; then
+  echo "Error: Could not find download URL for latest release"
+  exit 1
+fi
+
+echo "Downloading Gemini CLI version $LATEST_VERSION..."
+
+# Download the latest version
+if curl -L -o "$GEMINI_CLI_PATH.tmp" "$DOWNLOAD_URL"; then
+  chmod +x "$GEMINI_CLI_PATH.tmp"
+  mv "$GEMINI_CLI_PATH.tmp" "$GEMINI_CLI_PATH"
+  echo "gemini-cli installation completed! Version: $LATEST_VERSION"
+else
+  echo "Error: Failed to download gemini-cli"
+  rm -f "$GEMINI_CLI_PATH.tmp"
+  exit 1
+fi
+EOF
+            
+            # Create the main wrapper script
+            cat > $out/bin/gemini << 'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+GEMINI_CLI_PATH="$HOME/.local/bin/gemini"
+
+# Auto-install if not present or force update if --update flag is passed
+if [ ! -f "$GEMINI_CLI_PATH" ] || [[ "$*" == *"--force-update"* ]]; then
+  echo "Installing/updating gemini-cli..."
+  gemini-cli-install
+  # Remove --force-update from arguments if present
+  set -- "''${@/--force-update/}"
+fi
+
+# Execute the actual gemini CLI with all arguments
+if [ -f "$GEMINI_CLI_PATH" ]; then
+  exec "$GEMINI_CLI_PATH" "$@"
+else
+  echo "Error: gemini-cli installation failed"
+  echo "Please run 'gemini-cli-install' manually or check your internet connection"
+  exit 1
+fi
+EOF
+            
+            # Make scripts executable
+            chmod +x $out/bin/gemini-cli-install
+            chmod +x $out/bin/gemini
+            
+            # Wrap the scripts to ensure proper PATH and dependencies
+            wrapProgram $out/bin/gemini-cli-install \
+              --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.jq prev.bash ]}
+            
+            wrapProgram $out/bin/gemini \
+              --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.jq prev.bash ]} \
+              --prefix PATH : $out/bin
+          '';
+          
+          meta = with prev.lib; {
+            description = "Gemini CLI - Google's Generative AI command line interface";
+            homepage = "https://github.com/google-gemini/gemini-cli";
+            license = licenses.asl20;
+            platforms = platforms.unix;
+            maintainers = [ "cavelasco" ];
+          };
+        };
       })
     ];
     config = {
@@ -195,6 +302,7 @@ EOF
     # editors
     vscode
     cursor-cli
+    gemini-cli
     # LANGUAGES
     devbox
     racket
@@ -390,7 +498,6 @@ EOF
         fi
       }
       alias ranger="ranger-cd"
-      alias gemini="npx https://github.com/google-gemini/gemini-cli"
     '';
   };
 
@@ -436,6 +543,8 @@ EOF
     
     # Create desktop entry directory
     mkdir -p "$HOME/.local/share/applications"
+    
+
   '';
 
   systemd.user.services.install-cursor = {
