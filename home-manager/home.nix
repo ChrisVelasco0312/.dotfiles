@@ -20,47 +20,47 @@ in
             src = inputs.plugin-lualine;
           };
         };
-        
+
         # Custom cursor-cli package that automatically fetches the latest version
         cursor-cli = prev.stdenv.mkDerivation rec {
           pname = "cursor-cli";
           version = "latest";
-          
+
           # No source needed - we create wrapper scripts
           src = null;
           dontUnpack = true;
-          
+
           nativeBuildInputs = with prev; [ makeWrapper ];
-          
+
           installPhase = ''
-            mkdir -p $out/bin
+                        mkdir -p $out/bin
             
-            # Create the installer script
-            cat > $out/bin/cursor-cli-install << 'EOF'
-${builtins.readFile ./scripts/cursor-cli-install.sh}
-EOF
+                        # Create the installer script
+                        cat > $out/bin/cursor-cli-install << 'EOF'
+            ${builtins.readFile ./scripts/cursor-cli-install.sh}
+            EOF
             
-            # Create the main wrapper script
-            cat > $out/bin/cursor-agent << 'EOF'
-${builtins.readFile ./scripts/cursor-agent.sh}
-EOF
+                        # Create the main wrapper script
+                        cat > $out/bin/cursor-agent << 'EOF'
+            ${builtins.readFile ./scripts/cursor-agent.sh}
+            EOF
             
-            # Make scripts executable
-            chmod +x $out/bin/cursor-cli-install
-            chmod +x $out/bin/cursor-agent
+                        # Make scripts executable
+                        chmod +x $out/bin/cursor-cli-install
+                        chmod +x $out/bin/cursor-agent
             
-            # Wrap the scripts to ensure proper PATH and dependencies
-            wrapProgram $out/bin/cursor-cli-install \
-              --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.bash ]}
+                        # Wrap the scripts to ensure proper PATH and dependencies
+                        wrapProgram $out/bin/cursor-cli-install \
+                          --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.bash ]}
             
-            wrapProgram $out/bin/cursor-agent \
-              --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.bash ]} \
-              --prefix PATH : $out/bin
+                        wrapProgram $out/bin/cursor-agent \
+                          --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.bash ]} \
+                          --prefix PATH : $out/bin
             
-            # Create symlink for convenience
-            ln -s $out/bin/cursor-agent $out/bin/cursor-cli
+                        # Create symlink for convenience
+                        ln -s $out/bin/cursor-agent $out/bin/cursor-cli
           '';
-          
+
           meta = with prev.lib; {
             description = "Cursor CLI - AI-powered code editor command line interface";
             homepage = "https://cursor.com/cli";
@@ -74,39 +74,39 @@ EOF
         gemini-cli = prev.stdenv.mkDerivation rec {
           pname = "gemini-cli";
           version = "latest";
-          
+
           # No source needed - we create wrapper scripts
           src = null;
           dontUnpack = true;
-          
+
           nativeBuildInputs = with prev; [ makeWrapper ];
-          
+
           installPhase = ''
-            mkdir -p $out/bin
+                        mkdir -p $out/bin
             
-            # Create the installer script
-            cat > $out/bin/gemini-cli-install << 'EOF'
-${builtins.readFile ./scripts/gemini-cli-install.sh}
-EOF
+                        # Create the installer script
+                        cat > $out/bin/gemini-cli-install << 'EOF'
+            ${builtins.readFile ./scripts/gemini-cli-install.sh}
+            EOF
             
-            # Create the main wrapper script
-            cat > $out/bin/gemini << 'EOF'
-${builtins.readFile ./scripts/gemini.sh}
-EOF
+                        # Create the main wrapper script
+                        cat > $out/bin/gemini << 'EOF'
+            ${builtins.readFile ./scripts/gemini.sh}
+            EOF
             
-            # Make scripts executable
-            chmod +x $out/bin/gemini-cli-install
-            chmod +x $out/bin/gemini
+                        # Make scripts executable
+                        chmod +x $out/bin/gemini-cli-install
+                        chmod +x $out/bin/gemini
             
-            # Wrap the scripts to ensure proper PATH and dependencies
-            wrapProgram $out/bin/gemini-cli-install \
-              --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.jq prev.bash ]}
+                        # Wrap the scripts to ensure proper PATH and dependencies
+                        wrapProgram $out/bin/gemini-cli-install \
+                          --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.jq prev.bash ]}
             
-            wrapProgram $out/bin/gemini \
-              --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.jq prev.bash ]} \
-              --prefix PATH : $out/bin
+                        wrapProgram $out/bin/gemini \
+                          --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.jq prev.bash ]} \
+                          --prefix PATH : $out/bin
           '';
-          
+
           meta = with prev.lib; {
             description = "Gemini CLI - Google's Generative AI command line interface";
             homepage = "https://github.com/google-gemini/gemini-cli";
@@ -149,7 +149,7 @@ EOF
       XCURSOR_SIZE = toString cursorTheme.size;
       XDG_DATA_DIRS = "$XDG_DATA_DIRS:$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share";
     };
-    
+
     sessionPath = [
       "$HOME/.local/bin"
     ];
@@ -272,7 +272,7 @@ EOF
     ardour # audio editing
     zotero # research management
     xournalpp # handwritten note taking
-    kdePackages.okular 
+    kdePackages.okular
     feh #image viewer
     gparted # Partition editor
     vlc # Cross-platform media player
@@ -423,13 +423,13 @@ EOF
   # VIRTUALIZATION
   dconf.settings = {
     "org/virt-manager/virt-manager/connections" = {
-      autoconnect = ["qemu:///system"];
-      uris = ["qemu:///system"];
+      autoconnect = [ "qemu:///system" ];
+      uris = [ "qemu:///system" ];
     };
   };
 
   # CURSOR APPIMAGE INSTALLATION - using systemd service for better network access
-  home.activation.createCursorDirectories = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  home.activation.createCursorDirectories = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     # Create Applications directory
     mkdir -p "$HOME/Applications"
     
@@ -449,77 +449,77 @@ EOF
       Type = "oneshot";
       RemainAfterExit = true;
       ExecStart = pkgs.writeShellScript "install-cursor" ''
-        # Ensure directories exist
-        mkdir -p "$HOME/Applications"
-        mkdir -p "$HOME/.local/share/applications"
+                # Ensure directories exist
+                mkdir -p "$HOME/Applications"
+                mkdir -p "$HOME/.local/share/applications"
         
-        # Check if Cursor already exists and is recent (less than 7 days old)
-        if [ -f "$HOME/Applications/Cursor.AppImage" ]; then
-          if [ $(find "$HOME/Applications/Cursor.AppImage" -mtime -7 2>/dev/null | wc -l) -gt 0 ]; then
-            echo "Cursor AppImage is recent, skipping download."
-            exit 0
-          fi
-        fi
+                # Check if Cursor already exists and is recent (less than 7 days old)
+                if [ -f "$HOME/Applications/Cursor.AppImage" ]; then
+                  if [ $(find "$HOME/Applications/Cursor.AppImage" -mtime -7 2>/dev/null | wc -l) -gt 0 ]; then
+                    echo "Cursor AppImage is recent, skipping download."
+                    exit 0
+                  fi
+                fi
         
-        echo "Fetching latest Cursor AppImage..."
+                echo "Fetching latest Cursor AppImage..."
         
-        # Add retry logic with timeout
-        for i in {1..3}; do
-          echo "Attempt $i/3..."
-          CURSOR_INFO=$(${pkgs.curl}/bin/curl --connect-timeout 30 --max-time 120 -sSfL "https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest" 2>/dev/null)
-          if [ $? -eq 0 ] && [ -n "$CURSOR_INFO" ]; then
-            break
-          fi
-          echo "Attempt $i failed, waiting 10 seconds..."
-          sleep 10
-        done
+                # Add retry logic with timeout
+                for i in {1..3}; do
+                  echo "Attempt $i/3..."
+                  CURSOR_INFO=$(${pkgs.curl}/bin/curl --connect-timeout 30 --max-time 120 -sSfL "https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest" 2>/dev/null)
+                  if [ $? -eq 0 ] && [ -n "$CURSOR_INFO" ]; then
+                    break
+                  fi
+                  echo "Attempt $i failed, waiting 10 seconds..."
+                  sleep 10
+                done
         
-        if [ -z "$CURSOR_INFO" ]; then
-          echo "ERROR: Failed to fetch Cursor download information after 3 attempts."
-          exit 1
-        fi
+                if [ -z "$CURSOR_INFO" ]; then
+                  echo "ERROR: Failed to fetch Cursor download information after 3 attempts."
+                  exit 1
+                fi
         
-        DOWNLOAD_URL=$(${pkgs.jq}/bin/jq -r '.downloadUrl' <<< "$CURSOR_INFO")
+                DOWNLOAD_URL=$(${pkgs.jq}/bin/jq -r '.downloadUrl' <<< "$CURSOR_INFO")
         
-        if [ -n "$DOWNLOAD_URL" ] && [ "$DOWNLOAD_URL" != "null" ]; then
-          echo "Downloading from $DOWNLOAD_URL..."
+                if [ -n "$DOWNLOAD_URL" ] && [ "$DOWNLOAD_URL" != "null" ]; then
+                  echo "Downloading from $DOWNLOAD_URL..."
           
-          # Download with retry logic
-          for i in {1..3}; do
-            echo "Download attempt $i/3..."
-            if ${pkgs.curl}/bin/curl --connect-timeout 30 --max-time 300 -sSfL "$DOWNLOAD_URL" -o "$HOME/Applications/Cursor.AppImage.tmp"; then
-              chmod +x "$HOME/Applications/Cursor.AppImage.tmp"
-              mv "$HOME/Applications/Cursor.AppImage.tmp" "$HOME/Applications/Cursor.AppImage"
-              echo "Cursor AppImage downloaded successfully."
-              break
-            else
-              echo "Download attempt $i failed, waiting 10 seconds..."
-              rm -f "$HOME/Applications/Cursor.AppImage.tmp"
-              if [ $i -eq 3 ]; then
-                echo "ERROR: Failed to download Cursor AppImage after 3 attempts."
-                exit 1
-              fi
-              sleep 10
-            fi
-          done
-        else
-          echo "ERROR: Could not retrieve Cursor download URL."
-          exit 1
-        fi
+                  # Download with retry logic
+                  for i in {1..3}; do
+                    echo "Download attempt $i/3..."
+                    if ${pkgs.curl}/bin/curl --connect-timeout 30 --max-time 300 -sSfL "$DOWNLOAD_URL" -o "$HOME/Applications/Cursor.AppImage.tmp"; then
+                      chmod +x "$HOME/Applications/Cursor.AppImage.tmp"
+                      mv "$HOME/Applications/Cursor.AppImage.tmp" "$HOME/Applications/Cursor.AppImage"
+                      echo "Cursor AppImage downloaded successfully."
+                      break
+                    else
+                      echo "Download attempt $i failed, waiting 10 seconds..."
+                      rm -f "$HOME/Applications/Cursor.AppImage.tmp"
+                      if [ $i -eq 3 ]; then
+                        echo "ERROR: Failed to download Cursor AppImage after 3 attempts."
+                        exit 1
+                      fi
+                      sleep 10
+                    fi
+                  done
+                else
+                  echo "ERROR: Could not retrieve Cursor download URL."
+                  exit 1
+                fi
         
-        # Create desktop entry for the AppImage
-        cat > "$HOME/.local/share/applications/cursor.desktop" << 'EOF'
-[Desktop Entry]
-Name=Cursor
-Exec=${pkgs.appimage-run}/bin/appimage-run %h/Applications/Cursor.AppImage
-Icon=code
-Type=Application
-Categories=Development;IDE;
-Comment=AI-first code editor
-Terminal=false
-EOF
+                # Create desktop entry for the AppImage
+                cat > "$HOME/.local/share/applications/cursor.desktop" << 'EOF'
+        [Desktop Entry]
+        Name=Cursor
+        Exec=${pkgs.appimage-run}/bin/appimage-run %h/Applications/Cursor.AppImage
+        Icon=code
+        Type=Application
+        Categories=Development;IDE;
+        Comment=AI-first code editor
+        Terminal=false
+        EOF
         
-        echo "Cursor installation completed successfully."
+                echo "Cursor installation completed successfully."
       '';
     };
     Install = {
