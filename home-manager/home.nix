@@ -20,6 +20,102 @@ in
             src = inputs.plugin-lualine;
           };
         };
+        
+        # Custom cursor-cli package that automatically fetches the latest version
+        cursor-cli = prev.stdenv.mkDerivation rec {
+          pname = "cursor-cli";
+          version = "latest";
+          
+          # No source needed - we create wrapper scripts
+          src = null;
+          dontUnpack = true;
+          
+          nativeBuildInputs = with prev; [ makeWrapper ];
+          
+          installPhase = ''
+            mkdir -p $out/bin
+            
+            # Create the installer script
+            cat > $out/bin/cursor-cli-install << 'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+CURSOR_CLI_DIR="$HOME/.local/bin"
+CURSOR_CLI_PATH="$CURSOR_CLI_DIR/cursor-agent"
+
+# Create directory if it doesn't exist
+mkdir -p "$CURSOR_CLI_DIR"
+
+# Check if cursor-agent exists and is recent (less than 7 days old)
+if [ -f "$CURSOR_CLI_PATH" ]; then
+  if [ $(find "$CURSOR_CLI_PATH" -mtime -7 2>/dev/null | wc -l) -gt 0 ]; then
+    echo "cursor-cli is up to date (less than 7 days old)"
+    exit 0
+  fi
+  echo "cursor-cli found but older than 7 days, updating..."
+fi
+
+echo "Installing/updating cursor-cli..."
+# Use the official installation script
+if command -v curl >/dev/null 2>&1; then
+  curl https://cursor.com/install -fsS | bash
+else
+  echo "Error: curl is required but not found in PATH"
+  exit 1
+fi
+
+echo "cursor-cli installation completed!"
+EOF
+            
+            # Create the main wrapper script
+            cat > $out/bin/cursor-agent << 'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+CURSOR_CLI_PATH="$HOME/.local/bin/cursor-agent"
+
+# Auto-install if not present or force update if --update flag is passed
+if [ ! -f "$CURSOR_CLI_PATH" ] || [[ "$*" == *"--force-update"* ]]; then
+  echo "Installing/updating cursor-cli..."
+  cursor-cli-install
+  # Remove --force-update from arguments if present
+  set -- "''${@/--force-update/}"
+fi
+
+# Execute the actual cursor-agent with all arguments
+if [ -f "$CURSOR_CLI_PATH" ]; then
+  exec "$CURSOR_CLI_PATH" "$@"
+else
+  echo "Error: cursor-cli installation failed"
+  echo "Please run 'cursor-cli-install' manually or check your internet connection"
+  exit 1
+fi
+EOF
+            
+            # Make scripts executable
+            chmod +x $out/bin/cursor-cli-install
+            chmod +x $out/bin/cursor-agent
+            
+            # Wrap the scripts to ensure proper PATH and dependencies
+            wrapProgram $out/bin/cursor-cli-install \
+              --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.bash ]}
+            
+            wrapProgram $out/bin/cursor-agent \
+              --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.bash ]} \
+              --prefix PATH : $out/bin
+            
+            # Create symlink for convenience
+            ln -s $out/bin/cursor-agent $out/bin/cursor-cli
+          '';
+          
+          meta = with prev.lib; {
+            description = "Cursor CLI - AI-powered code editor command line interface";
+            homepage = "https://cursor.com/cli";
+            license = licenses.unfree;
+            platforms = platforms.unix;
+            maintainers = [ "cavelasco" ];
+          };
+        };
       })
     ];
     config = {
@@ -54,6 +150,10 @@ in
       XCURSOR_SIZE = toString cursorTheme.size;
       XDG_DATA_DIRS = "$XDG_DATA_DIRS:$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share";
     };
+    
+    sessionPath = [
+      "$HOME/.local/bin"
+    ];
 
     shellAliases = {
       l = "eza";
@@ -94,6 +194,7 @@ in
     qutebrowser
     # editors
     vscode
+    cursor-cli
     # LANGUAGES
     devbox
     racket
