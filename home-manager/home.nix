@@ -148,6 +148,7 @@ in
       XCURSOR_THEME = cursorTheme.name;
       XCURSOR_SIZE = toString cursorTheme.size;
       XDG_DATA_DIRS = "$XDG_DATA_DIRS:$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share";
+      JAVA_HOME = "${pkgs.jdk21}/lib/openjdk";
     };
 
     sessionPath = [
@@ -220,7 +221,7 @@ in
     isort
     # java
     jdt-language-server
-    jdk23
+    jdk21
     lombok
     maven
     # NODE

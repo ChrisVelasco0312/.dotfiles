@@ -18,9 +18,43 @@ function nnoremap(rhs, lhs, bufopts, desc)
   vim.keymap.set("n", rhs, lhs, bufopts)
 end
 
+-- Get Java executable path dynamically
+local function get_java_executable()
+  local java_path = vim.fn.exepath('java')
+  if java_path ~= '' then
+    return java_path
+  end
+  -- Fallback to the hardcoded path
+  return "/home/cavelasco/.nix-profile/bin/java"
+end
+
+-- Get Java home directory dynamically
+local function get_java_home()
+  local java_home = os.getenv('JAVA_HOME')
+  if java_home and java_home ~= '' then
+    return java_home
+  end
+  -- Fallback: try to get it from the java executable
+  local java_exec = get_java_executable()
+  if java_exec then
+    -- Remove /bin/java from the path to get the home directory
+    return vim.fn.fnamemodify(java_exec, ":h:h")
+  end
+  -- Final fallback
+  return "/nix/store/*/openjdk-21*/lib/openjdk"
+end
+
+local java_executable = get_java_executable()
+local java_home = get_java_home()
+
+-- Debug: Print Java executable and home paths
+vim.api.nvim_echo({{"Java executable: " .. java_executable, "Comment"}}, false, {})
+vim.api.nvim_echo({{"Java home: " .. java_home, "Comment"}}, false, {})
+
 local config = {
   flags = {
     debounce_text_changes = 80,
+    allow_incremental_sync = true,
   },
   root_dir = root_dir, -- Set the root directory to our found root_marker
   -- Here you can configure eclipse.jdt.ls specific settings
@@ -83,10 +117,20 @@ local config = {
       configuration = {
         runtimes = {
           {
-            name = "JavaSE-23",
-            path = "/home/cavelasco/.nix-profile/bin/java",
+            name = "JavaSE-21",
+            path = java_home,
+            default = true,
           }
-        }
+        },
+        -- Additional configuration to help with runtime detection
+        updateBuildConfiguration = "automatic",
+        maven = {
+          downloadSources = true,
+          updateSnapshots = true,
+        },
+        gradle = {
+          wrapperEnabled = true,
+        },
       }
     }
   },
@@ -97,7 +141,10 @@ local config = {
   -- for the full list of options
   cmd = {
     "jdtls",
-    "--java-executable", "/home/cavelasco/.nix-profile/bin/java",
+    "--java-executable", java_executable,
+    "--no-validate-java-version",  -- Disable Java version validation to avoid issues
+    "--jvm-arg=-Dlog.level=WARNING",  -- Reduce log verbosity
+    "--jvm-arg=-Djava.home=" .. java_home,  -- Explicitly set Java home
     "-data", workspace_folder,
   },
 }
