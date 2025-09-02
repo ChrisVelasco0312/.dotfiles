@@ -28,34 +28,15 @@ in
   # Bootloader.
   boot.loader = {
     grub.enable = true;
-    grub.device = "/dev/nvme0n1";
+    grub.device = "nodev"; # EFI install, avoid BIOS blocklists on GPT
     grub.useOSProber = true;
+    efi.canTouchEfiVariables = true;
+    efi.efiSysMountPoint = "/boot"; # ensure your ESP is mounted here
   };
   boot.supportedFilesystems = [ "ntfs" ];
 
-  # Auto-mount additional storage drives
-  fileSystems."/mnt/myfiles" = {
-    device = "/dev/disk/by-uuid/6088266F5FF8E75C";
-    fsType = "ntfs";
-    options = [ "defaults" "uid=1000" "gid=100" "dmask=022" "fmask=133" ];
-  };
-
-  fileSystems."/mnt/storage" = {
-    device = "/dev/disk/by-uuid/8EB68508B684F24F";
-    fsType = "ntfs";
-    options = [ "defaults" "uid=1000" "gid=100" "dmask=022" "fmask=133" ];
-  };
-
-  # Create mount point directories
-  systemd.tmpfiles.rules = [
-    "d /mnt/myfiles 0755 cavelasco users -"
-    "d /mnt/storage 0755 cavelasco users -"
-  ];
-
-  # Explicitly load NVIDIA kernel modules early during boot.
-  # This helps ensure the proprietary driver is ready before the display manager starts.
-  boot.initrd.kernelModules = [ "nvidia" ];
-  boot.kernelParams = [ "processor.max_cstate=1" "nvidia_drm.modeset=1" "idle=nomwait" ];
+  # Explicitly load kernel modules early during boot.
+  boot.kernelParams = [ "processor.max_cstate=1" "idle=nomwait" ];
   boot.kernel.sysctl."kernel.sysrq" = 1;
   boot.kernelModules = [ "pstore" "snd-seq" "snd-rawmidi" ];
 
@@ -70,18 +51,9 @@ in
     enable32Bit = true;
   };
 
-  hardware.nvidia = {
-    # Enable kernel mode setting (KMS) for the NVIDIA driver.
-    # This is CRUCIAL for Wayland compositors like Hyprland.
-    modesetting.enable = true;
-    powerManagement.enable = false; # User preference
-    powerManagement.finegrained = false; # User preference
-    open = false; # Use the traditional proprietary driver, not the open-source kernel modules.
-    nvidiaSettings = true; # Enable the NVIDIA Settings utility.
-    package = config.boot.kernelPackages.nvidiaPackages.stable; # Specify the production driver package.
-  };
+  # NVIDIA-specific configuration removed for non-NVIDIA hardware.
   # --- END NVIDIA Proprietary Driver Configuration ---
-  nixpkgs.config.nvidia.acceptLicense = true;
+  
 
   networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager.enable = true; # Enable networking
@@ -148,9 +120,8 @@ in
   };
 
   services.xserver = {
-    # Corrected typo: "nvidea" should be "nvidia".
-    # This tells X.org (used by XWayland) to use the NVIDIA driver.
-    videoDrivers = [ "nvidia" ];
+    # Use the generic modesetting driver for wide hardware compatibility.
+    videoDrivers = [ "modesetting" ];
     enable = true;
     xkb.layout = "us, es";
     xkb.options = "erosign:e, compose:menu, grp:alt_space_toggle";
