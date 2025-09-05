@@ -317,6 +317,8 @@ in
     reaper
     # Cloud
     google-cloud-sdk
+    scrcpy
+    android-tools
   ];
 
   # ---- GITHUB SSH -------#

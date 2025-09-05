@@ -214,7 +214,7 @@ in
   users.users.cavelasco = {
     isNormalUser = true;
     description = "cavelasco";
-    extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "render" "video" "input" "plugdev" "audio" ];
+    extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "render" "video" "input" "plugdev" "audio" "adbusers" ];
     shell = pkgs.zsh;
   };
 
@@ -291,6 +291,10 @@ in
     linuxConsoleTools # Tools for gamepad support
     jstest-gtk # Joystick testing tool
   ];
+
+  # Enable adb and set proper udev rules for Android devices
+  programs.adb.enable = true;
+  services.udev.packages = [ pkgs.android-udev-rules ];
 
   virtualisation.libvirtd = {
     enable = true;
