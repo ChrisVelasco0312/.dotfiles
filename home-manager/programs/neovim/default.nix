@@ -50,6 +50,10 @@
         telescope-file-browser-nvim
         nvim-autopairs
         {
+          plugin = git-blame-nvim;
+          config = toLuaFile ./nvim-lua/plugins/git-blame.lua;
+        }
+        {
           plugin = oil-nvim;
           config = toLuaFile ./nvim-lua/plugins/oil.lua;
         }
