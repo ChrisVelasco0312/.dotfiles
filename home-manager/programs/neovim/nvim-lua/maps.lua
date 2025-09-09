@@ -108,3 +108,57 @@ vim.keymap.set('n', '<Leader>k', '<cmd>wa<CR>:qa<CR>', { silent = true, desc = '
 vim.keymap.set('n', '<leader>f', function()
   vim.lsp.buf.format()
 end, { desc = '[LSP] Format buffer' })
+
+-- Git blame floating window
+vim.keymap.set('n', '<Leader>gb', function()
+  local blame_info = require('gitblame').get_current_blame_text()
+  if blame_info == "Not Committed Yet" then
+    blame_info = "No blame information available"
+  end
+  
+  -- Create a floating window
+  local buf = vim.api.nvim_create_buf(false, true)
+  local width = 100
+  local height = 3
+  
+  -- Get current cursor position
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local row = cursor[1] - 1
+  local col = cursor[2]
+  
+  -- Calculate window position (centered around cursor)
+  local win_row = math.max(0, row - height - 1)
+  local win_col = math.max(0, col - width / 2)
+  
+  -- Create the floating window
+  local opts = {
+    relative = 'cursor',
+    row = win_row,
+    col = win_col,
+    width = width,
+    height = height,
+    style = 'minimal',
+    border = 'rounded',
+    title = 'Git Blame',
+    title_pos = 'center'
+  }
+  
+  local win = vim.api.nvim_open_win(buf, true, opts)
+  
+  -- Set the blame text
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, {blame_info})
+  vim.api.nvim_buf_set_option(buf, 'modifiable', false)
+  vim.api.nvim_buf_set_option(buf, 'readonly', true)
+  
+  -- Close the window when pressing any key
+  vim.api.nvim_buf_set_keymap(buf, 'n', '<Esc>', ':close<CR>', {noremap = true, silent = true})
+  vim.api.nvim_buf_set_keymap(buf, 'n', '<CR>', ':close<CR>', {noremap = true, silent = true})
+  vim.api.nvim_buf_set_keymap(buf, 'n', 'q', ':close<CR>', {noremap = true, silent = true})
+  
+  -- Auto-close after 5 seconds
+  vim.defer_fn(function()
+    if vim.api.nvim_win_is_valid(win) then
+      vim.api.nvim_win_close(win, true)
+    end
+  end, 5000)
+end, { desc = 'Show git blame in floating window' })
