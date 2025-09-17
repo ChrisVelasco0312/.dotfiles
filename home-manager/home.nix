@@ -220,6 +220,7 @@ in
     black
     isort
     # java
+    tmc-cli
     jdt-language-server
     jdk21
     lombok
@@ -313,6 +314,12 @@ in
     # Phone microphone streaming
     mumble
     pulseaudio
+    scrcpy
+    # Android development and device control
+    android-tools  # Includes ADB and fastboot
+    android-udev-rules  # USB device rules for Android devices
+    libusb1  # USB library
+    usbutils  # USB utilities for device detection
     # DAW
     reaper
     # Cloud
@@ -417,6 +424,8 @@ in
   xdg.configFile."hypr/start.sh".source = ../dots/hypr/start.sh;
   xdg.configFile."hypr/background.jpg".source = ../dots/hypr/background.jpg;
   xdg.configFile."nvim/ftplugin/java.lua".source = ./programs/neovim/nvim-lua/ftplugin/java.lua;
+  
+
 
   # Optional fallback WM config
   # xdg.configFile.awesome.source = ../dots/awesome;
@@ -436,8 +445,6 @@ in
     
     # Create desktop entry directory
     mkdir -p "$HOME/.local/share/applications"
-    
-
   '';
 
   systemd.user.services.install-cursor = {
@@ -521,6 +528,72 @@ in
         EOF
         
                 echo "Cursor installation completed successfully."
+      '';
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+  };
+
+  systemd.user.services.install-kdenlive = {
+    Unit = {
+      Description = "Download and install Kdenlive AppImage";
+      After = [ "network-online.target" ];
+      Wants = [ "network-online.target" ];
+    };
+    Service = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = pkgs.writeShellScript "install-kdenlive" ''
+                # Ensure directories exist
+                mkdir -p "$HOME/Applications"
+                mkdir -p "$HOME/.local/share/applications"
+        
+                # Check if Kdenlive already exists and is recent (less than 7 days old)
+                if [ -f "$HOME/Applications/Kdenlive.AppImage" ]; then
+                  if [ $(find "$HOME/Applications/Kdenlive.AppImage" -mtime -7 2>/dev/null | wc -l) -gt 0 ]; then
+                    echo "Kdenlive AppImage is recent, skipping download."
+                    exit 0
+                  fi
+                fi
+        
+                echo "Fetching latest Kdenlive AppImage..."
+        
+                # Kdenlive AppImage download URL - using the official KDE download server
+                DOWNLOAD_URL="https://download.kde.org/stable/kdenlive/25.08/linux/kdenlive-25.08.0-x86_64.AppImage"
+        
+                # Download with retry logic
+                for i in {1..3}; do
+                  echo "Download attempt $i/3..."
+                  if ${pkgs.curl}/bin/curl --connect-timeout 30 --max-time 300 -sSfL "$DOWNLOAD_URL" -o "$HOME/Applications/Kdenlive.AppImage.tmp"; then
+                    chmod +x "$HOME/Applications/Kdenlive.AppImage.tmp"
+                    mv "$HOME/Applications/Kdenlive.AppImage.tmp" "$HOME/Applications/Kdenlive.AppImage"
+                    echo "Kdenlive AppImage downloaded successfully."
+                    break
+                  else
+                    echo "Download attempt $i failed, waiting 10 seconds..."
+                    rm -f "$HOME/Applications/Kdenlive.AppImage.tmp"
+                    if [ $i -eq 3 ]; then
+                      echo "ERROR: Failed to download Kdenlive AppImage after 3 attempts."
+                      exit 1
+                    fi
+                    sleep 10
+                  fi
+                done
+        
+                # Create desktop entry for the AppImage
+                cat > "$HOME/.local/share/applications/kdenlive.desktop" << 'EOF'
+        [Desktop Entry]
+        Name=Kdenlive
+        Exec=${pkgs.appimage-run}/bin/appimage-run %h/Applications/Kdenlive.AppImage
+        Icon=kdenlive
+        Type=Application
+        Categories=AudioVideo;Video;VideoEditing;
+        Comment=Non-linear video editor
+        Terminal=false
+        EOF
+        
+                echo "Kdenlive installation completed successfully."
       '';
     };
     Install = {
