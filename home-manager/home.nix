@@ -269,6 +269,7 @@ in
     nerd-fonts.jetbrains-mono
     nerd-fonts.inconsolata
     # APPS
+    dbeaver-bin # SQL client
     postman # API testing
     anki # spaced repetition cards
     ardour # audio editing
