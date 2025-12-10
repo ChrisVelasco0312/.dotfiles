@@ -7,7 +7,8 @@ require('obsidian').setup({
   },
   follow_url_func = function(url)
     vim.fn.jobstart({ "xdg-open", url })
-  end
+  end,
+  legacy_commands = false,
 })
 
 vim.api.nvim_create_autocmd("FileType", {
