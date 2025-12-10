@@ -18,10 +18,8 @@ in
     # Example: MY_GLOBAL_VAR = "value";
   };
 
-  # Environment variables specific to user sessions (e.g., graphical sessions like Hyprland)
   environment.sessionVariables = {
-    TERMINAL = "kitty"; # Moved here for clarity as it's usually a session-specific variable.
-    # For hardware video acceleration (e.g., in browsers like Firefox or mpv) NIXOS_OZONE_WL = "1"; # Enables Ozone Wayland backend for Chromium-based apps LIBVA_DRIVER_NAME = "nvidia"; # Specifies NVIDIA as the VA-API driver for hardware decoding
+    TERMINAL = "kitty"; 
   };
 
 
@@ -71,26 +69,23 @@ in
   };
 
   hardware.nvidia = {
-    # Enable kernel mode setting (KMS) for the NVIDIA driver.
-    # This is CRUCIAL for Wayland compositors like Hyprland.
     modesetting.enable = true;
-    powerManagement.enable = false; # User preference
-    powerManagement.finegrained = false; # User preference
-    open = false; # Use the traditional proprietary driver, not the open-source kernel modules.
-    nvidiaSettings = true; # Enable the NVIDIA Settings utility.
-    package = config.boot.kernelPackages.nvidiaPackages.stable; # Specify the production driver package.
+    powerManagement.enable = false;
+    powerManagement.finegrained = false; 
+    open = false; 
+    nvidiaSettings = true; 
+    package = config.boot.kernelPackages.nvidiaPackages.stable; 
   };
   # --- END NVIDIA Proprietary Driver Configuration ---
   nixpkgs.config.nvidia.acceptLicense = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
-  networking.networkmanager.enable = true; # Enable networking
+
+  networking.hostName = "nixos"; 
+  networking.networkmanager.enable = true; 
   networking.nameservers = [ "1.1.1.1" "8.0.0.0" ];
 
-  # Set your time zone.
   time.timeZone = "America/Bogota";
 
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "es_CO.UTF-8";
@@ -104,10 +99,9 @@ in
     LC_TIME = "es_CO.UTF-8";
   };
 
-  hardware.bluetooth.enable = true; # enables support for Bluetooth
+  hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
-  # hardware.pulseaudio.enable = false; # Disabled in favor of PipeWire
   services.pulseaudio.enable = false;
 
   security.sudo = {
@@ -138,7 +132,6 @@ in
 
   services.greetd = {
     enable = true;
-    vt = 3;
     settings = {
       default_session = {
         user = "cavelasco";
@@ -173,7 +166,7 @@ in
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    jack.enable = true; # Enable JACK support in PipeWire
+    jack.enable = true; 
   };
 
   # JACK configuration for low-latency audio and MIDI
@@ -243,7 +236,7 @@ in
   users.users.cavelasco = {
     isNormalUser = true;
     description = "cavelasco";
-    extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "render" "video" "input" "plugdev" "audio" ];
+    extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "render" "video" "input" "plugdev" "audio" "adbusers" "kvm" ];
     shell = pkgs.zsh;
   };
 
@@ -341,6 +334,8 @@ in
       proton-ge-bin
     ];
   };
+  
+  programs.adb.enable = true;
 
   # Open ports in the firewall for Mumble server (phone microphone)
   networking.firewall.allowedTCPPorts = [

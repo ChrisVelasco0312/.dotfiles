@@ -149,6 +149,9 @@ in
       XCURSOR_SIZE = toString cursorTheme.size;
       XDG_DATA_DIRS = "$XDG_DATA_DIRS:$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share";
       JAVA_HOME = "${pkgs.jdk21}/lib/openjdk";
+      # Flutter
+      ANDROID_HOME = "$HOME/Android/Sdk";
+      CHROME_EXECUTABLE = "brave";
     };
 
     sessionPath = [
@@ -191,11 +194,12 @@ in
 
   home.packages = with pkgs; [
     brave
-    qutebrowser
+    google-chrome
     # editors
     vscode
     cursor-cli
     gemini-cli
+    awscli2
     # LANGUAGES
     devbox
     racket
@@ -225,6 +229,9 @@ in
     jdk21
     lombok
     maven
+    # Flutter
+    flutter
+    android-studio
     # NODE
     nodejs_22
     nodejs_22.pkgs.pnpm
@@ -271,17 +278,15 @@ in
     # APPS
     dbeaver-bin # SQL client
     postman # API testing
-    anki # spaced repetition cards
-    ardour # audio editing
     zotero # research management
     xournalpp # handwritten note taking
     kdePackages.okular
     feh #image viewer
     gparted # Partition editor
     vlc # Cross-platform media player
-    libsForQt5.dolphin # file manager
-    libsForQt5.dolphin-plugins
-    libsForQt5.breeze-icons # icons
+    kdePackages.dolphin # file manager
+    kdePackages.dolphin-plugins
+    kdePackages.breeze-icons # icons
     # GNOME/GTK theming and thumbnails
     papirus-icon-theme # Modern icon theme
     adwaita-icon-theme # Default GNOME icons (fallback)
@@ -294,6 +299,7 @@ in
     ffmpegthumbnailer # Video thumbnail generator
     webp-pixbuf-loader # WebP image support
     spotify # music stream
+    tidal-hifi
     #--OBSIDIAN--
     obsidian
     hyprshot # screenshot
@@ -306,7 +312,6 @@ in
     nautilus
     spotify
     obs-studio
-    inkscape
     obsidian
     hyprshot
     kitty
@@ -318,19 +323,22 @@ in
     scrcpy
     # Android development and device control
     android-tools  # Includes ADB and fastboot
-    android-udev-rules  # USB device rules for Android devices
     libusb1  # USB library
     usbutils  # USB utilities for device detection
-    # DAW
-    reaper
     # Cloud
     google-cloud-sdk
   ];
 
   # ---- GITHUB SSH -------#
   programs.ssh.enable = true;
+  programs.ssh.enableDefaultConfig = false;
   services.ssh-agent.enable = true;
   programs.ssh.matchBlocks = {
+    "*" = {
+      extraOptions = {
+        addKeysToAgent = "yes";
+      };
+    };
     "github.com" = {
       user = "git";
       hostname = "github.com";
@@ -344,7 +352,6 @@ in
       identitiesOnly = true;
     };
   };
-  programs.ssh.addKeysToAgent = "yes";
   systemd.user.services = {
     add-github-ssh-key = {
       Unit = {
@@ -404,7 +411,7 @@ in
 
   programs.git = {
     enable = true;
-    extraConfig = {
+    settings = {
       credential.helper = "${
         pkgs.git.override { withLibsecret = true; }
       }/bin/git-credential-libsecret";
@@ -461,14 +468,6 @@ in
                 # Ensure directories exist
                 mkdir -p "$HOME/Applications"
                 mkdir -p "$HOME/.local/share/applications"
-        
-                # Check if Cursor already exists and is recent (less than 7 days old)
-                if [ -f "$HOME/Applications/Cursor.AppImage" ]; then
-                  if [ $(find "$HOME/Applications/Cursor.AppImage" -mtime -7 2>/dev/null | wc -l) -gt 0 ]; then
-                    echo "Cursor AppImage is recent, skipping download."
-                    exit 0
-                  fi
-                fi
         
                 echo "Fetching latest Cursor AppImage..."
         
@@ -532,7 +531,8 @@ in
       '';
     };
     Install = {
-      WantedBy = [ "default.target" ];
+      # Service is not automatically started - run manually with:
+      # systemctl --user start install-cursor
     };
   };
 

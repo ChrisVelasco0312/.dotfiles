@@ -5,7 +5,7 @@
     wl-clipboard
     libnotify                                                                        
     networkmanagerapplet                                                             
-    rofi-wayland                                                                     
+    rofi                                                                  
     swww                                                                             
     waybar   
     eww
