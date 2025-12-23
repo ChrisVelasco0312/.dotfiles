@@ -25,8 +25,16 @@
         luajitPackages.lua-lsp
         nixd
         nixpkgs-fmt
-        python312Packages.python-lsp-server
         nodePackages.prettier
+
+        (python312.withPackages (ps: with ps; [
+          python-lsp-server
+          python-lsp-ruff
+          mypy
+          python-lsp-black
+          isort
+          rope
+        ])) 
       ];
 
       extraLuaConfig = ''

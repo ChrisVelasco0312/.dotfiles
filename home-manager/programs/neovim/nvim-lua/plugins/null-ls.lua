@@ -13,9 +13,13 @@ local sources = {
     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "css", "scss", "json", "yaml",
       "markdown", "html", "vue" },
   }),
-  builtins.formatting.nixpkgs_fmt
+  builtins.formatting.nixpkgs_fmt,
 
+  --python
+  builtins.formatting.black,
+  builtins.formatting.isort,
 }
+
 
 local on_attach = function(client, bufnr)
   if client.supports_method("textDocument/formatting") then
@@ -36,3 +40,4 @@ null_ls.setup({
   on_attach = on_attach,
   sources = sources,
 })
+

@@ -212,13 +212,10 @@ in
     virt-viewer # remote viewing
     spice-gtk # Spice support
     dnsmasq # Virtual network bridges
-    #java
     docker-compose
-    python312Packages.pylsp-mypy
-    python312Packages.python-lsp-black
-    python312Packages.python-lsp-ruff
-    python312Packages.pyls-isort
-    python312Packages.pylsp-rope
+    #python
+    python312
+    python312Packages.pip
     ruff
     mypy
     black
@@ -240,9 +237,6 @@ in
     nodejs_22.pkgs.prettier
     live-server
     bun
-    # PYTHON
-    python312
-    python312Packages.pip
     # TOOLS
     direnv
     lazygit

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-swww init &
+swww daemon &
 swww img ~/.config/hypr/background.jpg &
 nm-applet --indicator &
 waybar &
