@@ -258,10 +258,6 @@ in
     pavucontrol
     brightnessctl
     mission-center
-    # Fonts & Cursors
-    # (nerdfonts.override {
-    #   fonts = [ "JetBrainsMono" "Inconsolata" ];
-    # })
     capitaine-cursors
     hunspell
     hunspellDicts.es_CO
@@ -270,6 +266,9 @@ in
     nerd-fonts.jetbrains-mono
     nerd-fonts.inconsolata
     # APPS
+    mongodb-compass # MongoDB GUI
+    mongodb-cli
+    mongodb-atlas-cli
     dbeaver-bin # SQL client
     postman # API testing
     zotero # research management
@@ -292,8 +291,11 @@ in
     gst_all_1.gst-libav # FFmpeg integration for GStreamer
     ffmpegthumbnailer # Video thumbnail generator
     webp-pixbuf-loader # WebP image support
-    spotify # music stream
+    feishin
+    streamrip
     tidal-hifi
+    mpd
+    ncmpcpp
     #--OBSIDIAN--
     obsidian
     hyprshot # screenshot
@@ -346,6 +348,7 @@ in
       identitiesOnly = true;
     };
   };
+
   systemd.user.services = {
     add-github-ssh-key = {
       Unit = {
@@ -373,6 +376,23 @@ in
       };
       Install = {
         WantedBy = [ "default.target" ];
+      };
+    };
+    swww-hook = {
+      Unit = {
+        Description = "Run swww to set wallpaper";
+        Requires = [ "swww-daemon.service" ];
+        After = [ "swww-daemon.service" ];
+        PartOf = "swww-daemon.service";
+      };
+
+      Service = {
+        Type = "oneshot";
+        ExecStart = "/run/current-system/sw/bin/swww-daemon";
+      };
+
+      Install = {
+        WantedBy = [ "swww-daemon.service" ];
       };
     };
   };
@@ -426,11 +446,44 @@ in
   xdg.configFile."hypr/start.sh".source = ../dots/hypr/start.sh;
   xdg.configFile."hypr/background.jpg".source = ../dots/hypr/background.jpg;
   xdg.configFile."nvim/ftplugin/java.lua".source = ./programs/neovim/nvim-lua/ftplugin/java.lua;
+  xdg.configFile."ncmpcpp/config".source = ../dots/ncmpcpp/config;
+  xdg.configFile."ncmpcpp/bindings".source = ../dots/ncmpcpp/bindings;
   
 
 
   # Optional fallback WM config
   # xdg.configFile.awesome.source = ../dots/awesome;
+
+  services.mpd = {
+    enable = true;
+    musicDirectory = "/mnt/myfiles/music";
+    network.listenAddress = "any";
+    network.port = 6600;
+    extraConfig = ''
+      audio_output {
+        type "pulse"
+        name "MPD PulseAudio"
+      }
+      filesystem_charset "UTF-8"
+      id3v1_encoding "UTF-8"
+      playlist_plugin {
+        name "m3u"
+        enabled "yes"
+      }
+      auto_update "yes"
+      auto_update_depth "3"
+      audio_output {
+        type        "httpd"
+        name        "Phone Stream"
+        encoder     "vorbis"          # Best balance of quality and bandwidth
+        port        "8000"            # Separate port for the audio data
+        bind_to_address "0.0.0.0"
+        bitrate     "128"
+        format      "44100:16:2"
+        always_on   "yes"             # Keeps stream alive even when paused
+      }
+    '';
+  };
 
   # VIRTUALIZATION
   dconf.settings = {

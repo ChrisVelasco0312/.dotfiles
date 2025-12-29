@@ -1,0 +1,39 @@
+##############################################################
+## ncmpcpp bindings with vim motions                        ##
+##############################################################
+
+# Vim-style movement keys
+# j/k for up/down navigation (like vim)
+def_key "j"
+  scroll_down
+
+def_key "k"
+  scroll_up
+
+# h/l for previous/next song (vim left/right equivalent)
+# Note: 'l' normally shows lyrics, but we override it for vim motions
+# Access lyrics via 'L' (capital L) instead
+def_key "h"
+  previous
+
+def_key "l"
+  next
+
+# G for bottom (vim-style: G goes to end)
+def_key "G"
+  move_end
+
+# Ctrl-d and Ctrl-u for half-page scrolling (vim-style)
+def_key "ctrl-d"
+  page_down
+
+def_key "ctrl-u"
+  page_up
+
+# Keep original functionality accessible via capital letters
+def_key "L"
+  show_lyrics
+
+# Note: 'g' is used for jump_to_position_in_song by default
+# To go to top, use Home key or keep default 'g' behavior
+# If you want 'gg' for top, you'd need a more complex macro setup

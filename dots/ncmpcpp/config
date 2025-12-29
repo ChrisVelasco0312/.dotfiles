@@ -1,0 +1,69 @@
+# ncmpcpp configuration file
+# For more information, see: https://ncmpcpp.rybczak.net/documentation/
+
+# Connection settings
+mpd_host = "127.0.0.1"
+mpd_port = "6600"
+mpd_connection_timeout = "5"
+
+# Interface
+ncmpcpp_directory = "~/.ncmpcpp"
+playlist_show_mpd_host = "yes"
+# playlist_show_format is not a valid option in ncmpcpp 0.10.1
+# Use song_list_format or song_columns_list_format instead for formatting
+browser_playlist_prefix = "$(2)$b"
+selected_item_prefix = "$(1)$r"
+modified_item_prefix = "$(1)$b"
+song_window_title_format = "{%a - }{%t}|{%f}"
+statusbar_visibility = "yes"
+header_visibility = "yes"
+titles_visibility = "yes"
+
+# Visualizer
+visualizer_data_source = "/tmp/mpd.fifo"
+visualizer_output_name = "Visualizer"
+visualizer_in_stereo = "yes"
+visualizer_type = "wave"
+visualizer_look = "+|"
+
+# Colors
+colors_enabled = "yes"
+empty_tag_color = "white"
+header_window_color = "white"
+volume_color = "white"
+state_line_color = "white"
+state_flags_color = "white"
+main_window_color = "white"
+color1 = "white"
+color2 = "green"
+progressbar_color = "black"
+progressbar_elapsed_color = "white"
+statusbar_color = "white"
+# active_column_color is not a valid option in ncmpcpp 0.10.1
+# Column colors are controlled via song_columns_list_format or color1/color2
+window_border_color = "green"
+active_window_border = "green"
+
+# Behavior
+autocenter_mode = "yes"
+centered_cursor = "yes"
+cyclic_scrolling = "yes"
+display_bitrate = "no"
+display_remaining_time = "no"
+external_editor = "nvim"
+ignore_leading_the = "yes"
+mouse_support = "yes"
+mouse_list_scroll_whole_page = "yes"
+playlist_disable_highlight_delay = "0"
+message_delay_time = "1"
+search_engine_display_mode = "classic"
+user_interface = "classic"
+# window_state is not a valid option in ncmpcpp 0.10.1
+
+# Display
+song_status_format = "$7%a$9{$b%t$9}{$8%f$9}"
+song_list_format = "$(008)%t$R  $(247)%a$R  $(247)%l$R"
+song_columns_list_format = "(20)[white]{tr} (30)[green]{a} (30)[blue]{b} (7f)[magenta]{l}"
+
+# Key bindings
+# Use '?' in ncmpcpp to see all key bindings

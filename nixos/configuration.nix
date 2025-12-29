@@ -19,7 +19,7 @@ in
   };
 
   environment.sessionVariables = {
-    TERMINAL = "kitty"; 
+    TERMINAL = "kitty";
   };
 
 
@@ -71,17 +71,17 @@ in
   hardware.nvidia = {
     modesetting.enable = true;
     powerManagement.enable = false;
-    powerManagement.finegrained = false; 
-    open = false; 
-    nvidiaSettings = true; 
-    package = config.boot.kernelPackages.nvidiaPackages.stable; 
+    powerManagement.finegrained = false;
+    open = false;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
   # --- END NVIDIA Proprietary Driver Configuration ---
   nixpkgs.config.nvidia.acceptLicense = true;
 
 
-  networking.hostName = "nixos"; 
-  networking.networkmanager.enable = true; 
+  networking.hostName = "nixos";
+  networking.networkmanager.enable = true;
   networking.nameservers = [ "1.1.1.1" "8.0.0.0" ];
 
   time.timeZone = "America/Bogota";
@@ -166,7 +166,7 @@ in
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    jack.enable = true; 
+    jack.enable = true;
   };
 
   # JACK configuration for low-latency audio and MIDI
@@ -334,13 +334,32 @@ in
       proton-ge-bin
     ];
   };
-  
+
   programs.adb.enable = true;
 
+  services.tailscale.enable = true;
+
   # Open ports in the firewall for Mumble server (phone microphone)
+  services.navidrome = {
+    enable = true;
+    settings = {
+      MusicFolder = "/mnt/myfiles/music";
+      Port = 4533;
+      Address = "0.0.0.0";
+    };
+    openFirewall = true;
+  };
+
   networking.firewall.allowedTCPPorts = [
     64738 # Mumble Murmur server port
+    6600
+    4533
+    8000
   ];
+  networking.firewall = {
+    enable = true;
+    trustedInterfaces = [ "tailscale0" ];
+  };
   networking.firewall.allowedUDPPorts = [
     64738 # Mumble Murmur server port
   ];
