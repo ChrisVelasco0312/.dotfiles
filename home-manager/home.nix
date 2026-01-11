@@ -200,6 +200,7 @@ in
     cursor-cli
     gemini-cli
     awscli2
+    opencode
     # LANGUAGES
     devbox
     racket
@@ -296,6 +297,8 @@ in
     tidal-hifi
     mpd
     ncmpcpp
+    spek
+    alsa-scarlett-gui
     #--OBSIDIAN--
     obsidian
     hyprshot # screenshot
