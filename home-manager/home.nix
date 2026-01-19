@@ -217,6 +217,7 @@ in
     #python
     python312
     python312Packages.pip
+    pipx
     ruff
     mypy
     black
@@ -231,11 +232,11 @@ in
     flutter
     android-studio
     # NODE
-    nodejs_22
-    nodejs_22.pkgs.pnpm
-    nodejs_22.pkgs.yarn
-    nodejs_22.pkgs.typescript
-    nodejs_22.pkgs.prettier
+    nodejs_24
+    nodejs_24.pkgs.pnpm
+    nodejs_24.pkgs.yarn
+    nodejs_24.pkgs.typescript
+    nodejs_24.pkgs.prettier
     live-server
     bun
     # TOOLS
@@ -295,6 +296,7 @@ in
     feishin
     streamrip
     tidal-hifi
+    flatpak
     mpd
     ncmpcpp
     spek
@@ -309,7 +311,6 @@ in
     gparted
     vlc
     nautilus
-    spotify
     obs-studio
     obsidian
     hyprshot

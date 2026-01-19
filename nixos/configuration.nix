@@ -38,22 +38,15 @@ in
     options = [ "defaults" "uid=1000" "gid=100" "dmask=022" "fmask=133" ];
   };
 
-  fileSystems."/mnt/storage" = {
-    device = "/dev/disk/by-uuid/8EB68508B684F24F";
-    fsType = "ntfs";
-    options = [ "defaults" "uid=1000" "gid=100" "dmask=022" "fmask=133" ];
-  };
-
   # Create mount point directories
   systemd.tmpfiles.rules = [
     "d /mnt/myfiles 0755 cavelasco users -"
-    "d /mnt/storage 0755 cavelasco users -"
   ];
 
   # Explicitly load NVIDIA kernel modules early during boot.
   # This helps ensure the proprietary driver is ready before the display manager starts.
   boot.initrd.kernelModules = [ "nvidia" ];
-  boot.kernelParams = [ "processor.max_cstate=1" "nvidia_drm.modeset=1" "idle=nomwait" ];
+  boot.kernelParams = [ "processor.max_cstate=1" "nvidia_drm.modeset=1" "idle=nomwait" "amd_iommu=on" ];
   boot.kernel.sysctl."kernel.sysrq" = 1;
   boot.kernelModules = [ "pstore" "snd-seq" "snd-rawmidi" ];
 
@@ -401,4 +394,51 @@ in
   '';
 
   system.stateVersion = "25.05"; # Ensure this matches your NixOS channel
+
+  # ============================================================================
+  # Windows VM with GPU Passthrough Specialisation
+  # ============================================================================
+  # This creates a second GRUB boot option "NixOS - windows-vm" that:
+  # - Boots headless (no display manager)
+  # - Binds the NVIDIA GPU to vfio-pci driver
+  # - Auto-starts a Windows 11 VM with full GPU passthrough
+  # ============================================================================
+  specialisation.windows-vm.configuration = {
+    system.nixos.tags = [ "windows-vm" ];
+
+    # Disable display manager - boot to TTY only
+    services.greetd.enable = lib.mkForce false;
+
+    # Blacklist nvidia drivers - prevents loading even if in initrd
+    boot.blacklistedKernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" "nouveau" ];
+
+    # Bind GPU to vfio-pci via kernel parameters (earliest possible binding)
+    boot.kernelParams = [ "vfio-pci.ids=10de:1c03,10de:10f1" ];
+
+    # Load VFIO modules early in initrd
+    boot.initrd.kernelModules = [ "vfio_pci" "vfio" "vfio_iommu_type1" ];
+
+    # Bind GPU to vfio-pci at module load time (backup)
+    boot.extraModprobeConfig = ''
+      options vfio-pci ids=10de:1c03,10de:10f1
+      softdep nvidia pre: vfio-pci
+      softdep nouveau pre: vfio-pci
+    '';
+
+    # Open VNC port for remote access during Windows installation
+    networking.firewall.allowedTCPPorts = [ 5900 ];
+
+    # Auto-start the Windows VM
+    systemd.services.windows-vm = {
+      description = "Windows 11 VM with GPU Passthrough";
+      after = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "simple";
+        User = "root";
+        ExecStart = "/home/cavelasco/.dotfiles/nixos/scripts/start-windows-vm.sh";
+        Restart = "on-failure";
+      };
+    };
+  };
 }
