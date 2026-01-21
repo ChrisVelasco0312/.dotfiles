@@ -282,6 +282,7 @@ in
     spice-gtk
     spice-protocol
     OVMF
+    samba # Required for QEMU's smb= folder sharing
 
     appimage-run
     curl
@@ -427,6 +428,9 @@ in
 
     # Open VNC port for remote access during Windows installation
     networking.firewall.allowedTCPPorts = [ 5900 ];
+
+    # Don't mount myfiles - it will be passed through to the VM
+    fileSystems."/mnt/myfiles".enable = false;
 
     # Auto-start the Windows VM
     systemd.services.windows-vm = {

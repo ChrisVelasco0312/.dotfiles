@@ -2,31 +2,18 @@
 
 # Windows 11 VM with GPU Passthrough
 # Uses OVMF/EDK2 for UEFI boot
-#
-# SETUP REQUIRED BEFORE FIRST USE:
-# 1. Create OVMF NVRAM copy (run the commands printed when this script starts)
-#
-# 2. Get USB device IDs (run `lsusb` and find keyboard/mouse):
-#    Update the USB passthrough lines below with your device IDs
-#
-# 3. For Windows installation, add these lines temporarily:
-#    -cdrom /path/to/Win11.iso \
-#    -boot d \
 
 set -e
 
 QEMU_CMD="/run/current-system/sw/bin/qemu-system-x86_64"
 
-# Find OVMF/EDK2 files dynamically (bundled with QEMU in NixOS)
+# Find OVMF/EDK2 files dynamically
 QEMU_SHARE_DIR="$(dirname "$QEMU_CMD")/../share/qemu"
-
-# Try common paths for EDK2/OVMF CODE file
 if [[ -f "$QEMU_SHARE_DIR/edk2-x86_64-code.fd" ]]; then
   OVMF_CODE="$QEMU_SHARE_DIR/edk2-x86_64-code.fd"
 elif [[ -f "/run/current-system/sw/share/qemu/edk2-x86_64-code.fd" ]]; then
   OVMF_CODE="/run/current-system/sw/share/qemu/edk2-x86_64-code.fd"
 else
-  # Fallback: find it in the nix store via qemu binary
   QEMU_REAL=$(readlink -f "$QEMU_CMD")
   QEMU_STORE_DIR=$(dirname "$(dirname "$QEMU_REAL")")
   OVMF_CODE="$QEMU_STORE_DIR/share/qemu/edk2-x86_64-code.fd"
@@ -34,30 +21,40 @@ fi
 
 OVMF_VARS="/var/lib/libvirt/qemu/nvram/windows11_VARS.fd"
 
-# Verify files exist
 if [[ ! -f "$OVMF_CODE" ]]; then
-  echo "ERROR: OVMF CODE file not found at: $OVMF_CODE"
-  echo "Searching for it..."
-  find /nix/store -maxdepth 3 -name "edk2-x86_64-code.fd" 2>/dev/null | head -3
+  echo "ERROR: OVMF CODE not found: $OVMF_CODE"
   exit 1
 fi
 
 if [[ ! -f "$OVMF_VARS" ]]; then
-  echo "ERROR: OVMF VARS file not found at: $OVMF_VARS"
-  echo ""
-  echo "Please create it with:"
-  VARS_SOURCE=$(dirname "$OVMF_CODE")/edk2-i386-vars.fd
-  echo "  sudo mkdir -p /var/lib/libvirt/qemu/nvram"
-  echo "  sudo cp $VARS_SOURCE $OVMF_VARS"
-  echo "  sudo chmod 644 $OVMF_VARS"
+  echo "ERROR: OVMF VARS not found. Create with:"
+  echo "  sudo cp $(dirname "$OVMF_CODE")/edk2-i386-vars.fd $OVMF_VARS"
   exit 1
 fi
 
-echo "Using OVMF CODE: $OVMF_CODE"
-echo "Using OVMF VARS: $OVMF_VARS"
-echo "Starting Windows 11 VM..."
+# Ensure myfiles disk is not mounted
+echo "Ensuring /mnt/myfiles is unmounted..."
+sudo umount -f /mnt/myfiles 2>/dev/null || true
+sleep 1
 
-exec $QEMU_CMD \
+# Verify disk is accessible
+MYFILES_DISK="/dev/disk/by-id/ata-ST2000DM001-9YN164_W1E0DC7R"
+if [[ ! -e "$MYFILES_DISK" ]]; then
+  echo "ERROR: Myfiles disk not found: $MYFILES_DISK"
+  exit 1
+fi
+
+echo "Starting Windows 11 VM..."
+echo "Myfiles disk: $MYFILES_DISK"
+
+# Remount on exit
+cleanup() {
+  echo "Remounting /mnt/myfiles..."
+  sudo mount /mnt/myfiles 2>/dev/null || true
+}
+trap cleanup EXIT
+
+$QEMU_CMD \
   -name "Windows11-GPU" \
   -enable-kvm \
   -machine q35,accel=kvm \
@@ -68,12 +65,12 @@ exec $QEMU_CMD \
   -drive if=pflash,format=raw,readonly=on,file="$OVMF_CODE" \
   -drive if=pflash,format=raw,file="$OVMF_VARS" \
   \
-  -drive file=/dev/sdb,format=raw,if=none,id=disk0,cache=none \
+  -drive file=/dev/disk/by-id/ata-ADATA_SU630_2J3320030962,format=raw,if=none,id=disk0,cache=none \
   -device ahci,id=ahci \
   -device ide-hd,drive=disk0,bus=ahci.0 \
   \
-  -cdrom "/mnt/myfiles/software/Windows 11/windows_iso.iso" \
-  \
+  -drive file="$MYFILES_DISK",format=raw,if=none,id=disk1,cache=writethrough,detect-zeroes=on \
+  -device virtio-blk-pci,drive=disk1,physical_block_size=4096,logical_block_size=512 \
   \
   -device vfio-pci,host=26:00.0,multifunction=on \
   -device vfio-pci,host=26:00.1 \
@@ -89,9 +86,3 @@ exec $QEMU_CMD \
   -vga std \
   -vnc 0.0.0.0:0 \
   -monitor stdio
-
-# Notes:
-# - USB passthrough: Add lines like these for keyboard/mouse (get IDs from lsusb):
-#   -device usb-host,vendorid=0xXXXX,productid=0xXXXX \
-# - Port 3389 is forwarded for RDP access (optional fallback)
-# - GPU output goes to the physical GPU ports - connect monitor there
