@@ -191,6 +191,21 @@ vim.lsp.config('jdtls', {
   capabilities = capabilities,
 })
 
+-- C/C++ (clangd)
+vim.lsp.config('clangd', {
+  -- On NixOS, system headers (e.g. libstdc++'s <iostream>) live in the Nix store.
+  -- clangd needs permission to "query" the compiler driver found in compile_commands.json
+  -- to discover the correct include paths.
+  cmd = {
+    'clangd',
+    '--background-index',
+    '--query-driver=/nix/store/*/bin/clang++,/nix/store/*/bin/clang,/nix/store/*/bin/g++,/nix/store/*/bin/gcc',
+  },
+  filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda', 'proto' },
+  root_markers = { '.clangd', '.clang-tidy', '.clang-format', 'compile_commands.json', 'compile_flags.txt', 'configure.ac', '.git' },
+  capabilities = capabilities,
+})
+
 -- Emmet
 vim.lsp.config('emmet_ls', {
   cmd = { 'emmet-ls', '--stdio' },
@@ -241,6 +256,7 @@ vim.lsp.enable({
   'pylsp',
   'markdown_oxide',
   'jdtls',
+  'clangd',
   'emmet_ls',
   'nixd'
 })

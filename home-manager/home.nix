@@ -253,6 +253,11 @@ in
     tree
     eza
     gcc
+    gnumake
+    cmake
+    (lib.hiPrio clang)
+    lldb
+    gdb
     pandoc
     fish
     fd

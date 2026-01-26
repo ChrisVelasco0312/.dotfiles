@@ -26,6 +26,8 @@
         nixd
         nixpkgs-fmt
         nodePackages.prettier
+        clang-tools
+        lldb
 
         (python312.withPackages (ps: with ps; [
           python-lsp-server
@@ -147,7 +149,10 @@
           config = toLuaFile ./nvim-lua/plugins/windsurf.lua;
         }
         #JAVA 
-        nvim-dap
+        {
+          plugin = nvim-dap;
+          config = toLuaFile ./nvim-lua/plugins/dap.lua;
+        }
         nvim-jdtls
       ];
     };

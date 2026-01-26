@@ -410,20 +410,31 @@ in
     # Disable display manager - boot to TTY only
     services.greetd.enable = lib.mkForce false;
 
+    # Allocate hugepages for VM (16GB = 8192 x 2MB pages, +256 for overhead)
+    boot.kernel.sysctl."vm.nr_hugepages" = 8448;
+
     # Blacklist nvidia drivers - prevents loading even if in initrd
     boot.blacklistedKernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" "nouveau" ];
 
-    # Bind GPU to vfio-pci via kernel parameters (earliest possible binding)
-    boot.kernelParams = [ "vfio-pci.ids=10de:1c03,10de:10f1" ];
+    # Bind GPU and USB controller to vfio-pci via kernel parameters (earliest possible binding)
+    # GPU: 10de:1c03,10de:10f1 | USB controller (for Focusrite): 1022:145c
+    # CPU isolation: CPUs 4-11 reserved for VM, no host scheduling/interrupts
+    boot.kernelParams = [
+      "vfio-pci.ids=10de:1c03,10de:10f1,1022:145c"
+      "isolcpus=4-11"
+      "nohz_full=4-11"
+      "rcu_nocbs=4-11"
+    ];
 
     # Load VFIO modules early in initrd
     boot.initrd.kernelModules = [ "vfio_pci" "vfio" "vfio_iommu_type1" ];
 
-    # Bind GPU to vfio-pci at module load time (backup)
+    # Bind GPU and USB controller to vfio-pci at module load time (backup)
     boot.extraModprobeConfig = ''
-      options vfio-pci ids=10de:1c03,10de:10f1
+      options vfio-pci ids=10de:1c03,10de:10f1,1022:145c
       softdep nvidia pre: vfio-pci
       softdep nouveau pre: vfio-pci
+      softdep xhci_hcd pre: vfio-pci
     '';
 
     # Open VNC port for remote access during Windows installation
