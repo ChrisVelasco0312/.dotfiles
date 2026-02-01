@@ -4,5 +4,10 @@ nm-applet --indicator &
 waybar &
 dunst &
 swww-daemon &
-swww img ~/.config/hypr/background.jpg
+
+# Start background cycle script
+python3 /home/cavelasco/.dotfiles/dots/hypr/background-cycle.py &
+
+# Start rescrobbled
+rescrobbled &
 

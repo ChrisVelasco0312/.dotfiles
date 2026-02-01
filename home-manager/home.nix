@@ -171,6 +171,7 @@ in
     (python312.withPackages (ps: with ps; [
       pip
       requests
+      tidalapi
     ]))
     pipx
     ruff
@@ -258,6 +259,7 @@ in
     mpd
     ncmpcpp
     spek
+    rescrobbled # Added explicitly to ensure binary availability
     alsa-scarlett-gui
     #--OBSIDIAN--
     obsidian
@@ -418,7 +420,7 @@ in
   # xdg.configFile.awesome.source = ../dots/awesome;
 
   services.mpd = {
-    enable = true;
+    enable = false; # Disabled in favor of Mopidy
     musicDirectory = "/mnt/myfiles/music";
     network.listenAddress = "any";
     network.port = 6600;
@@ -446,6 +448,41 @@ in
         always_on   "yes"             # Keeps stream alive even when paused
       }
     '';
+  };
+
+  services.mopidy = {
+    enable = true;
+    extensionPackages = with pkgs; [
+      mopidy-mpd
+      mopidy-tidal
+      mopidy-local
+      mopidy-mpris # Required for rescrobbled/MPRIS support
+    ];
+    settings = {
+      core = {
+        restore_state = true;
+      };
+      mpd = {
+        hostname = "0.0.0.0";
+        port = 6600;
+      };
+      audio = {
+        output = "autoaudiosink";
+      };
+      tidal = {
+        enabled = true;
+        # login details will be in ~/.config/mopidy/mopidy.conf
+      };
+      file = {
+        enabled = true;
+        media_dirs = [ 
+          "/mnt/myfiles/music|Music" 
+        ];
+      };
+      mpris = {
+        enabled = true;
+      };
+    };
   };
 
   # VIRTUALIZATION
