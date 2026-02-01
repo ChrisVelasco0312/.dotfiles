@@ -8,13 +8,33 @@ This directory contains shell scripts that are used by the custom packages defin
 - `cursor-cli-install.sh` - Installation script for Cursor CLI
 - `cursor-agent.sh` - Wrapper script for Cursor CLI execution
 
+## Updating Cursor
+
+**Cursor CLI** (the `cursor-agent` / `cursor-cli` binary in `~/.local/bin`):
+
+- Run `cursor-cli-install`. It will install or update only if the binary is missing or older than 7 days.
+- To force an update (e.g. when the binary is less than 7 days old), remove it and run the installer again:
+  ```bash
+  rm -f ~/.local/bin/cursor-agent && cursor-cli-install
+  ```
+
+**Cursor AppImage** (the GUI app in `~/Applications/Cursor.AppImage`):
+
+- Updates are done by the systemd user service that re-downloads the latest AppImage. Run:
+  ```bash
+  systemctl --user start install-cursor
+  ```
+  The service is not enabled by default; run this whenever you want to refresh the AppImage.
+
 ### Gemini CLI
 - `gemini-cli-install.sh` - Installation script for Gemini CLI
 - `gemini.sh` - Wrapper script for Gemini CLI execution
 
 ## Usage
 
-These scripts are automatically imported into the Nix packages using `builtins.readFile` in the `home.nix` file. They are not meant to be executed directly, but rather as part of the Nix package installation process.
+These scripts are automatically imported into the Nix packages using
+`builtins.readFile` in the `home.nix` file. They are not meant to be executed
+directly, but rather as part of the Nix package installation process.
 
 ## Benefits of this organization
 

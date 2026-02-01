@@ -319,6 +319,7 @@ in
     obs-studio
     obsidian
     hyprshot
+    ghostty
     kitty
     kitty-themes
     ffmpeg

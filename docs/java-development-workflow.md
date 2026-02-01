@@ -149,7 +149,7 @@ The LSP server automatically:
 - Configures classpath
 - Updates project configuration on POM changes
 
-## 🐛 Debugging Setup
+## Debugging Setup
 
 ### Debug Adapter Protocol (DAP)
 
@@ -288,7 +288,7 @@ services:
 docker-compose up --build
 ```
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -352,7 +352,7 @@ ls ~/.local/share/eclipse/eclipse-java-google-style.xml
    # Run the JAR or deploy to containers
    ```
 
-## 🎯 Advanced Features
+## Advanced Features
 
 ### Custom Keybindings
 
@@ -385,7 +385,7 @@ mvn archetype:generate \
   -DarchetypeArtifactId=spring-boot-starter-web
 ```
 
-## 📚 Additional Resources
+## Additional Resources
 
 - [Eclipse JDT Language Server Wiki](https://github.com/eclipse/eclipse.jdt.ls/wiki)
 - [Maven Documentation](https://maven.apache.org/guides/)
