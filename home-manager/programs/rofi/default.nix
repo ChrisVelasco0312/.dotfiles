@@ -14,16 +14,16 @@
     
     * {
         font: "monospace 14";
-        background-color: #1e1e2e;
-        text-color: #cdd6f4;
-        border-color: #89b4fa;
-        separatorcolor: #6c7086;
-        selected-normal-background: #89b4fa;
-        selected-normal-foreground: #1e1e2e;
-        normal-background: #1e1e2e;
-        normal-foreground: #cdd6f4;
-        alternate-normal-background: #1e1e2e;
-        alternate-normal-foreground: #cdd6f4;
+        background-color: #151515;
+        text-color: #ffffff;
+        border-color: #ffffff;
+        separatorcolor: #333333;
+        selected-normal-background: #ffffff;
+        selected-normal-foreground: #151515;
+        normal-background: #151515;
+        normal-foreground: #ffffff;
+        alternate-normal-background: #151515;
+        alternate-normal-foreground: #ffffff;
     }
     
     window {
@@ -42,7 +42,7 @@
     
     inputbar {
         children: [prompt, entry];
-        background-color: #313244;
+        background-color: #252525;
         text-color: @text-color;
         padding: 8;
         border-radius: 4;
@@ -59,7 +59,7 @@
         background-color: transparent;
         text-color: @text-color;
         placeholder: "Search...";
-        placeholder-color: #6c7086;
+        placeholder-color: #555555;
     }
     
     listview {
