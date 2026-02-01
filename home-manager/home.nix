@@ -168,8 +168,10 @@ in
     dnsmasq # Virtual network bridges
     docker-compose
     #python
-    python312
-    python312Packages.pip
+    (python312.withPackages (ps: with ps; [
+      pip
+      requests
+    ]))
     pipx
     ruff
     mypy
