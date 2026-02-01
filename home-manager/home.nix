@@ -69,52 +69,6 @@ in
             maintainers = [ "cavelasco" ];
           };
         };
-
-        # Custom gemini-cli package that automatically fetches the latest version
-        gemini-cli = prev.stdenv.mkDerivation rec {
-          pname = "gemini-cli";
-          version = "latest";
-
-          # No source needed - we create wrapper scripts
-          src = null;
-          dontUnpack = true;
-
-          nativeBuildInputs = with prev; [ makeWrapper ];
-
-          installPhase = ''
-                        mkdir -p $out/bin
-            
-                        # Create the installer script
-                        cat > $out/bin/gemini-cli-install << 'EOF'
-            ${builtins.readFile ./scripts/gemini-cli-install.sh}
-            EOF
-            
-                        # Create the main wrapper script
-                        cat > $out/bin/gemini << 'EOF'
-            ${builtins.readFile ./scripts/gemini.sh}
-            EOF
-            
-                        # Make scripts executable
-                        chmod +x $out/bin/gemini-cli-install
-                        chmod +x $out/bin/gemini
-            
-                        # Wrap the scripts to ensure proper PATH and dependencies
-                        wrapProgram $out/bin/gemini-cli-install \
-                          --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.jq prev.bash ]}
-            
-                        wrapProgram $out/bin/gemini \
-                          --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.jq prev.bash ]} \
-                          --prefix PATH : $out/bin
-          '';
-
-          meta = with prev.lib; {
-            description = "Gemini CLI - Google's Generative AI command line interface";
-            homepage = "https://github.com/google-gemini/gemini-cli";
-            license = licenses.asl20;
-            platforms = platforms.unix;
-            maintainers = [ "cavelasco" ];
-          };
-        };
       })
     ];
     config = {
@@ -198,7 +152,6 @@ in
     # editors
     vscode
     cursor-cli
-    gemini-cli
     awscli2
     opencode
     # LANGUAGES
@@ -284,8 +237,6 @@ in
     feh #image viewer
     gparted # Partition editor
     vlc # Cross-platform media player
-    kdePackages.dolphin # file manager
-    kdePackages.dolphin-plugins
     kdePackages.breeze-icons # icons
     # GNOME/GTK theming and thumbnails
     papirus-icon-theme # Modern icon theme

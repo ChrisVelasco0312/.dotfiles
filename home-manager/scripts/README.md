@@ -26,10 +26,6 @@ This directory contains shell scripts that are used by the custom packages defin
   ```
   The service is not enabled by default; run this whenever you want to refresh the AppImage.
 
-### Gemini CLI
-- `gemini-cli-install.sh` - Installation script for Gemini CLI
-- `gemini.sh` - Wrapper script for Gemini CLI execution
-
 ## Usage
 
 These scripts are automatically imported into the Nix packages using
