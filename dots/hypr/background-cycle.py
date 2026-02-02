@@ -35,7 +35,7 @@ LASTFM_USER = ENV["LASTFM_USER"]
 
 CACHE_FILE = os.path.expanduser("~/.config/tidal_session.json")
 CACHE_DIR = os.path.expanduser("~/.cache/album_covers")
-INTERVAL = 300  # 5 minutes per image
+INTERVAL = 600  # 5 minutes per image
 # ---------------------
 
 os.makedirs(CACHE_DIR, exist_ok=True)
