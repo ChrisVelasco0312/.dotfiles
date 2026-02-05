@@ -110,6 +110,7 @@ in
 
     sessionPath = [
       "$HOME/.local/bin"
+      "$HOME/.opencode/bin"
     ];
 
     shellAliases = {
@@ -153,7 +154,6 @@ in
     vscode
     cursor-cli
     awscli2
-    opencode
     # LANGUAGES
     devbox
     racket
@@ -240,6 +240,7 @@ in
     feh #image viewer
     gparted # Partition editor
     vlc # Cross-platform media player
+    mpv # Media player for Tidal streaming
     kdePackages.breeze-icons # icons
     # GNOME/GTK theming and thumbnails
     papirus-icon-theme # Modern icon theme
@@ -261,6 +262,7 @@ in
     ncmpcpp
     spek
     rescrobbled # Added explicitly to ensure binary availability
+    playerctl # For media playback control
     alsa-scarlett-gui
     #--OBSIDIAN--
     obsidian
@@ -412,6 +414,8 @@ in
   xdg.configFile."hypr/start.sh".source = ../dots/hypr/start.sh;
   xdg.configFile."hypr/background.jpg".source = ../dots/hypr/background.jpg;
   xdg.configFile."hypr/rofi-mpd.sh".source = ../dots/hypr/rofi-mpd.sh;
+  xdg.configFile."hypr/rofi-tidal.py".source = ../dots/hypr/rofi-tidal.py;
+  xdg.configFile."hypr/rofi-music.sh".source = ../dots/hypr/rofi-music.sh;
   xdg.configFile."nvim/ftplugin/java.lua".source = ./programs/neovim/nvim-lua/ftplugin/java.lua;
   xdg.configFile."ncmpcpp/config".source = ../dots/ncmpcpp/config;
   xdg.configFile."ncmpcpp/bindings".source = ../dots/ncmpcpp/bindings;
@@ -582,6 +586,36 @@ in
     Install = {
       # Service is not automatically started - run manually with:
       # systemctl --user start install-cursor
+    };
+  };
+
+  systemd.user.services.install-opencode-cli = {
+    Unit = {
+      Description = "Install or update OpenCode CLI via official script";
+      After = [ "network-online.target" ];
+      Wants = [ "network-online.target" ];
+    };
+    Service = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = pkgs.writeShellScript "install-opencode-cli" ''
+                set -euo pipefail
+
+                # Determine installation directory (default to ~/.local/bin, like your PATH setup)
+                INSTALL_DIR="''${XDG_BIN_DIR:-$HOME/.local/bin}"
+                mkdir -p "''${INSTALL_DIR}"
+
+                echo "Installing OpenCode CLI to ''${INSTALL_DIR}..."
+
+                # Use official installer script, targeting the chosen directory
+                XDG_BIN_DIR="''${INSTALL_DIR}" ${pkgs.curl}/bin/curl -fsSL "https://opencode.ai/install" | ${pkgs.bash}/bin/bash
+
+                echo "OpenCode CLI installation completed."
+      '';
+    };
+    Install = {
+      # Not enabled by default - run manually with:
+      # systemctl --user start install-opencode-cli
     };
   };
 

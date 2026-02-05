@@ -39,8 +39,19 @@
         border: 0;
         padding: 4;
         background-color: transparent;
-        children: [inputbar, mode-switcher, listview];
+        children: [inputbar, message, mode-switcher, listview];
         spacing: 10px;
+    }
+    
+    message {
+        padding: 5px;
+        border-radius: 3px;
+        background-color: @alternate-normal-background;
+        border: 1px;
+        border-color: @border-color;
+    }
+    textbox {
+        text-color: @text-color;
     }
     
     inputbar {
