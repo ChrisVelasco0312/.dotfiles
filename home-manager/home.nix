@@ -257,6 +257,7 @@ in
     tidal-hifi
     flatpak
     mpd
+    mpc
     ncmpcpp
     spek
     rescrobbled # Added explicitly to ensure binary availability
@@ -410,6 +411,7 @@ in
   xdg.configFile."hypr/hyprland.conf".source = ../dots/hypr/hyprland.conf;
   xdg.configFile."hypr/start.sh".source = ../dots/hypr/start.sh;
   xdg.configFile."hypr/background.jpg".source = ../dots/hypr/background.jpg;
+  xdg.configFile."hypr/rofi-mpd.sh".source = ../dots/hypr/rofi-mpd.sh;
   xdg.configFile."nvim/ftplugin/java.lua".source = ./programs/neovim/nvim-lua/ftplugin/java.lua;
   xdg.configFile."ncmpcpp/config".source = ../dots/ncmpcpp/config;
   xdg.configFile."ncmpcpp/bindings".source = ../dots/ncmpcpp/bindings;
@@ -470,7 +472,7 @@ in
         output = "autoaudiosink";
       };
       tidal = {
-        enabled = true;
+        enabled = false;
         # login details will be in ~/.config/mopidy/mopidy.conf
       };
       file = {
