@@ -38,6 +38,8 @@
         border: 0;
         padding: 4;
         background-color: transparent;
+        children: [inputbar, mode-switcher, listview];
+        spacing: 10px;
     }
     
     inputbar {
@@ -101,6 +103,23 @@
     element-text {
         background-color: transparent;
         text-color: inherit;
+    }
+
+    mode-switcher {
+        spacing: 0;
+    }
+
+    button {
+        padding: 10px;
+        background-color: @alternate-normal-background;
+        text-color: @alternate-normal-foreground;
+        vertical-align: 0.5; 
+        horizontal-align: 0.5;
+    }
+
+    button selected {
+        background-color: @selected-normal-background;
+        text-color: @selected-normal-foreground;
     }
   '';
 }
