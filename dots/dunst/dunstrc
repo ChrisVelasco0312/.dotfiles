@@ -1,0 +1,49 @@
+[# Global settings]
+[global]
+    # Minimal black background with white foreground to match Waybar
+    background = "#000000dd"      # black with slight transparency
+    foreground = "#ffffff"        # white text
+
+    # Match Waybar font style/size (Waybar uses JetBrains Mono 14px)
+    font = JetBrains Mono 11
+
+    # Subtle white frame and separators for a clean card look
+    frame_width = 1
+    frame_color = "#ffffff"
+    separator_color = "#ffffff22"
+
+    # Card shape and spacing
+    corner_radius = 4
+    padding = 8
+    horizontal_padding = 12
+
+    # Icons kept small and left-aligned
+    icon_theme = Papirus
+    icon_position = left
+    max_icon_size = 24
+
+    # Basic behaviour tweaks (sane defaults)
+    transparency = 0
+    indicate_hidden = yes
+    word_wrap = yes
+    ignore_newline = no
+    markup = full
+
+[# Apply a consistent style for all urgencies]
+[urgency_low]
+    background = "#000000dd"
+    foreground = "#ffffff"
+    frame_color = "#ffffff22"
+
+[urgency_normal]
+    background = "#000000dd"
+    foreground = "#ffffff"
+    frame_color = "#ffffff44"
+
+[urgency_critical]
+    background = "#000000dd"
+    foreground = "#ffffff"
+    frame_color = "#ff5555"    # red border to stand out; change to white if unwanted
+
+
+

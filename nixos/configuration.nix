@@ -59,6 +59,8 @@ in
   networking.networkmanager.enable = true; # Enable networking
   networking.nameservers = [ "1.1.1.1" "8.0.0.0" ];
 
+  programs.nm-applet.enable = true;
+
   # Set your time zone.
   time.timeZone = "America/Bogota";
 

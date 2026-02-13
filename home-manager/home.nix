@@ -277,6 +277,7 @@ in
     feh #image viewer
     gparted # Partition editor
     vlc # Cross-platform media player
+    stremio
     libsForQt5.dolphin # file manager
     libsForQt5.dolphin-plugins
     libsForQt5.breeze-icons # icons
@@ -370,8 +371,6 @@ in
     };
   };
 
-
-
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -419,9 +418,7 @@ in
   xdg.configFile."hypr/start.sh".source = ../dots/hypr/start.sh;
   xdg.configFile."hypr/background.jpg".source = ../dots/hypr/background.jpg;
   xdg.configFile."nvim/ftplugin/java.lua".source = ./programs/neovim/nvim-lua/ftplugin/java.lua;
-
-  # Optional fallback WM config
-  # xdg.configFile.awesome.source = ../dots/awesome;
+  xdg.configFile."dunst/dunstrc".source = ../dots/dunst/dunstrc;
 
   # VIRTUALIZATION
   dconf.settings = {
@@ -438,8 +435,6 @@ in
     
     # Create desktop entry directory
     mkdir -p "$HOME/.local/share/applications"
-    
-
   '';
 
   systemd.user.services.install-cursor = {
