@@ -8,10 +8,25 @@ let
   };
   githubKeyPath = "${config.home.homeDirectory}/.ssh/id_ed25519_personal";
   workKeyPath = "${config.home.homeDirectory}/.ssh/id_ed25519_work";
+
+  # Parse .env file from root
+  env = let
+    content = builtins.readFile "${config.home.homeDirectory}/.dotfiles/.env";
+    lines = lib.splitString "\n" content;
+    parseLine = line:
+      if (builtins.match "[A-Za-z_][A-Za-z0-9_]*=.*" line) != null then
+        let
+          parts = lib.splitString "=" line;
+          key = builtins.head parts;
+          value = lib.concatStringsSep "=" (builtins.tail parts);
+        in { name = key; value = value; }
+      else null;
+  in
+    builtins.listToAttrs (builtins.filter (x: x != null) (map parseLine lines));
+
 in
 {
-
-  nixpkgs = {
+nixpkgs = {
     overlays = [
       (final: prev: {
         vimPlugins = prev.vimPlugins // {
@@ -106,6 +121,9 @@ in
       # Flutter
       ANDROID_HOME = "$HOME/Android/Sdk";
       CHROME_EXECUTABLE = "brave";
+      LASTFM_APIKEY = env.LASTFM_APIKEY or "";
+      LASTFM_SECRET = env.LASTFM_SECRET or "";
+      LASTFM_USER = env.LASTFM_USER or "";
     };
 
     sessionPath = [
@@ -425,9 +443,14 @@ in
   xdg.configFile."nvim/ftplugin/java.lua".source = ./programs/neovim/nvim-lua/ftplugin/java.lua;
   xdg.configFile."ncmpcpp/config".source = ../dots/ncmpcpp/config;
   xdg.configFile."ncmpcpp/bindings".source = ../dots/ncmpcpp/bindings;
-  
   xdg.configFile."ghostty/config".source = ../dots/ghostty/config;
 
+  # Rescrobbled configuration with secrets from .env
+  xdg.configFile."rescrobbled/config.toml".text = ''
+    lastfm-key = "${env.LASTFM_APIKEY or ""}"
+    lastfm-secret = "${env.LASTFM_SECRET or ""}"
+    player-whitelist = ["mopidy", "tidal-hifi", "Feishin", "mpd", "spotify", "mpv"]
+  '';
 
   # Optional fallback WM config
   # xdg.configFile.awesome.source = ../dots/awesome;
