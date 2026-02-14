@@ -29,3 +29,7 @@ backup-configs:
 
 clean:
 	nix-collect-garbage
+
+wallpaper-fix:
+	rm -f ~/.cache/album_covers/rofi_list_cache.txt
+	python3 ~/.dotfiles/dots/hypr/wallpaper-picker.py --recent --force

@@ -5,11 +5,10 @@
   home.file.".config/rofi/config.rasi".text = ''
     configuration {
         font: "monospace 14";
-        modi: "drun,run,wallpaper:${config.home.homeDirectory}/.dotfiles/dots/hypr/rofi-wallpaper.sh";
+        modi: "drun,run";
         show-icons: true;
         display-drun: "Apps";
         display-run: "Run";
-        display-wallpaper: "Art";
         terminal: "${pkgs.kitty}/bin/kitty";
     }
     

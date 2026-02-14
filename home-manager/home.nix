@@ -236,11 +236,12 @@ in
     postman # API testing
     zotero # research management
     xournalpp # handwritten note taking
+    shotcut
+    epr # epub reader
     kdePackages.okular
     feh #image viewer
     gparted # Partition editor
     vlc # Cross-platform media player
-    mpv # Media player for Tidal streaming
     kdePackages.breeze-icons # icons
     # GNOME/GTK theming and thumbnails
     papirus-icon-theme # Modern icon theme
@@ -405,6 +406,11 @@ in
     enableZshIntegration = true;
   };
 
+  programs.mpv = {
+    enable = true;
+    scripts = [ pkgs.mpvScripts.mpris ];
+  };
+
   ## CONFIG FILES
   xdg.configFile."waybar/config".source = ../dots/waybar/config;
   xdg.configFile."waybar/style.css".source = ../dots/waybar/style.css;
@@ -420,6 +426,7 @@ in
   xdg.configFile."ncmpcpp/config".source = ../dots/ncmpcpp/config;
   xdg.configFile."ncmpcpp/bindings".source = ../dots/ncmpcpp/bindings;
   
+  xdg.configFile."ghostty/config".source = ../dots/ghostty/config;
 
 
   # Optional fallback WM config

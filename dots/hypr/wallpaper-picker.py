@@ -82,9 +82,9 @@ def download_image(url, is_thumb=True):
 def get_lastfm_recent(limit=20):
     if not LASTFM_APIKEY or not LASTFM_USER:
         return []
-    url = f"http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={LASTFM_USER}&api_key={LASTFM_APIKEY}&format=json&limit={limit}"
+    url = f"https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={LASTFM_USER}&api_key={LASTFM_APIKEY}&format=json&limit={limit}"
     try:
-        data = requests.get(url, timeout=3).json()
+        data = requests.get(url, timeout=5).json()
         tracks = data['recenttracks']['track']
         albums = []
         seen = set()
