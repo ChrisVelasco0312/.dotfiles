@@ -349,6 +349,7 @@ in
     6600
     4533
     8000
+    5173
   ];
   networking.firewall = {
     enable = true;

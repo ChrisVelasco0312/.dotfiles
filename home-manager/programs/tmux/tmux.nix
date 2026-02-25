@@ -35,6 +35,8 @@ in
       bind-key j select-pane -D
       bind-key k select-pane -U
       bind-key l select-pane -R
+      bind-key -T copy-mode-vi v send-keys -X begin-selection
+      bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
 
       # map prefix to Control + a
       set -g prefix C-a

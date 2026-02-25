@@ -240,6 +240,8 @@ nixpkgs = {
     brightnessctl
     mission-center
     capitaine-cursors
+    libreoffice-fresh
+    weylus
     hunspell
     hunspellDicts.es_CO
     hunspellDicts.es-es
@@ -286,6 +288,9 @@ nixpkgs = {
     #--OBSIDIAN--
     obsidian
     hyprshot # screenshot
+    satty
+    grim
+    slurp
     zotero
     qbittorrent
     xournalpp
