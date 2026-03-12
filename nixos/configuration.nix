@@ -48,7 +48,8 @@ in
   boot.initrd.kernelModules = [ "nvidia" ];
   boot.kernelParams = [ "processor.max_cstate=1" "nvidia_drm.modeset=1" "idle=nomwait" "amd_iommu=on" ];
   boot.kernel.sysctl."kernel.sysrq" = 1;
-  boot.kernelModules = [ "pstore" "snd-seq" "snd-rawmidi" ];
+  # Ensure Xbox Wireless Controller over Bluetooth gets a proper HID driver
+  boot.kernelModules = [ "pstore" "snd-seq" "snd-rawmidi" "hid_microsoft" ];
 
   services.journald.extraConfig = ''
     Storage=persistent
@@ -96,6 +97,12 @@ in
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
   services.pulseaudio.enable = false;
+
+  # Use xpadneo driver for Xbox Wireless Controller over Bluetooth
+  hardware.xpadneo.enable = true;
+
+  # Enable xone driver for Xbox One / Series accessories
+  hardware.xone.enable = true;
 
   security.sudo = {
     enable = true;
@@ -225,6 +232,28 @@ in
   };
   services.openssh.enable = true;
 
+  services.mysql = {
+    enable = true;
+    package = pkgs.mysql84;
+  };
+
+  services.postgresql = {
+    enable = true;
+    package = pkgs.postgresql_16;
+    authentication = lib.mkOverride 10 ''
+      # TYPE  DATABASE  USER  ADDRESS       METHOD
+      local   all       all                 trust
+      host    all       all   127.0.0.1/32  trust
+      host    all       all   ::1/128       trust
+    '';
+    ensureUsers = [
+      {
+        name = "cavelasco";
+        ensureClauses.superuser = true;
+      }
+    ];
+  };
+
   # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.cavelasco = {
     isNormalUser = true;
@@ -332,6 +361,28 @@ in
   programs.adb.enable = true;
 
   services.tailscale.enable = true;
+  services.samba = {
+    enable = true;
+    settings = {
+      global = {
+        "workgroup" = "WORKGROUP";
+        "server string" = "nixos";
+        "netbios name" = "nixos";
+        "security" = "user";
+
+        # Only accessible via Tailscale (100.64.0.0/10 is Tailscale's CGNAT range)
+        "hosts allow" = "100.64.0.0/10 127.0.0.1 localhost";
+        "hosts deny" = "0.0.0.0/0";
+      };
+
+      "myfolder" = {
+        "path" = "/mnt/myfiles";
+        "valid users" = "cavelasco";
+        "public" = "no";
+        "writeable" = "yes";
+      };
+    };
+  };
 
   # Open ports in the firewall for Mumble server (phone microphone)
   services.navidrome = {
@@ -375,6 +426,7 @@ in
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
+    stdenv.cc.cc
     libdrm
     mesa
     libxkbcommon

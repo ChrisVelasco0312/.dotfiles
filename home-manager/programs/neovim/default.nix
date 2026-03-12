@@ -120,6 +120,7 @@
         vim-rhubarb
         gitsigns-nvim
         todo-comments-nvim
+        copilot-vim
         {
           plugin = markdown-preview-nvim;
           config = toLuaFile ./nvim-lua/plugins/markdownpreview.lua;
@@ -144,10 +145,7 @@
           plugin = nvim-ufo;
           config = toLuaFile ./nvim-lua/plugins/ufo.lua;
         }
-        {
-          plugin = windsurf-nvim;
-          config = toLuaFile ./nvim-lua/plugins/windsurf.lua;
-        }
+        
         #JAVA 
         {
           plugin = nvim-dap;

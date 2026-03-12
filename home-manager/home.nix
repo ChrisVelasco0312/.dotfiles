@@ -166,46 +166,61 @@ nixpkgs = {
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
+    # === BROWSERS ===
     brave
     google-chrome
-    # editors
+
+    # === EDITORS & IDES ===
     vscode
     cursor-cli
+
+    # === CLOUD & DEPLOYMENT ===
     awscli2
-    # LANGUAGES
+    google-cloud-sdk
+
+    # === LANGUAGES & RUNTIMES ===
     devbox
     racket
     lua-language-server
     markdown-oxide
-    #virtualization
-    virt-manager #GUI for virtual machines
-    qemu # Core QEMU tools
-    libvirt # Libvirt tools
-    virt-viewer # remote viewing
-    spice-gtk # Spice support
-    dnsmasq # Virtual network bridges
+
+    # === VIRTUALIZATION & CONTAINERS ===
+    virt-manager
+    qemu
+    libvirt
+    virt-viewer
+    spice-gtk
+    dnsmasq
     docker-compose
-    #python
+
+    # === PYTHON ===
     (python312.withPackages (ps: with ps; [
       pip
       requests
       tidalapi
+      harlequin-postgres
     ]))
     pipx
     ruff
     mypy
     black
     isort
-    # java
-    tmc-cli
-    jdt-language-server
+
+    # === JAVA & JVM ===
     jdk21
-    lombok
     maven
-    # Flutter
+    jdt-language-server
+    lombok
+    tmc-cli
+
+    # === FLUTTER & ANDROID ===
     flutter
     android-studio
-    # NODE
+    android-tools
+    libusb1
+    usbutils
+
+    # === NODE.JS & BUN ===
     nodejs_24
     nodejs_24.pkgs.pnpm
     nodejs_24.pkgs.yarn
@@ -213,108 +228,120 @@ nixpkgs = {
     nodejs_24.pkgs.prettier
     live-server
     bun
-    # TOOLS
-    direnv
-    lazygit
-    zoom-us
-    prettierd
-    evtest
-    unzip
-    bat
-    fzf
-    ripgrep
-    jq
-    tree
-    eza
+
+    # === BUILD TOOLS ===
     gcc
     gnumake
     cmake
     (lib.hiPrio clang)
     lldb
     gdb
-    pandoc
-    fish
+
+    # === DEVELOPER TOOLS ===
+    direnv
+    lazygit
+    prettierd
+    bat
+    fzf
+    ripgrep
+    jq
+    tree
+    eza
     fd
     htop
+    pandoc
+    fish
+
+    # === SYSTEM UTILITIES ===
+    unzip
+    evtest
     pavucontrol
     brightnessctl
     mission-center
-    capitaine-cursors
     libreoffice-fresh
     weylus
     hunspell
     hunspellDicts.es_CO
     hunspellDicts.es-es
-    # Fonts
+
+    # === FONTS ===
     nerd-fonts.jetbrains-mono
     nerd-fonts.inconsolata
-    # APPS
-    mongodb-compass # MongoDB GUI
+
+    # === THEMES & ICONS ===
+    papirus-icon-theme
+    adwaita-icon-theme
+    kdePackages.breeze-icons
+    capitaine-cursors
+
+    # === DATABASE TOOLS ===
+    mongodb-compass
     mongodb-cli
     mongodb-atlas-cli
-    dbeaver-bin # SQL client
-    postman # API testing
-    zotero # research management
-    xournalpp # handwritten note taking
-    shotcut
-    epr # epub reader
+    dbeaver-bin
+    postman
+    harlequin
+
+    # === PRODUCTIVITY ===
+    zotero
+    obsidian
+    xournalpp
+    epr
     kdePackages.okular
-    feh #image viewer
-    gparted # Partition editor
-    vlc # Cross-platform media player
-    kdePackages.breeze-icons # icons
-    # GNOME/GTK theming and thumbnails
-    papirus-icon-theme # Modern icon theme
-    adwaita-icon-theme # Default GNOME icons (fallback)
-    gst_all_1.gstreamer # Video thumbnail generation
+
+    # === IMAGE VIEWERS & FILE MANAGEMENT ===
+    feh
+    gparted
+    nautilus
+
+    # === VIDEO/AUDIO TOOLS ===
+    shotcut
+    ffmpeg
+    ffmpegthumbnailer
+    webp-pixbuf-loader
+    gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-libav # FFmpeg integration for GStreamer
-    ffmpegthumbnailer # Video thumbnail generator
-    webp-pixbuf-loader # WebP image support
+    gst_all_1.gst-libav
+
+    # === MEDIA PLAYERS & STREAMING ===
+    vlc
     feishin
     streamrip
     tidal-hifi
-    flatpak
     mpd
     mpc
     ncmpcpp
     spek
-    rescrobbled # Added explicitly to ensure binary availability
-    playerctl # For media playback control
+    playerctl
     alsa-scarlett-gui
-    #--OBSIDIAN--
-    obsidian
-    hyprshot # screenshot
+    rescrobbled
+
+    # === SCREENSHOTS & RECORDING ===
+    hyprshot
     satty
     grim
     slurp
-    zotero
-    qbittorrent
-    xournalpp
-    feh
-    gparted
-    vlc
-    nautilus
     obs-studio
-    obsidian
-    hyprshot
+
+    # === TERMINALS ===
     ghostty
     kitty
     kitty-themes
-    ffmpeg
-    # Phone microphone streaming
+
+    # === COMMUNICATION ===
+    zoom-us
     mumble
-    pulseaudio
+
+    # === DOWNLOADERS & DEVICE STREAMING ===
+    qbittorrent
     scrcpy
-    # Android development and device control
-    android-tools  # Includes ADB and fastboot
-    libusb1  # USB library
-    usbutils  # USB utilities for device detection
-    # Cloud
-    google-cloud-sdk
+    pulseaudio
+
+    # === FLATPAK ===
+    flatpak
   ];
 
   # ---- GITHUB SSH -------#
