@@ -120,7 +120,10 @@
         vim-rhubarb
         gitsigns-nvim
         todo-comments-nvim
-        copilot-vim
+        {
+          plugin = copilot-vim;
+          config = toLuaFile ./nvim-lua/plugins/copilot.lua;
+        }
         {
           plugin = markdown-preview-nvim;
           config = toLuaFile ./nvim-lua/plugins/markdownpreview.lua;
