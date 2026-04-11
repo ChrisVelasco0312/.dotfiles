@@ -174,6 +174,7 @@ nixpkgs = {
     vscode
     cursor-cli
     github-copilot-cli
+    claude-code
 
     # === CLOUD & DEPLOYMENT ===
     awscli2
