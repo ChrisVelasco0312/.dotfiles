@@ -16,7 +16,9 @@ flake:
 	make home
 
 update:
+	nix flake update
 	sudo nixos-rebuild switch --upgrade --flake .#nixos --impure
+	make home
 
 home: .i-home
 	@if [ -f .env ]; then set -a && . ./.env && set +a; fi; home-manager switch --flake .#cavelasco@nixos --impure 

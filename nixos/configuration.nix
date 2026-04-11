@@ -60,6 +60,10 @@ in
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
+    extraPackages = with pkgs; [
+      nvidia-vaapi-driver
+      libvdpau-va-gl
+    ];
   };
 
   hardware.nvidia = {
@@ -158,6 +162,8 @@ in
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+
+  services.gvfs.enable = true;
 
   # Enable sound with pipewire
   security.rtkit.enable = true;
@@ -306,7 +312,8 @@ in
         spiceSupport = true;
       }
     )
-    qemu_full
+    # qemu_full # commented out because it currently breaks build due to ceph/sphinx/python3.11
+    qemu
     virt-manager
     spice-gtk
     spice-protocol
@@ -335,6 +342,9 @@ in
     # Controller support packages
     linuxConsoleTools # Tools for gamepad support
     jstest-gtk # Joystick testing tool
+
+    # Android debugging tools
+    android-tools
   ];
 
   virtualisation.libvirtd = {
@@ -358,7 +368,6 @@ in
     ];
   };
 
-  programs.adb.enable = true;
 
   services.tailscale.enable = true;
   services.samba = {
@@ -443,6 +452,10 @@ in
   ];
 
   nix.package = pkgs.nixVersions.stable;
+  nix.settings = {
+    # 134217728 bytes = 128 MB (to fix "download buffer is full" warnings)
+    download-buffer-size = 134217728;
+  };
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';

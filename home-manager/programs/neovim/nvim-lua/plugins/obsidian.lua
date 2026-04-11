@@ -5,9 +5,6 @@ require('obsidian').setup({
       path = "~/Desktop/vaults",
     }
   },
-  follow_url_func = function(url)
-    vim.fn.jobstart({ "xdg-open", url })
-  end,
   legacy_commands = false,
 })
 

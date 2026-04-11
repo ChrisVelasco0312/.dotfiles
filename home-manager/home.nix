@@ -173,6 +173,7 @@ nixpkgs = {
     # === EDITORS & IDES ===
     vscode
     cursor-cli
+    github-copilot-cli
 
     # === CLOUD & DEPLOYMENT ===
     awscli2
@@ -194,7 +195,7 @@ nixpkgs = {
     docker-compose
 
     # === PYTHON ===
-    (python312.withPackages (ps: with ps; [
+    (python3.withPackages (ps: with ps; [
       pip
       requests
       tidalapi
@@ -221,11 +222,11 @@ nixpkgs = {
     usbutils
 
     # === NODE.JS & BUN ===
-    nodejs_24
-    nodejs_24.pkgs.pnpm
-    nodejs_24.pkgs.yarn
-    nodejs_24.pkgs.typescript
-    nodejs_24.pkgs.prettier
+    nodejs_25
+    pnpm
+    yarn
+    typescript
+    prettier
     live-server
     bun
 
@@ -295,7 +296,8 @@ nixpkgs = {
     nautilus
 
     # === VIDEO/AUDIO TOOLS ===
-    shotcut
+    kdePackages.kdenlive
+    movit
     ffmpeg
     ffmpegthumbnailer
     webp-pixbuf-loader
@@ -439,6 +441,8 @@ nixpkgs = {
         fi
       }
       alias ranger="ranger-cd"
+      alias update:cursor="systemctl --user start install-cursor && journalctl --user -u install-cursor -n 50 --no-pager" # Custom alias to trigger Cursor CLI installation with visible logs
+      alias update:opencode="systemctl --user start install-opencode-cli" # Custom alias to trigger OpenCode CLI installation
     '';
   };
 
@@ -681,69 +685,4 @@ nixpkgs = {
     };
   };
 
-  systemd.user.services.install-kdenlive = {
-    Unit = {
-      Description = "Download and install Kdenlive AppImage";
-      After = [ "network-online.target" ];
-      Wants = [ "network-online.target" ];
-    };
-    Service = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = pkgs.writeShellScript "install-kdenlive" ''
-                # Ensure directories exist
-                mkdir -p "$HOME/Applications"
-                mkdir -p "$HOME/.local/share/applications"
-        
-                # Check if Kdenlive already exists and is recent (less than 7 days old)
-                if [ -f "$HOME/Applications/Kdenlive.AppImage" ]; then
-                  if [ $(find "$HOME/Applications/Kdenlive.AppImage" -mtime -7 2>/dev/null | wc -l) -gt 0 ]; then
-                    echo "Kdenlive AppImage is recent, skipping download."
-                    exit 0
-                  fi
-                fi
-        
-                echo "Fetching latest Kdenlive AppImage..."
-        
-                # Kdenlive AppImage download URL - using the official KDE download server
-                DOWNLOAD_URL="https://download.kde.org/stable/kdenlive/25.08/linux/kdenlive-25.08.0-x86_64.AppImage"
-        
-                # Download with retry logic
-                for i in {1..3}; do
-                  echo "Download attempt $i/3..."
-                  if ${pkgs.curl}/bin/curl --connect-timeout 30 --max-time 300 -sSfL "$DOWNLOAD_URL" -o "$HOME/Applications/Kdenlive.AppImage.tmp"; then
-                    chmod +x "$HOME/Applications/Kdenlive.AppImage.tmp"
-                    mv "$HOME/Applications/Kdenlive.AppImage.tmp" "$HOME/Applications/Kdenlive.AppImage"
-                    echo "Kdenlive AppImage downloaded successfully."
-                    break
-                  else
-                    echo "Download attempt $i failed, waiting 10 seconds..."
-                    rm -f "$HOME/Applications/Kdenlive.AppImage.tmp"
-                    if [ $i -eq 3 ]; then
-                      echo "ERROR: Failed to download Kdenlive AppImage after 3 attempts."
-                      exit 1
-                    fi
-                    sleep 10
-                  fi
-                done
-        
-                # Create desktop entry for the AppImage
-                cat > "$HOME/.local/share/applications/kdenlive.desktop" << 'EOF'
-        [Desktop Entry]
-        Name=Kdenlive
-        Exec=${pkgs.appimage-run}/bin/appimage-run %h/Applications/Kdenlive.AppImage
-        Icon=kdenlive
-        Type=Application
-        Categories=AudioVideo;Video;VideoEditing;
-        Comment=Non-linear video editor
-        Terminal=false
-        EOF
-        
-                echo "Kdenlive installation completed successfully."
-      '';
-    };
-    Install = {
-      WantedBy = [ "default.target" ];
-    };
-  };
 }

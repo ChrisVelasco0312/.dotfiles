@@ -18,18 +18,18 @@
       extraPackages = with pkgs; [
         emmet-ls
         tree-sitter
-        nodePackages.vscode-langservers-extracted
-        nodePackages.typescript
-        nodePackages.typescript-language-server
-        nodePackages.eslint
+        vscode-langservers-extracted
+        typescript
+        typescript-language-server
+        eslint
         luajitPackages.lua-lsp
         nixd
         nixpkgs-fmt
-        nodePackages.prettier
+        prettier
         clang-tools
         lldb
 
-        (python312.withPackages (ps: with ps; [
+        (python3.withPackages (ps: with ps; [
           python-lsp-server
           python-lsp-ruff
           mypy
@@ -39,7 +39,7 @@
         ])) 
       ];
 
-      extraLuaConfig = ''
+      initLua = ''
         ${builtins.readFile ./nvim-lua/init.lua } 
         ${builtins.readFile ./nvim-lua/base.lua } 
         ${builtins.readFile ./nvim-lua/maps.lua }
@@ -61,24 +61,29 @@
         nvim-autopairs
         {
           plugin = git-blame-nvim;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/git-blame.lua;
         }
         {
           plugin = oil-nvim;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/oil.lua;
         }
         {
           plugin = nvim-lspconfig;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/lsp.lua;
         }
         lsp-colors-nvim
         trouble-nvim
         {
           plugin = bufferline-nvim;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/bufferline.lua;
         }
         {
           plugin = own-lualine-nvim;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/lualine.lua;
         }
         plenary-nvim
@@ -86,6 +91,7 @@
         ## autocompletion
         {
           plugin = nvim-cmp;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/cmp.lua;
         }
         nvim-cmp
@@ -94,18 +100,22 @@
         cmp-buffer
         {
           plugin = onedark-nvim;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/onedark.lua;
         }
         {
           plugin = none-ls-nvim;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/null-ls.lua;
         }
         {
           plugin = nvim-treesitter.withAllGrammars;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/treesitter.lua;
         }
         {
           plugin = zen-mode-nvim;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/zenmode.lua;
         }
         vim-which-key
@@ -122,36 +132,44 @@
         todo-comments-nvim
         {
           plugin = copilot-vim;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/copilot.lua;
         }
         {
           plugin = markdown-preview-nvim;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/markdownpreview.lua;
         }
         {
           plugin = obsidian-nvim;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/obsidian.lua;
         }
         {
           plugin = nvim-peekup;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/peekup.lua;
         }
         {
           plugin = lspsaga-nvim;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/lsp-saga.lua;
         }
         {
           plugin = harpoon2;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/harpoon.lua;
         }
         {
           plugin = nvim-ufo;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/ufo.lua;
         }
         
         #JAVA 
         {
           plugin = nvim-dap;
+          type = "viml";
           config = toLuaFile ./nvim-lua/plugins/dap.lua;
         }
         nvim-jdtls
