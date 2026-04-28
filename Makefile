@@ -20,6 +20,10 @@ update:
 	sudo nixos-rebuild switch --upgrade --flake .#nixos --impure
 	make home
 
+update-safe:
+	nix flake update home-manager nixd hardware plugin-lualine
+	make home
+
 home: .i-home
 	@if [ -f .env ]; then set -a && . ./.env && set +a; fi; home-manager switch --flake .#cavelasco@nixos --impure 
 

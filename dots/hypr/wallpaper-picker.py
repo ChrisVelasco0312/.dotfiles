@@ -8,6 +8,7 @@ import requests
 import hashlib
 import time
 import subprocess
+import shutil
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # --- Configuration ---
@@ -36,6 +37,7 @@ CACHE_DIR = os.path.expanduser("~/.cache/album_covers")
 THUMB_DIR = os.path.join(CACHE_DIR, "thumbnails")
 LIST_CACHE_FILE = os.path.join(CACHE_DIR, "rofi_list_cache.txt")
 os.makedirs(THUMB_DIR, exist_ok=True)
+WALLPAPER_CMD = "awww" if shutil.which("awww") else "swww" if shutil.which("swww") else None
 
 # --- Tidal Session ---
 def load_session():
@@ -181,11 +183,14 @@ def set_wallpaper(url):
     path = download_image(url, is_thumb=False)
     if path:
         try:
+            if not WALLPAPER_CMD:
+                raise RuntimeError("Wallpaper tool missing: install awww (or swww on older setups)")
+
             # Send notification
             subprocess.run(["notify-send", "Wallpaper", "Setting wallpaper..."])
             
             cmd = [
-                "swww", "img", path,
+                WALLPAPER_CMD, "img", path,
                 "--resize", "no",
                 "--fill-color", "000000",
                 "--transition-type", "outer",

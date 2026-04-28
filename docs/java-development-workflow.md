@@ -2,7 +2,7 @@
 
 This document outlines the complete Java development environment setup and workflow using NixOS, Home Manager, and Neovim as the primary editor.
 
-## 🛠 Development Environment Overview
+## Development Environment Overview
 
 ### Installed Tools & Versions
 

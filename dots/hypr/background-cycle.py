@@ -2,6 +2,7 @@
 import tidalapi
 import json
 import os
+import shutil
 import subprocess
 import time
 import requests
@@ -39,6 +40,7 @@ INTERVAL = 3600
 # ---------------------
 
 os.makedirs(CACHE_DIR, exist_ok=True)
+WALLPAPER_CMD = "awww" if shutil.which("awww") else "swww" if shutil.which("swww") else None
 
 def load_session():
     """Loads the Tidal session from the local cache file."""
@@ -149,9 +151,12 @@ def update_wallpaper(url, index):
         with open(path, 'wb') as f:
             f.write(img_data)
         
-        # swww command with a smooth transition
+        if not WALLPAPER_CMD:
+            print("Wallpaper tool missing: install awww (or swww on older setups).")
+            return
+
         subprocess.run([
-            "swww", "img", path, 
+            WALLPAPER_CMD, "img", path, 
             "--resize", "no",
             "--fill-color", "000000",
             "--transition-type", "outer", 

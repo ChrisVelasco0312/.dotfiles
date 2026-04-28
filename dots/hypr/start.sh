@@ -3,7 +3,7 @@
 nm-applet --indicator &
 waybar &
 dunst &
-swww-daemon &
+awww-daemon &
 
 # Apply startup wallpaper using the same flow as the rofi picker.
 # This keeps the original image sizing/behavior consistent after reboot.
@@ -18,4 +18,3 @@ swww-daemon &
 ) &
 
 rescrobbled &
-

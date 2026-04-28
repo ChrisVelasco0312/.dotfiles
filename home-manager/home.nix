@@ -207,6 +207,7 @@ nixpkgs = {
     mypy
     black
     isort
+    uv
 
     # === JAVA & JVM ===
     jdk21
@@ -223,7 +224,7 @@ nixpkgs = {
     usbutils
 
     # === NODE.JS & BUN ===
-    nodejs_25
+    nodejs_24
     pnpm
     yarn
     typescript
@@ -400,21 +401,21 @@ nixpkgs = {
         WantedBy = [ "default.target" ];
       };
     };
-    swww-hook = {
+    awww-hook = {
       Unit = {
-        Description = "Run swww to set wallpaper";
-        Requires = [ "swww-daemon.service" ];
-        After = [ "swww-daemon.service" ];
-        PartOf = "swww-daemon.service";
+        Description = "Run awww to set wallpaper";
+        Requires = [ "awww-daemon.service" ];
+        After = [ "awww-daemon.service" ];
+        PartOf = "awww-daemon.service";
       };
 
       Service = {
         Type = "oneshot";
-        ExecStart = "/run/current-system/sw/bin/swww-daemon";
+        ExecStart = "/run/current-system/sw/bin/awww-daemon";
       };
 
       Install = {
-        WantedBy = [ "swww-daemon.service" ];
+        WantedBy = [ "awww-daemon.service" ];
       };
     };
   };

@@ -678,7 +678,7 @@ qemu-system-x86_64 \
   # GPU passthrough
   -device vfio-pci,host=26:00.0,multifunction=on \  # GPU
   -device vfio-pci,host=26:00.1 \                   # GPU Audio
-  
+
   # Network (NAT with RDP port forwarding)
   -device e1000,netdev=net0 \
   -netdev user,id=net0,hostfwd=tcp::3389-:3389 \
@@ -811,6 +811,10 @@ boot.kernelParams = [ "pcie_acs_override=downstream,multifunction" ];
 ```
 
 **Warning:** This reduces security. Use only if necessary.
+
+#### "group is not viable" for a USB controller
+
+If QEMU reports `vfio ... group X is not viable` for a passed-through USB controller, do **not** passthrough that controller unless every device in its IOMMU group can also be bound to vfio. Keep only GPU functions in `vfio-pci.ids` and pass USB devices individually with `-device usb-host,...` instead.
 
 #### Reset Bug (GPU Won't Reinitialize)
 

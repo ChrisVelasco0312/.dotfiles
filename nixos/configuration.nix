@@ -43,9 +43,9 @@ in
     "d /mnt/myfiles 0755 cavelasco users -"
   ];
 
-  # Explicitly load NVIDIA kernel modules early during boot.
-  # This helps ensure the proprietary driver is ready before the display manager starts.
-  boot.initrd.kernelModules = [ "nvidia" ];
+  # Do not force-load NVIDIA in initrd. Let the regular module loading path handle it.
+  # For passthrough specialisations we need initrd free of nvidia.
+  boot.initrd.kernelModules = [ ];
   boot.kernelParams = [ "processor.max_cstate=1" "nvidia_drm.modeset=1" "idle=nomwait" "amd_iommu=on" ];
   boot.kernel.sysctl."kernel.sysrq" = 1;
   # Ensure Xbox Wireless Controller over Bluetooth gets a proper HID driver
@@ -72,7 +72,7 @@ in
     powerManagement.finegrained = false;
     open = false;
     nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
   };
   # --- END NVIDIA Proprietary Driver Configuration ---
   nixpkgs.config.nvidia.acceptLicense = true;
@@ -505,9 +505,6 @@ in
 
     # Open VNC port for remote access during Windows installation
     networking.firewall.allowedTCPPorts = [ 5900 ];
-
-    # Don't mount myfiles - it will be passed through to the VM
-    fileSystems."/mnt/myfiles".enable = false;
 
     # Auto-start the Windows VM
     systemd.services.windows-vm = {
