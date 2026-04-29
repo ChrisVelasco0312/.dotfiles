@@ -1,3 +1,4 @@
 /nixos/hardware-configuration.nix
 env-vars.nix
 .env
+temp/

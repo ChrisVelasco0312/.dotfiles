@@ -36,6 +36,28 @@ nixpkgs = {
           };
         };
 
+        bitwig-studio-patched = prev.bitwig-studio.overrideAttrs (oldAttrs:
+          let
+            customJar = builtins.path {
+              path = /home/cavelasco/.dotfiles/temp/bitwig.jar;
+              name = "bitwig.jar";
+            };
+          in {
+          postInstall = (oldAttrs.postInstall or "") + ''
+            customJar=${customJar}
+            if [ -f "$out/opt/bitwig-studio/bin/bitwig.jar" ]; then
+              cp "$customJar" "$out/opt/bitwig-studio/bin/bitwig.jar"
+            elif [ -f "$out/libexec/bin/bitwig.jar" ]; then
+              cp "$customJar" "$out/libexec/bin/bitwig.jar"
+            elif [ -f "$out/libexec/bitwig-studio/bin/bitwig.jar" ]; then
+              cp "$customJar" "$out/libexec/bitwig-studio/bin/bitwig.jar"
+            else
+              echo "bitwig.jar target path not found" >&2
+              exit 1
+            fi
+          '';
+        });
+
         # Custom cursor-cli package that automatically fetches the latest version
         cursor-cli = prev.stdenv.mkDerivation rec {
           pname = "cursor-cli";
@@ -166,6 +188,7 @@ nixpkgs = {
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
+    bitwig-studio-patched
     # === BROWSERS ===
     brave
     google-chrome
