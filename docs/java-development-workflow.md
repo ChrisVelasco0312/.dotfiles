@@ -30,7 +30,7 @@ This document outlines the complete Java development environment setup and workf
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Project Setup
 
@@ -65,7 +65,7 @@ nvim .
 nvim src/main/java/com/example/App.java
 ```
 
-## 📝 Neovim Java Features
+## Neovim Java Features
 
 ### Language Server Protocol (LSP) Features
 
@@ -117,7 +117,7 @@ Automatic code generation for:
 - **Static star threshold**: 9999 (prefers explicit static imports)
 - Automatic import organization on save (when enabled)
 
-## 🏗 Build & Execution Workflow
+## Build & Execution Workflow
 
 ### Maven Commands
 
@@ -180,7 +180,7 @@ dap.configurations.java = {
 :lua require('dap').continue()
 ```
 
-## 🎨 Code Formatting
+## Code Formatting
 
 ### Google Java Style
 
@@ -201,7 +201,7 @@ The setup uses Google Java Style guidelines:
 | `:Format` | Format current buffer |
 | `:FormatOnSaveToggle` | Toggle automatic formatting on save |
 
-## 🧪 Testing Workflow
+## Testing Workflow
 
 ### JUnit Integration
 
@@ -230,7 +230,7 @@ mvn test -Dtest=MyTestClass#testMethod
 mvn test -X
 ```
 
-## 📦 Dependency Management
+## Dependency Management
 
 ### Adding Dependencies
 
@@ -265,7 +265,7 @@ public class User {
 }
 ```
 
-## 🐳 Containerization
+## Containerization
 
 ### Docker Integration
 
@@ -326,7 +326,7 @@ ls ~/.local/share/eclipse/eclipse-java-google-style.xml
 - **JDTLS logs**: `~/.local/share/eclipse/<project-name>/.metadata/.log`
 - **Neovim LSP logs**: `:LspLog`
 
-## 🔄 Workflow Example
+## Workflow Example
 
 ### Complete Development Cycle
 
