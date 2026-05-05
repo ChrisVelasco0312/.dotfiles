@@ -135,6 +135,13 @@
           type = "viml";
           config = toLuaFile ./nvim-lua/plugins/copilot.lua;
         }
+        ## opencode dependencies
+        snacks-nvim
+        {
+          plugin = opencode-nvim;
+          type = "viml";
+          config = toLuaFile ./nvim-lua/plugins/opencode.lua;
+        }
         {
           plugin = markdown-preview-nvim;
           type = "viml";
