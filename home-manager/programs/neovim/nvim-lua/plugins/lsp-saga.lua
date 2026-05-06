@@ -5,7 +5,7 @@ if (not status) then return end
 local function safe_lsp_request(method, params, callback)
   local clients = vim.lsp.get_active_clients()
   for _, client in pairs(clients) do
-    if client.supports_method(method) then
+    if client:supports_method(method) then
       vim.lsp.buf_request(0, method, params, callback)
       return
     end

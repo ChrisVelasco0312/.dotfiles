@@ -58,55 +58,7 @@ nixpkgs = {
           '';
         });
 
-        # Custom cursor-cli package that automatically fetches the latest version
-        cursor-cli = prev.stdenv.mkDerivation rec {
-          pname = "cursor-cli";
-          version = "latest";
-
-          # No source needed - we create wrapper scripts
-          src = null;
-          dontUnpack = true;
-
-          nativeBuildInputs = with prev; [ makeWrapper ];
-
-          installPhase = ''
-                        mkdir -p $out/bin
-            
-                        # Create the installer script
-                        cat > $out/bin/cursor-cli-install << 'EOF'
-            ${builtins.readFile ./scripts/cursor-cli-install.sh}
-            EOF
-            
-                        # Create the main wrapper script
-                        cat > $out/bin/cursor-agent << 'EOF'
-            ${builtins.readFile ./scripts/cursor-agent.sh}
-            EOF
-            
-                        # Make scripts executable
-                        chmod +x $out/bin/cursor-cli-install
-                        chmod +x $out/bin/cursor-agent
-            
-                        # Wrap the scripts to ensure proper PATH and dependencies
-                        wrapProgram $out/bin/cursor-cli-install \
-                          --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.bash ]}
-            
-                        wrapProgram $out/bin/cursor-agent \
-                          --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.bash ]} \
-                          --prefix PATH : $out/bin
-            
-                        # Create symlink for convenience
-                        ln -s $out/bin/cursor-agent $out/bin/cursor-cli
-          '';
-
-          meta = with prev.lib; {
-            description = "Cursor CLI - AI-powered code editor command line interface";
-            homepage = "https://cursor.com/cli";
-            license = licenses.unfree;
-            platforms = platforms.unix;
-            maintainers = [ "cavelasco" ];
-          };
-        };
-      })
+        })
     ];
     config = {
       allowUnfree = true;
@@ -193,9 +145,8 @@ nixpkgs = {
     brave
     google-chrome
 
-    # === EDITORS & IDES ===
+    # === EDITORS & IDE ===
     vscode
-    cursor-cli
     github-copilot-cli
     claude-code
 
@@ -466,8 +417,7 @@ nixpkgs = {
         fi
       }
       alias ranger="ranger-cd"
-      alias update:cursor="systemctl --user start install-cursor && journalctl --user -u install-cursor -n 50 --no-pager" # Custom alias to trigger Cursor CLI installation with visible logs
-      alias update:opencode="systemctl --user start install-opencode-cli" # Custom alias to trigger OpenCode CLI installation
+      alias update:opencode="systemctl --user start install-opencode-cli"
     '';
   };
 
@@ -587,96 +537,6 @@ nixpkgs = {
     "org/virt-manager/virt-manager/connections" = {
       autoconnect = [ "qemu:///system" ];
       uris = [ "qemu:///system" ];
-    };
-  };
-
-  # CURSOR APPIMAGE INSTALLATION - using systemd service for better network access
-  home.activation.createCursorDirectories = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    # Create Applications directory
-    mkdir -p "$HOME/Applications"
-    
-    # Create desktop entry directory
-    mkdir -p "$HOME/.local/share/applications"
-  '';
-
-  systemd.user.services.install-cursor = {
-    Unit = {
-      Description = "Download and install Cursor AppImage";
-      After = [ "network-online.target" ];
-      Wants = [ "network-online.target" ];
-    };
-    Service = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = pkgs.writeShellScript "install-cursor" ''
-                # Ensure directories exist
-                mkdir -p "$HOME/Applications"
-                mkdir -p "$HOME/.local/share/applications"
-        
-                echo "Fetching latest Cursor AppImage..."
-        
-                # Add retry logic with timeout
-                for i in {1..3}; do
-                  echo "Attempt $i/3..."
-                  CURSOR_INFO=$(${pkgs.curl}/bin/curl --connect-timeout 30 --max-time 120 -sSfL "https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest" 2>/dev/null)
-                  if [ $? -eq 0 ] && [ -n "$CURSOR_INFO" ]; then
-                    break
-                  fi
-                  echo "Attempt $i failed, waiting 10 seconds..."
-                  sleep 10
-                done
-        
-                if [ -z "$CURSOR_INFO" ]; then
-                  echo "ERROR: Failed to fetch Cursor download information after 3 attempts."
-                  exit 1
-                fi
-        
-                DOWNLOAD_URL=$(${pkgs.jq}/bin/jq -r '.downloadUrl' <<< "$CURSOR_INFO")
-        
-                if [ -n "$DOWNLOAD_URL" ] && [ "$DOWNLOAD_URL" != "null" ]; then
-                  echo "Downloading from $DOWNLOAD_URL..."
-          
-                  # Download with retry logic
-                  for i in {1..3}; do
-                    echo "Download attempt $i/3..."
-                    if ${pkgs.curl}/bin/curl --connect-timeout 30 --max-time 300 -sSfL "$DOWNLOAD_URL" -o "$HOME/Applications/Cursor.AppImage.tmp"; then
-                      chmod +x "$HOME/Applications/Cursor.AppImage.tmp"
-                      mv "$HOME/Applications/Cursor.AppImage.tmp" "$HOME/Applications/Cursor.AppImage"
-                      echo "Cursor AppImage downloaded successfully."
-                      break
-                    else
-                      echo "Download attempt $i failed, waiting 10 seconds..."
-                      rm -f "$HOME/Applications/Cursor.AppImage.tmp"
-                      if [ $i -eq 3 ]; then
-                        echo "ERROR: Failed to download Cursor AppImage after 3 attempts."
-                        exit 1
-                      fi
-                      sleep 10
-                    fi
-                  done
-                else
-                  echo "ERROR: Could not retrieve Cursor download URL."
-                  exit 1
-                fi
-        
-                # Create desktop entry for the AppImage
-                cat > "$HOME/.local/share/applications/cursor.desktop" << 'EOF'
-        [Desktop Entry]
-        Name=Cursor
-        Exec=${pkgs.appimage-run}/bin/appimage-run %h/Applications/Cursor.AppImage
-        Icon=code
-        Type=Application
-        Categories=Development;IDE;
-        Comment=AI-first code editor
-        Terminal=false
-        EOF
-        
-                echo "Cursor installation completed successfully."
-      '';
-    };
-    Install = {
-      # Service is not automatically started - run manually with:
-      # systemctl --user start install-cursor
     };
   };
 
