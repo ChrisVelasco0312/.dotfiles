@@ -1,8 +1,20 @@
 require('obsidian').setup({
   workspaces = {
     {
-      name = "vaults",
-      path = "~/Desktop/vaults",
+      name = "knowledge-vault",
+      path = "~/Desktop/vaults/knowledge-vault",
+    },
+    {
+      name = "compsci-uni",
+      path = "~/Desktop/vaults/compsci-uni"
+    },
+    {
+      name = "local-notes",
+      path = "~/Desktop/vaults/local-notes"
+    },
+    {
+      name = "workvault",
+      path = "~/Desktop/vaults/workvault",
     }
   },
   legacy_commands = false,
@@ -68,7 +80,7 @@ local function rearrange_lines(opts)
 end
 
 vim.api.nvim_create_user_command("RearrangeLines", rearrange_lines, {
-  range = true, 
-  nargs = "?", 
+  range = true,
+  nargs = "?",
   desc = "Rearrange selected lines to fit within a character limit, ensuring no single word is left alone.",
 })
