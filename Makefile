@@ -25,7 +25,7 @@ update-safe:
 	make home
 
 home: .i-home
-	@if [ -f .env ]; then set -a && . ./.env && set +a; fi; home-manager switch --flake .#cavelasco@nixos --impure 
+	@if [ -f .env ]; then set -a && . ./.env && set +a; fi; home-manager switch -b backup --flake .#cavelasco@nixos --impure 
 
 build:
 	make flake

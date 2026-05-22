@@ -20,11 +20,11 @@
     },
     "hardware": {
       "locked": {
-        "lastModified": 1776830795,
-        "narHash": "sha256-PAfvLwuHc1VOvsLcpk6+HDKgMEibvZjCNvbM1BJOA7o=",
+        "lastModified": 1779258371,
+        "narHash": "sha256-j1iZsLy6oFApqR1oiDmHhvkwxXqcNi0aoSJj643LuwU=",
         "owner": "nixos",
         "repo": "nixos-hardware",
-        "rev": "72674a6b5599e844c045ae7449ba91f803d44ebc",
+        "rev": "c97bc4d15bd3473dd095e8e8ba57330ab1943a77",
         "type": "github"
       },
       "original": {
@@ -40,11 +40,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1776950293,
-        "narHash": "sha256-t6KMARLILjPuTBSRoYanUxV+FU50IFZ7L5XVdOcdtaY=",
+        "lastModified": 1779336838,
+        "narHash": "sha256-n1+l78hJRABp4cQHKeD0BVByT0vZLPqd09Tvoq8Q+d8=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "6837e0d6c5eda81fd26308489799fbf83a160465",
+        "rev": "928d72376949e222ea4f07b44828a55b0136422e",
         "type": "github"
       },
       "original": {
@@ -60,11 +60,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1776341634,
-        "narHash": "sha256-L//ltP2o5+BnuK+KEulbi2gGeDpyyex6SkXLZcGQ/Ac=",
+        "lastModified": 1779328436,
+        "narHash": "sha256-bRzpb6egVgT4BQS8IsRwR9t8jwwkA3CsXkoYOU2osBk=",
         "owner": "nix-community",
         "repo": "nixd",
-        "rev": "951e98e2025c47614f5249556ecf509b0ea35b51",
+        "rev": "8f09666d08ff84163881545939668d2409f79bfa",
         "type": "github"
       },
       "original": {
@@ -75,11 +75,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1772963539,
-        "narHash": "sha256-G4+9cEu8XSqEWYUB6iRgDfrg53av6yyRwAKhSeKbUVw=",
-        "rev": "9dcb002ca1690658be4a04645215baea8b95f31d",
+        "lastModified": 1776877367,
+        "narHash": "sha256-wMN1gM00sUQ2KC9CNr/XEOGdfOrl67PabIRv9AYayTo=",
+        "rev": "0726a0ecb6d4e08f6adced58726b95db924cef57",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.05pre960399.9dcb002ca169/nixexprs.tar.xz"
+        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.05pre985613.0726a0ecb6d4/nixexprs.tar.xz"
       },
       "original": {
         "type": "tarball",
@@ -120,11 +120,11 @@
     "plugin-lualine": {
       "flake": false,
       "locked": {
-        "lastModified": 1775957658,
-        "narHash": "sha256-PHunrG0yd3pDw3c1S9w1AXQx5/1nT68M+mjxT53enmM=",
+        "lastModified": 1777365207,
+        "narHash": "sha256-5+JKZD4w80QZxnFv+1OxkFVety8fgmcGVOuxfYouxhI=",
         "owner": "nvim-lualine",
         "repo": "lualine.nvim",
-        "rev": "a905eeebc4e63fdc48b5135d3bf8aea5618fb21c",
+        "rev": "131a558e13f9f28b15cd235557150ccb23f89286",
         "type": "github"
       },
       "original": {

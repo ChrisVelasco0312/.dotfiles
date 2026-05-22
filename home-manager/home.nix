@@ -257,6 +257,7 @@ nixpkgs = {
     mongodb-atlas-cli
     dbeaver-bin
     postman
+    apidog
     harlequin
 
     # === PRODUCTIVITY ===
@@ -455,6 +456,26 @@ nixpkgs = {
   xdg.configFile."ncmpcpp/config".source = ../dots/ncmpcpp/config;
   xdg.configFile."ncmpcpp/bindings".source = ../dots/ncmpcpp/bindings;
   xdg.configFile."ghostty/config".source = ../dots/ghostty/config;
+
+  # Apidog protocol handler for OAuth redirects
+  home.file.".local/share/applications/apidog.desktop".text = ''
+    [Desktop Entry]
+    Name=Apidog
+    Exec=apidog %U
+    Terminal=false
+    Type=Application
+    MimeType=x-scheme-handler/apidog;
+    Categories=Development;
+  '';
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "x-scheme-handler/apidog" = [ "apidog.desktop" ];
+      "x-scheme-handler/http" = [ "firefox.desktop" ];
+      "x-scheme-handler/https" = [ "firefox.desktop" ];
+    };
+  };
 
   # Rescrobbled configuration with secrets from .env
   xdg.configFile."rescrobbled/config.toml".text = ''
