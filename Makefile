@@ -15,6 +15,10 @@ flake:
 	sudo nixos-rebuild switch --flake .#nixos --impure
 	make home
 
+flake-dry:
+	sudo nixos-rebuild switch --flake .#nixos --impure --dry-run
+	make home-dry
+
 update:
 	nix flake update
 	sudo nixos-rebuild switch --upgrade --flake .#nixos --impure
@@ -24,8 +28,17 @@ update-safe:
 	nix flake update home-manager nixd hardware plugin-lualine
 	make home
 
+home-news:
+	home-manager news
+
+home-eval:
+	nix eval .#homeConfigurations.cavelasco@nixos.config.home.username --impure
+
 home: .i-home
-	@if [ -f .env ]; then set -a && . ./.env && set +a; fi; home-manager switch -b backup --flake .#cavelasco@nixos --impure 
+	@if [ -f .env ]; then set -a && . ./.env && set +a; fi; home-manager switch -b backup --flake .#cavelasco@nixos --impure
+
+home-dry: .i-home
+	@if [ -f .env ]; then set -a && . ./.env && set +a; fi; home-manager switch -b backup --flake .#cavelasco@nixos --impure --dry-run
 
 build:
 	make flake

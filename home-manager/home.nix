@@ -327,23 +327,21 @@ nixpkgs = {
   programs.ssh.enable = true;
   programs.ssh.enableDefaultConfig = false;
   services.ssh-agent.enable = true;
-  programs.ssh.matchBlocks = {
+  programs.ssh.settings = {
     "*" = {
-      extraOptions = {
-        addKeysToAgent = "yes";
-      };
+      AddKeysToAgent = "yes";
     };
     "github.com" = {
-      user = "git";
-      hostname = "github.com";
-      identityFile = githubKeyPath;
-      identitiesOnly = true;
+      User = "git";
+      HostName = "github.com";
+      IdentityFile = githubKeyPath;
+      IdentitiesOnly = true;
     };
     "github-work" = {
-      user = "git";
-      hostname = "github.com";
-      identityFile = workKeyPath;
-      identitiesOnly = true;
+      User = "git";
+      HostName = "github.com";
+      IdentityFile = workKeyPath;
+      IdentitiesOnly = true;
     };
   };
 
