@@ -35,6 +35,7 @@ This document outlines the complete Java development environment setup and workf
 ### 1. Project Setup
 
 #### Creating a New Maven Project
+
 ```bash
 # Navigate to your projects directory
 cd ~/projects
@@ -50,9 +51,11 @@ cd my-java-app
 ```
 
 #### Project Structure Recognition
+
 The Java LSP automatically detects projects using these markers:
+
 - `gradlew` (Gradle wrapper)
-- `mvnw` (Maven wrapper)  
+- `mvnw` (Maven wrapper)
 - `.git` (Git repository)
 
 ### 2. Opening Projects in Neovim
@@ -70,31 +73,35 @@ nvim src/main/java/com/example/App.java
 ### Language Server Protocol (LSP) Features
 
 #### Navigation & Discovery
-| Keybinding | Action | Description |
-|------------|--------|-------------|
-| `gd` | Go to Definition | Jump to where symbol is defined |
-| `gI` | Go to Implementation | Jump to implementation |
-| `<leader>D` | Type Definition | Show type definition |
-| `<leader>ds` | Document Symbols | List symbols in current file |
-| `<leader>ws` | Workspace Symbols | Search symbols across workspace |
+
+| Keybinding   | Action               | Description                     |
+| ------------ | -------------------- | ------------------------------- |
+| `gd`         | Go to Definition     | Jump to where symbol is defined |
+| `gI`         | Go to Implementation | Jump to implementation          |
+| `<leader>D`  | Type Definition      | Show type definition            |
+| `<leader>ds` | Document Symbols     | List symbols in current file    |
+| `<leader>ws` | Workspace Symbols    | Search symbols across workspace |
 
 #### Code Actions & Refactoring
-| Command | Action |
-|---------|--------|
-| `:lua vim.lsp.buf.code_action()` | Show available code actions |
-| `:lua vim.lsp.buf.rename()` | Rename symbol |
-| `:lua vim.lsp.buf.format()` | Format code using Google Java Style |
+
+| Command                          | Action                              |
+| -------------------------------- | ----------------------------------- |
+| `:lua vim.lsp.buf.code_action()` | Show available code actions         |
+| `:lua vim.lsp.buf.rename()`      | Rename symbol                       |
+| `:lua vim.lsp.buf.format()`      | Format code using Google Java Style |
 
 #### Workspace Management
-| Keybinding | Action |
-|------------|--------|
-| `<leader>wl` | List workspace folders |
-| `<leader>wa` | Add workspace folder |
+
+| Keybinding   | Action                  |
+| ------------ | ----------------------- |
+| `<leader>wl` | List workspace folders  |
+| `<leader>wa` | Add workspace folder    |
 | `<leader>wr` | Remove workspace folder |
 
 ### Autocompletion & Intellisense
 
 The setup includes smart autocompletion with:
+
 - **Method signatures** with parameter hints
 - **Import organization** (auto-imports)
 - **Favorite static members** for common testing frameworks:
@@ -106,6 +113,7 @@ The setup includes smart autocompletion with:
 ### Code Generation
 
 Automatic code generation for:
+
 - **toString()** methods with custom templates
 - **hashCode() and equals()** using Java 7+ Objects
 - **Getters and setters**
@@ -144,6 +152,7 @@ mvn install
 ### IDE Integration with Maven
 
 The LSP server automatically:
+
 - Detects Maven projects via `pom.xml`
 - Downloads dependencies
 - Configures classpath
@@ -196,9 +205,9 @@ The setup uses Google Java Style guidelines:
 
 ### Format Commands
 
-| Command | Action |
-|---------|--------|
-| `:Format` | Format current buffer |
+| Command               | Action                              |
+| --------------------- | ----------------------------------- |
+| `:Format`             | Format current buffer               |
 | `:FormatOnSaveToggle` | Toggle automatic formatting on save |
 
 ## Testing Workflow
@@ -273,7 +282,7 @@ Docker Compose is available for containerized development:
 
 ```yaml
 # docker-compose.yml
-version: '3.8'
+version: "3.8"
 services:
   app:
     build: .
@@ -293,6 +302,7 @@ docker-compose up --build
 ### Common Issues
 
 #### 1. LSP Not Starting
+
 ```bash
 # Check if jdtls is available
 which jdtls
@@ -305,6 +315,7 @@ java -version
 ```
 
 #### 2. Maven Dependencies Not Resolving
+
 ```bash
 # Force dependency resolution
 mvn dependency:resolve
@@ -314,6 +325,7 @@ mvn clean install
 ```
 
 #### 3. Format Not Working
+
 ```bash
 # Check if Google Style file exists
 ls ~/.local/share/eclipse/eclipse-java-google-style.xml
@@ -331,6 +343,7 @@ ls ~/.local/share/eclipse/eclipse-java-google-style.xml
 ### Complete Development Cycle
 
 1. **Create Project**:
+
    ```bash
    mvn archetype:generate -DgroupId=com.example -DartifactId=my-app
    cd my-app
@@ -340,6 +353,7 @@ ls ~/.local/share/eclipse/eclipse-java-google-style.xml
 2. **Edit Code**: Use Neovim with full LSP support for navigation, completion, and refactoring
 
 3. **Build & Test**:
+
    ```bash
    mvn compile test
    ```
@@ -394,4 +408,4 @@ mvn archetype:generate \
 
 ---
 
-*This workflow is optimized for the NixOS + Home Manager + Neovim development environment. All tools are declaratively managed and reproducible across systems.*
+_This workflow is optimized for the NixOS + Home Manager + Neovim development environment. All tools are declaratively managed and reproducible across systems._
