@@ -55,8 +55,8 @@ in
     Storage=persistent
   '';
 
-  # --- NVIDIA Proprietary Driver Configuration ---
-  # Enable the NVIDIA proprietary drivers (this was the main missing switch).
+  # --- Graphics Configuration ---
+  # NVIDIA VA-API for hardware video decoding (phones, etc.)
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -164,6 +164,7 @@ in
   services.printing.enable = true;
 
   services.gvfs.enable = true;
+  services.udisks2.enable = true;
 
   # Enable sound with pipewire
   security.rtkit.enable = true;
@@ -460,7 +461,7 @@ in
     experimental-features = nix-command flakes
   '';
 
-  system.stateVersion = "25.05"; # Ensure this matches your NixOS channel
+  system.stateVersion = "26.05"; # Ensure this matches your NixOS channel
 
   # ============================================================================
   # Windows VM with GPU Passthrough Specialisation

@@ -36,27 +36,7 @@ nixpkgs = {
           };
         };
 
-        bitwig-studio-patched = prev.bitwig-studio.overrideAttrs (oldAttrs:
-          let
-            customJar = builtins.path {
-              path = /home/cavelasco/.dotfiles/temp/bitwig.jar;
-              name = "bitwig.jar";
-            };
-          in {
-          postInstall = (oldAttrs.postInstall or "") + ''
-            customJar=${customJar}
-            if [ -f "$out/opt/bitwig-studio/bin/bitwig.jar" ]; then
-              cp "$customJar" "$out/opt/bitwig-studio/bin/bitwig.jar"
-            elif [ -f "$out/libexec/bin/bitwig.jar" ]; then
-              cp "$customJar" "$out/libexec/bin/bitwig.jar"
-            elif [ -f "$out/libexec/bitwig-studio/bin/bitwig.jar" ]; then
-              cp "$customJar" "$out/libexec/bitwig-studio/bin/bitwig.jar"
-            else
-              echo "bitwig.jar target path not found" >&2
-              exit 1
-            fi
-          '';
-        });
+        
 
         })
     ];
@@ -76,7 +56,7 @@ nixpkgs = {
   home = {
     username = "cavelasco";
     homeDirectory = "/home/cavelasco";
-    stateVersion = "25.05";
+    stateVersion = "26.05";
 
     pointerCursor = {
       gtk.enable = true;
@@ -140,7 +120,7 @@ nixpkgs = {
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
-    bitwig-studio-patched
+    cardinal
     # === BROWSERS ===
     brave
     google-chrome
