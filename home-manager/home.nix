@@ -120,6 +120,8 @@ nixpkgs = {
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
+    puredata
+    plugdata
     cardinal
     # === BROWSERS ===
     brave
@@ -444,6 +446,24 @@ nixpkgs = {
     Type=Application
     MimeType=x-scheme-handler/apidog;
     Categories=Development;
+  '';
+
+  home.file.".local/share/applications/pd-jack.desktop".text = ''
+    [Desktop Entry]
+    Name=Pure Data (JACK/PipeWire)
+    Comment=Pure Data with PipeWire JACK backend
+    Exec=${pkgs.bash}/bin/bash ${config.home.homeDirectory}/.dotfiles/dots/pd-jack.sh %F
+    Terminal=false
+    Type=Application
+    Categories=AudioVideo;Audio;Development;Music;Graphics
+    Keywords=Audio;Video;Programming;Synthesis;Analysis
+    MimeType=text/x-puredata;application/x-puredata;
+    Icon=puredata
+  '';
+
+  xdg.dataFile."applications/org.puredata.pd-gui.desktop".text = ''
+    [Desktop Entry]
+    Hidden=true
   '';
 
   xdg.mimeApps = {

@@ -38,16 +38,21 @@ in
     options = [ "defaults" "uid=1000" "gid=100" "dmask=022" "fmask=133" ];
   };
 
-  # Create mount point directories
+  # Create mount point directories and swap directory
   systemd.tmpfiles.rules = [
     "d /mnt/myfiles 0755 cavelasco users -"
+    "d /swap 0555 root root -"
   ];
 
-  # Do not force-load NVIDIA in initrd. Let the regular module loading path handle it.
-  # For passthrough specialisations we need initrd free of nvidia.
-  boot.initrd.kernelModules = [ ];
-  boot.kernelParams = [ "processor.max_cstate=1" "nvidia_drm.modeset=1" "idle=nomwait" "amd_iommu=on" ];
+  # Swap file (16GB) - for memory overflow and hibernation
+  # To resize: adjust size below and run: sudo nixos-rebuild switch
+  swapDevices = [
+    { device = "/swap/swapfile"; size = 16 * 1024; }
+  ];
+
+  boot.kernelParams = [ "nvidia_drm.modeset=1" ];
   boot.kernel.sysctl."kernel.sysrq" = 1;
+
   # Ensure Xbox Wireless Controller over Bluetooth gets a proper HID driver
   boot.kernelModules = [ "pstore" "snd-seq" "snd-rawmidi" "hid_microsoft" ];
 
@@ -168,6 +173,11 @@ in
 
   # Enable sound with pipewire
   security.rtkit.enable = true;
+  security.pam.loginLimits = [
+    { domain = "@audio"; item = "rtprio"; type = "-"; value = "99"; }
+    { domain = "@audio"; item = "memlock"; type = "-"; value = "unlimited"; }
+    { domain = "@audio"; item = "nice"; type = "-"; value = "-19"; }
+  ];
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -239,27 +249,29 @@ in
   };
   services.openssh.enable = true;
 
-  services.mysql = {
-    enable = true;
-    package = pkgs.mysql84;
-  };
+  # services.mysql = {
+  #   enable = true;
+  #   package = pkgs.mysql84;
+  # };
+  # To re-enable: uncomment above and run: sudo nixos-rebuild switch
 
-  services.postgresql = {
-    enable = true;
-    package = pkgs.postgresql_16;
-    authentication = lib.mkOverride 10 ''
-      # TYPE  DATABASE  USER  ADDRESS       METHOD
-      local   all       all                 trust
-      host    all       all   127.0.0.1/32  trust
-      host    all       all   ::1/128       trust
-    '';
-    ensureUsers = [
-      {
-        name = "cavelasco";
-        ensureClauses.superuser = true;
-      }
-    ];
-  };
+  # services.postgresql = {
+  #   enable = true;
+  #   package = pkgs.postgresql_16;
+  #   authentication = lib.mkOverride 10 ''
+  #     # TYPE  DATABASE  USER  ADDRESS       METHOD
+  #     local   all       all                 trust
+  #     host    all       all   127.0.0.1/32  trust
+  #     host    all       all   ::1/128       trust
+  #   '';
+  #   ensureUsers = [
+  #     {
+  #       name = "cavelasco";
+  #       ensureClauses.superuser = true;
+  #     }
+  #   '';
+  # };
+  # To re-enable: uncomment above and run: sudo nixos-rebuild switch
 
   # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.cavelasco = {
@@ -270,10 +282,12 @@ in
   };
 
   # Docker configuration
-  virtualisation.docker.enable = true;
-  virtualisation.docker.rootless = {
+  virtualisation.docker = {
     enable = true;
-    setSocketVariable = true;
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
   };
   users.extraGroups.docker.members = [ "cavelasco" ];
 
@@ -301,7 +315,7 @@ in
     timidity # Software synthesizer and MIDI player
     qjackctl # JACK control application
     a2jmidid # ALSA to JACK MIDI bridge
-    jack2 # JACK audio connection kit
+    pipewire.jack # pw-jack wrapper for JACK apps
     wineasio # ASIO driver for Wine
 
     #virtualization packages
@@ -348,15 +362,17 @@ in
     android-tools
   ];
 
-  virtualisation.libvirtd = {
-    enable = true;
-    qemu = {
-      vhostUserPackages = [ pkgs.virtiofsd ];
-      runAsRoot = true;
-    };
-    onBoot = "start";
-    onShutdown = "shutdown";
-  };
+  # Virtualization with QEMU/libvirt
+  # To enable: uncomment below, add yourself to 'libvirtd' group (already done), and run: sudo nixos-rebuild switch
+  # virtualisation.libvirtd = {
+  #   enable = true;
+  #   qemu = {
+  #     vhostUserPackages = [ pkgs.virtiofsd ];
+  #     runAsRoot = true;
+  #   };
+  #   onBoot = "start";
+  #   onShutdown = "shutdown";
+  # };
 
   programs.steam = {
     enable = true;
@@ -370,31 +386,31 @@ in
   };
 
 
+  # Tailscale VPN - accessible at: https://login.tailscale.com/admin/machines
   services.tailscale.enable = true;
-  services.samba = {
-    enable = true;
-    settings = {
-      global = {
-        "workgroup" = "WORKGROUP";
-        "server string" = "nixos";
-        "netbios name" = "nixos";
-        "security" = "user";
+  # Samba for Windows file sharing
+  # To enable: uncomment below and run: sudo nixos-rebuild switch
+  # services.samba = {
+  #   enable = true;
+  #   settings = {
+  #     global = {
+  #       "workgroup" = "WORKGROUP";
+  #       "server string" = "nixos";
+  #       "netbios name" = "nixos";
+  #       "security" = "user";
+  #       "hosts allow" = "100.64.0.0/10 127.0.0.1 localhost";
+  #       "hosts deny" = "0.0.0.0/0";
+  #     };
+  #     "myfolder" = {
+  #       "path" = "/mnt/myfiles";
+  #       "valid users" = "cavelasco";
+  #       "public" = "no";
+  #       "writeable" = "yes";
+  #     };
+  #   };
+  # };
 
-        # Only accessible via Tailscale (100.64.0.0/10 is Tailscale's CGNAT range)
-        "hosts allow" = "100.64.0.0/10 127.0.0.1 localhost";
-        "hosts deny" = "0.0.0.0/0";
-      };
-
-      "myfolder" = {
-        "path" = "/mnt/myfiles";
-        "valid users" = "cavelasco";
-        "public" = "no";
-        "writeable" = "yes";
-      };
-    };
-  };
-
-  # Open ports in the firewall for Mumble server (phone microphone)
+  # Navidrome media server for streaming music
   services.navidrome = {
     enable = true;
     settings = {
@@ -463,61 +479,4 @@ in
 
   system.stateVersion = "26.05"; # Ensure this matches your NixOS channel
 
-  # ============================================================================
-  # Windows VM with GPU Passthrough Specialisation
-  # ============================================================================
-  # This creates a second GRUB boot option "NixOS - windows-vm" that:
-  # - Boots headless (no display manager)
-  # - Binds the NVIDIA GPU to vfio-pci driver
-  # - Auto-starts a Windows 11 VM with full GPU passthrough
-  # ============================================================================
-  specialisation.windows-vm.configuration = {
-    system.nixos.tags = [ "windows-vm" ];
-
-    # Disable display manager - boot to TTY only
-    services.greetd.enable = lib.mkForce false;
-
-    # Allocate hugepages for VM (16GB = 8192 x 2MB pages, +256 for overhead)
-    boot.kernel.sysctl."vm.nr_hugepages" = 8448;
-
-    # Blacklist nvidia drivers - prevents loading even if in initrd
-    boot.blacklistedKernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" "nouveau" ];
-
-    # Bind GPU and USB controller to vfio-pci via kernel parameters (earliest possible binding)
-    # GPU: 10de:1c03,10de:10f1 | USB controller (for Focusrite): 1022:145c
-    # CPU isolation: CPUs 4-11 reserved for VM, no host scheduling/interrupts
-    boot.kernelParams = [
-      "vfio-pci.ids=10de:1c03,10de:10f1,1022:145c"
-      "isolcpus=4-11"
-      "nohz_full=4-11"
-      "rcu_nocbs=4-11"
-    ];
-
-    # Load VFIO modules early in initrd
-    boot.initrd.kernelModules = [ "vfio_pci" "vfio" "vfio_iommu_type1" ];
-
-    # Bind GPU and USB controller to vfio-pci at module load time (backup)
-    boot.extraModprobeConfig = ''
-      options vfio-pci ids=10de:1c03,10de:10f1,1022:145c
-      softdep nvidia pre: vfio-pci
-      softdep nouveau pre: vfio-pci
-      softdep xhci_hcd pre: vfio-pci
-    '';
-
-    # Open VNC port for remote access during Windows installation
-    networking.firewall.allowedTCPPorts = [ 5900 ];
-
-    # Auto-start the Windows VM
-    systemd.services.windows-vm = {
-      description = "Windows 11 VM with GPU Passthrough";
-      after = [ "multi-user.target" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "simple";
-        User = "root";
-        ExecStart = "/home/cavelasco/.dotfiles/nixos/scripts/start-windows-vm.sh";
-        Restart = "on-failure";
-      };
-    };
-  };
 }
