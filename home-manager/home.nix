@@ -10,23 +10,25 @@ let
   workKeyPath = "${config.home.homeDirectory}/.ssh/id_ed25519_work";
 
   # Parse .env file from root
-  env = let
-    content = builtins.readFile "${config.home.homeDirectory}/.dotfiles/.env";
-    lines = lib.splitString "\n" content;
-    parseLine = line:
-      if (builtins.match "[A-Za-z_][A-Za-z0-9_]*=.*" line) != null then
-        let
-          parts = lib.splitString "=" line;
-          key = builtins.head parts;
-          value = lib.concatStringsSep "=" (builtins.tail parts);
-        in { name = key; value = value; }
-      else null;
-  in
+  env =
+    let
+      content = builtins.readFile "${config.home.homeDirectory}/.dotfiles/.env";
+      lines = lib.splitString "\n" content;
+      parseLine = line:
+        if (builtins.match "[A-Za-z_][A-Za-z0-9_]*=.*" line) != null then
+          let
+            parts = lib.splitString "=" line;
+            key = builtins.head parts;
+            value = lib.concatStringsSep "=" (builtins.tail parts);
+          in
+          { name = key; value = value; }
+        else null;
+    in
     builtins.listToAttrs (builtins.filter (x: x != null) (map parseLine lines));
 
 in
 {
-nixpkgs = {
+  nixpkgs = {
     overlays = [
       (final: prev: {
         vimPlugins = prev.vimPlugins // {
@@ -36,9 +38,9 @@ nixpkgs = {
           };
         };
 
-        
 
-        })
+
+      })
     ];
     config = {
       allowUnfree = true;
@@ -123,6 +125,7 @@ nixpkgs = {
     puredata
     plugdata
     cardinal
+    reaper
     # === BROWSERS ===
     brave
     google-chrome
@@ -142,13 +145,7 @@ nixpkgs = {
     lua-language-server
     markdown-oxide
 
-    # === VIRTUALIZATION & CONTAINERS ===
-    virt-manager
-    qemu
-    libvirt
-    virt-viewer
-    spice-gtk
-    dnsmasq
+    # === CONTAINERS ===
     docker-compose
 
     # === PYTHON ===
@@ -271,6 +268,7 @@ nixpkgs = {
     vlc
     feishin
     streamrip
+    spotify
     tidal-hifi
     mpd
     mpc
@@ -448,6 +446,18 @@ nixpkgs = {
     Categories=Development;
   '';
 
+  home.file.".local/share/applications/cardinal.desktop".text = ''
+    [Desktop Entry]
+    Name=Cardinal
+    Comment=Virtual modular synthesizer (VCV Rack)
+    Exec=${pkgs.bash}/bin/bash ${config.home.homeDirectory}/.dotfiles/dots/cardinal-jack.sh
+    Terminal=false
+    Type=Application
+    Categories=AudioVideo;Audio;Music
+    Keywords=Synth;Modular;Audio;Music
+    Icon=cardinal
+  '';
+
   home.file.".local/share/applications/pd-jack.desktop".text = ''
     [Desktop Entry]
     Name=Pure Data (JACK/PipeWire)
@@ -541,8 +551,8 @@ nixpkgs = {
       };
       file = {
         enabled = true;
-        media_dirs = [ 
-          "/mnt/myfiles/music|Music" 
+        media_dirs = [
+          "/mnt/myfiles/music|Music"
         ];
       };
       mpris = {
@@ -551,13 +561,7 @@ nixpkgs = {
     };
   };
 
-  # VIRTUALIZATION
-  dconf.settings = {
-    "org/virt-manager/virt-manager/connections" = {
-      autoconnect = [ "qemu:///system" ];
-      uris = [ "qemu:///system" ];
-    };
-  };
+
 
   systemd.user.services.install-opencode-cli = {
     Unit = {
@@ -569,18 +573,18 @@ nixpkgs = {
       Type = "oneshot";
       RemainAfterExit = true;
       ExecStart = pkgs.writeShellScript "install-opencode-cli" ''
-                set -euo pipefail
+        set -euo pipefail
 
-                # Determine installation directory (default to ~/.local/bin, like your PATH setup)
-                INSTALL_DIR="''${XDG_BIN_DIR:-$HOME/.local/bin}"
-                mkdir -p "''${INSTALL_DIR}"
+        # Determine installation directory (default to ~/.local/bin, like your PATH setup)
+        INSTALL_DIR="''${XDG_BIN_DIR:-$HOME/.local/bin}"
+        mkdir -p "''${INSTALL_DIR}"
 
-                echo "Installing OpenCode CLI to ''${INSTALL_DIR}..."
+        echo "Installing OpenCode CLI to ''${INSTALL_DIR}..."
 
-                # Use official installer script, targeting the chosen directory
-                XDG_BIN_DIR="''${INSTALL_DIR}" ${pkgs.curl}/bin/curl -fsSL "https://opencode.ai/install" | ${pkgs.bash}/bin/bash
+        # Use official installer script, targeting the chosen directory
+        XDG_BIN_DIR="''${INSTALL_DIR}" ${pkgs.curl}/bin/curl -fsSL "https://opencode.ai/install" | ${pkgs.bash}/bin/bash
 
-                echo "OpenCode CLI installation completed."
+        echo "OpenCode CLI installation completed."
       '';
     };
     Install = {

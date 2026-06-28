@@ -277,7 +277,7 @@ in
   users.users.cavelasco = {
     isNormalUser = true;
     description = "cavelasco";
-    extraGroups = [ "networkmanager" "wheel" "git" "libvirtd" "render" "video" "input" "plugdev" "audio" "adbusers" "kvm" ];
+    extraGroups = [ "networkmanager" "wheel" "git" "render" "video" "input" "plugdev" "audio" "adbusers" ];
     shell = pkgs.zsh;
   };
 
@@ -318,23 +318,6 @@ in
     pipewire.jack # pw-jack wrapper for JACK apps
     wineasio # ASIO driver for Wine
 
-    #virtualization packages
-    (
-      pkgs.qemu.override {
-        gtkSupport = true;
-        sdlSupport = true;
-        openGLSupport = true;
-        spiceSupport = true;
-      }
-    )
-    # qemu_full # commented out because it currently breaks build due to ceph/sphinx/python3.11
-    qemu
-    virt-manager
-    spice-gtk
-    spice-protocol
-    OVMF
-    samba # Required for QEMU's smb= folder sharing
-
     appimage-run
     curl
     jq
@@ -361,18 +344,6 @@ in
     # Android debugging tools
     android-tools
   ];
-
-  # Virtualization with QEMU/libvirt
-  # To enable: uncomment below, add yourself to 'libvirtd' group (already done), and run: sudo nixos-rebuild switch
-  # virtualisation.libvirtd = {
-  #   enable = true;
-  #   qemu = {
-  #     vhostUserPackages = [ pkgs.virtiofsd ];
-  #     runAsRoot = true;
-  #   };
-  #   onBoot = "start";
-  #   onShutdown = "shutdown";
-  # };
 
   programs.steam = {
     enable = true;
