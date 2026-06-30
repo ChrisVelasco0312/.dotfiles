@@ -132,8 +132,6 @@ in
 
     # === EDITORS & IDE ===
     vscode
-    github-copilot-cli
-    claude-code
 
     # === CLOUD & DEPLOYMENT ===
     awscli2
@@ -231,13 +229,9 @@ in
     capitaine-cursors
 
     # === DATABASE TOOLS ===
-    mongodb-compass
-    mongodb-cli
-    mongodb-atlas-cli
     dbeaver-bin
     postman
     apidog
-    harlequin
 
     # === PRODUCTIVITY ===
     zotero
@@ -373,8 +367,6 @@ in
     };
   };
 
-
-
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -482,6 +474,14 @@ in
       "x-scheme-handler/apidog" = [ "apidog.desktop" ];
       "x-scheme-handler/http" = [ "firefox.desktop" ];
       "x-scheme-handler/https" = [ "firefox.desktop" ];
+      "image/jpeg" = [ "feh.desktop" ];
+      "image/png" = [ "feh.desktop" ];
+      "image/gif" = [ "feh.desktop" ];
+      "image/webp" = [ "feh.desktop" ];
+      "image/bmp" = [ "feh.desktop" ];
+      "image/svg+xml" = [ "org.gnome.eog.desktop" ];
+      "application/pdf" = [ "org.kde.okular.desktop" ];
+      "application/epub+zip" = [ "org.kde.okular.desktop" ];
     };
   };
 
