@@ -239,6 +239,7 @@ in
     xournalpp
     epr
     kdePackages.okular
+    koodo-reader
 
     # === IMAGE VIEWERS & FILE MANAGEMENT ===
     feh
@@ -271,6 +272,7 @@ in
     playerctl
     alsa-scarlett-gui
     rescrobbled
+    stremio-linux-shell
 
     # === SCREENSHOTS & RECORDING ===
     hyprshot
@@ -278,6 +280,7 @@ in
     grim
     slurp
     obs-studio
+    hyprsunset
 
     # === TERMINALS ===
     ghostty

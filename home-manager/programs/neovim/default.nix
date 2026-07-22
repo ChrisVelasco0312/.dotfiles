@@ -35,7 +35,7 @@
           python-lsp-server
           python-lsp-ruff
           mypy
-          python-lsp-black
+          (python-lsp-black.overridePythonAttrs { doCheck = false; })
           isort
           rope
         ])) 
