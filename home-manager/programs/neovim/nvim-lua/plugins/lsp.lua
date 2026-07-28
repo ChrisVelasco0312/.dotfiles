@@ -196,7 +196,12 @@ vim.lsp.config('clangd', {
   cmd = {
     'clangd',
     '--background-index',
-    '--query-driver=/nix/store/*/bin/clang++,/nix/store/*/bin/clang,/nix/store/*/bin/g++,/nix/store/*/bin/gcc',
+    '--query-driver=' .. table.concat({
+      vim.fn.system('which clang++'):gsub('\n$', ''),
+      vim.fn.system('which clang'):gsub('\n$', ''),
+      vim.fn.system('which g++'):gsub('\n$', ''),
+      vim.fn.system('which gcc'):gsub('\n$', ''),
+    }, ','),
   },
   filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda', 'proto' },
   root_markers = { '.clangd', '.clang-tidy', '.clang-format', 'compile_commands.json', 'compile_flags.txt', 'configure.ac', '.git' },
