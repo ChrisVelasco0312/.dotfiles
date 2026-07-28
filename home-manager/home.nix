@@ -425,6 +425,7 @@ in
   xdg.configFile."hypr/rofi-mpd.sh".source = ../dots/hypr/rofi-mpd.sh;
   xdg.configFile."hypr/rofi-tidal.py".source = ../dots/hypr/rofi-tidal.py;
   xdg.configFile."hypr/rofi-music.sh".source = ../dots/hypr/rofi-music.sh;
+  xdg.configFile."hypr/rofi-buffer-size.sh".source = ../dots/hypr/rofi-buffer-size.sh;
   xdg.configFile."nvim/ftplugin/java.lua".source = ./programs/neovim/nvim-lua/ftplugin/java.lua;
   xdg.configFile."ncmpcpp/config".source = ../dots/ncmpcpp/config;
   xdg.configFile."ncmpcpp/bindings".source = ../dots/ncmpcpp/bindings;

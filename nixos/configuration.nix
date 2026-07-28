@@ -52,6 +52,7 @@ in
 
   boot.kernelParams = [ "nvidia_drm.modeset=1" ];
   boot.kernel.sysctl."kernel.sysrq" = 1;
+  boot.kernel.sysctl."kernel.sched_rt_runtime_us" = -1;
 
   # Ensure Xbox Wireless Controller over Bluetooth gets a proper HID driver
   boot.kernelModules = [ "pstore" "snd-seq" "snd-rawmidi" "hid_microsoft" ];
@@ -247,6 +248,16 @@ in
       }
     ];
   };
+  # Pro audio low-latency PipeWire configuration
+  services.pipewire.extraConfig.pipewire."10-pro-audio" = {
+    "context.properties" = {
+      "default.clock.allowed-rates" = [ 44100 48000 96000 ];
+      "default.clock.quantum" = 128;
+      "default.clock.min-quantum" = 32;
+      "default.clock.max-quantum" = 8192;
+    };
+  };
+
   services.openssh.enable = true;
 
   # services.mysql = {

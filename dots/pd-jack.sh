@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-SCARLETT="alsa_output.usb-Focusrite_Scarlett_2i2_4th_Gen_S2HA9TA5734C20-00.HiFi__Line1__sink"
+SCARLETT="alsa_output.usb-Focusrite_Scarlett_2i2_4th_Gen_S2HA9TA5734C20-00.pro-output-0"
 
 connect_pd() {
   for i in $(seq 1 20); do
     if pw-link -o 2>/dev/null | grep -q "pure_data:output_1"; then
-      pw-link pure_data:output_1 "${SCARLETT}:playback_FL" 2>/dev/null
-      pw-link pure_data:output_2 "${SCARLETT}:playback_FR" 2>/dev/null
+      pw-link pure_data:output_1 "${SCARLETT}:playback_AUX0" 2>/dev/null
+      pw-link pure_data:output_2 "${SCARLETT}:playback_AUX1" 2>/dev/null
       break
     fi
     sleep 0.25
