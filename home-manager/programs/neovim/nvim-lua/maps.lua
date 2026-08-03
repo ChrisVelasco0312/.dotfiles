@@ -110,6 +110,47 @@ vim.keymap.set('n', '<leader>f', function()
 end, { desc = '[LSP] Format buffer' })
 
 
+-- Toggle terminal buffer docked at the bottom
+local term_buf = nil
+local term_win = nil
+
+local function toggle_terminal()
+  if term_win and vim.api.nvim_win_is_valid(term_win) then
+    vim.api.nvim_win_close(term_win, true)
+    term_win = nil
+    return
+  end
+
+  if term_buf and vim.api.nvim_buf_is_valid(term_buf) then
+    vim.cmd('botright 15split')
+    vim.api.nvim_win_set_buf(0, term_buf)
+    term_win = vim.api.nvim_get_current_win()
+    vim.cmd('startinsert')
+    return
+  end
+
+  vim.cmd('botright 15split')
+  term_buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_win_set_buf(0, term_buf)
+  term_win = vim.api.nvim_get_current_win()
+  vim.fn.termopen(os.getenv('SHELL') or 'zsh')
+  vim.cmd('startinsert')
+
+  vim.api.nvim_create_autocmd('TermClose', {
+    buffer = term_buf,
+    callback = function()
+      if vim.api.nvim_buf_is_valid(term_buf) then
+        vim.api.nvim_buf_delete(term_buf, { force = true })
+      end
+      term_buf = nil
+      term_win = nil
+    end,
+  })
+end
+
+vim.keymap.set('n', '<leader>tt', toggle_terminal, { silent = true, desc = 'toggle bottom terminal' })
+vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { silent = true, desc = 'exit terminal mode' })
+
 -- Git blame floating window
 vim.keymap.set('n', '<Leader>gb', function()
   local blame_info = require('gitblame').get_current_blame_text()

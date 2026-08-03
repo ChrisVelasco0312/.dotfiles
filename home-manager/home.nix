@@ -122,6 +122,8 @@ in
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
+    shadps4
+    shadps4-qtlauncher
     puredata
     plugdata
     cardinal

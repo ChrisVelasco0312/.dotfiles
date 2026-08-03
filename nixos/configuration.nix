@@ -252,7 +252,7 @@ in
   services.pipewire.extraConfig.pipewire."10-pro-audio" = {
     "context.properties" = {
       "default.clock.allowed-rates" = [ 44100 48000 96000 ];
-      "default.clock.quantum" = 128;
+      "default.clock.quantum" = 512;
       "default.clock.min-quantum" = 32;
       "default.clock.max-quantum" = 8192;
     };
