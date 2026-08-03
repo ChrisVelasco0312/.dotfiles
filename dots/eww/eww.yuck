@@ -1,0 +1,25 @@
+(defpoll minimized_json :interval "1s" "bash ~/.config/eww/scripts/get-minimized.sh")
+(defvar show_bar false)
+
+(defwindow minimized_bar
+  :monitor 0
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  :geometry (geometry :width "500px" :height "2px" :anchor "bottom center")
+  (eventbox :onhover "eww update show_bar=true"
+            :onhoverlost "eww update show_bar=false"
+            (box :orientation "v"
+                 :halign "center"
+                 :valign "end"
+                 (box :visible {show_bar && minimized_json != "[]"}
+                      :class "minimized-box"
+                      :orientation "h"
+                      :spacing 6
+                      :halign "center"
+                      (for win in minimized_json
+                        (button :class "minimized-btn"
+                                :onclick "eww update show_bar=false; bash ~/.config/eww/scripts/restore.sh ${win.address}"
+                                (box :orientation "h" :spacing 6
+                                     (label :text "${win.class}" :class "minimized-icon")
+                                     (label :text "${win.title}" :limit-width 30))))))))

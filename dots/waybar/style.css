@@ -92,6 +92,17 @@ window#waybar {
 	color: #888888;
 }
 
+/* Taskbar window icons */
+#workspaces .taskbar-window {
+	padding: 0 4px;
+	color: #cccccc;
+}
+
+#workspaces .taskbar-window.active {
+	color: #fff;
+	font-weight: 600;
+}
+
 /* Remove all hover effects */
 #clock:hover,
 #pulseaudio:hover,

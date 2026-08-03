@@ -428,6 +428,13 @@ in
   xdg.configFile."hypr/rofi-tidal.py".source = ../dots/hypr/rofi-tidal.py;
   xdg.configFile."hypr/rofi-music.sh".source = ../dots/hypr/rofi-music.sh;
   xdg.configFile."hypr/rofi-buffer-size.sh".source = ../dots/hypr/rofi-buffer-size.sh;
+  xdg.configFile."eww/eww.yuck".source = ../dots/eww/eww.yuck;
+  xdg.configFile."eww/eww.scss".source = ../dots/eww/eww.scss;
+  xdg.configFile."eww/scripts/minimize.sh".source = ../dots/eww/scripts/minimize.sh;
+  xdg.configFile."eww/scripts/restore.sh".source = ../dots/eww/scripts/restore.sh;
+  xdg.configFile."eww/scripts/get-minimized.sh".source = ../dots/eww/scripts/get-minimized.sh;
+  xdg.configFile."eww/scripts/rofi-minimized.sh".source = ../dots/eww/scripts/rofi-minimized.sh;
+  xdg.configFile."rofi/window-switcher.rasi".source = ../dots/rofi/window-switcher.rasi;
   xdg.configFile."nvim/ftplugin/java.lua".source = ./programs/neovim/nvim-lua/ftplugin/java.lua;
   xdg.configFile."ncmpcpp/config".source = ../dots/ncmpcpp/config;
   xdg.configFile."ncmpcpp/bindings".source = ../dots/ncmpcpp/bindings;

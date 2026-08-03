@@ -1,0 +1,47 @@
+* {
+    all: unset;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+}
+
+window#minimized_trigger {
+    background-color: transparent;
+}
+
+window#minimized_bar {
+    background-color: transparent;
+}
+
+.trigger-zone {
+    background-color: transparent;
+}
+
+.minimized-box {
+    background-color: rgba(21, 21, 21, 0.95);
+    border: 1px solid #333333;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    padding: 6px 12px;
+    margin: 0;
+}
+
+.minimized-btn {
+    padding: 4px 10px;
+    border-radius: 4px;
+    color: #999999;
+    transition: background-color 150ms ease, color 150ms ease;
+}
+
+.minimized-btn:hover {
+    background-color: rgb(0, 110, 255);
+    color: #ffffff;
+}
+
+.minimized-icon {
+    color: rgb(0, 110, 255);
+    font-weight: 700;
+}
+
+.minimized-btn:hover .minimized-icon {
+    color: #ffffff;
+}

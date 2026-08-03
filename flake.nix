@@ -14,6 +14,7 @@
     plugin-lualine.flake = false;
 
     nixd.url = "github:nix-community/nixd";
+
     # Hardware
     hardware.url = "github:nixos/nixos-hardware";
   };
