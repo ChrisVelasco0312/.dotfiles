@@ -5,7 +5,7 @@
 options="󰌾 Lock\n󰍃 Logout\n󰤄 Suspend\n󰜉 Restart\n󰐥 Shutdown"
 
 chosen=$(echo -e "$options" | rofi -dmenu -i -p "Power Menu" \
-    -theme-str 'window {width: 340px; height: 250px;}' \
+    -theme-str 'window {width: 340px; height: 300px;}' \
     -theme-str 'listview {lines: 5; columns: 1;}' \
     -theme-str 'element {padding: 2px; margin: 2px;}' \
     -theme-str 'element-text {horizontal-align: 0.0;}' \

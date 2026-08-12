@@ -3,7 +3,7 @@
 	border-radius: 0;
 	min-height: 0;
 	font-family: "JetBrains Mono", "Noto Sans", monospace;
-	font-size: 14px;
+	font-size: 18px;
 	font-weight: 400;
 }
 
@@ -19,6 +19,8 @@ window#waybar {
 #battery,
 #network,
 #language,
+#custom-keyboard,
+#custom-missioncenter,
 #custom-power {
 	background-color: transparent;
 	color: #ffffff;
@@ -41,7 +43,7 @@ window#waybar {
 	padding: 0 6px;
 	margin: 0 2px;
 	min-width: 16px;
-	font-size: 14px;
+	font-size: 18px;
 	transition: none;
 }
 
@@ -60,7 +62,7 @@ window#waybar {
 #clock {
 	color: #ffffff;
 	font-weight: 500;
-	font-size: 14px;
+	font-size: 18px;
 }
 
 /* All modules - minimal styling */
@@ -68,9 +70,11 @@ window#waybar {
 #battery,
 #network,
 #language,
+#custom-keyboard,
+#custom-missioncenter,
 #custom-power {
 	color: #ffffff;
-	font-size: 14px;
+	font-size: 18px;
 }
 
 /* Muted state */
@@ -103,12 +107,13 @@ window#waybar {
 	font-weight: 600;
 }
 
-/* Remove all hover effects */
 #clock:hover,
 #pulseaudio:hover,
 #battery:hover,
 #network:hover,
 #language:hover,
+#custom-keyboard:hover,
+#custom-missioncenter:hover,
 #custom-power:hover {
 	background-color: transparent;
 }

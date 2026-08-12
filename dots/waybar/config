@@ -16,6 +16,7 @@
     "battery", 
     "network",
     "custom/missioncenter",
+    "custom/keyboard",
     "custom/power"
   ],
 
@@ -84,15 +85,25 @@
   },
 
   "custom/missioncenter": {
-    "format": "󰍛",
-    "tooltip": "Mission Center",
-    "on-click": "missioncenter"
+    "format": "{}",
+    "on-click": "missioncenter",
+    "exec": "/home/cavelasco/.dotfiles/dots/waybar/scripts/performance.sh",
+    "interval": 2,
+    "return-type": "json"
+  },
+
+  "custom/keyboard": {
+    "format": "{}",
+    "tooltip": "Toggle Keyboard",
+    "on-click": "/home/cavelasco/.dotfiles/dots/waybar/scripts/toggle_keyboard.sh",
+    "exec": "/home/cavelasco/.dotfiles/dots/waybar/scripts/toggle_keyboard.sh --status",
+    "interval": 1
   },
 
   "custom/power": {
     "format": "󰐥",
     "tooltip": "Power Menu",
-    "on-click": "~/.dotfiles/dots/waybar/scripts/power_menu.sh",
+    "on-click": "/home/cavelasco/.dotfiles/dots/waybar/scripts/power_menu.sh",
     "escape": true
   }
 }
