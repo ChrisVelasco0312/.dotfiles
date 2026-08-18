@@ -37,9 +37,12 @@ in
             src = inputs.plugin-lualine;
           };
         };
-
-
-
+        python3Packages = prev.python3Packages // {
+          patool = prev.python3Packages.patool.overrideAttrs (old: {
+            doCheck = false;
+            doInstallCheck = false;
+          });
+        };
       })
     ];
     config = {
@@ -74,8 +77,9 @@ in
       XCURSOR_SIZE = toString cursorTheme.size;
       XDG_DATA_DIRS = "$XDG_DATA_DIRS:$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share";
       JAVA_HOME = "${pkgs.jdk21}/lib/openjdk";
-      # Flutter
+      # React Native / Android
       ANDROID_HOME = "$HOME/Android/Sdk";
+      ANDROID_SDK_ROOT = "$HOME/Android/Sdk"; # Some Gradle scripts read this in addition to ANDROID_HOME
       CHROME_EXECUTABLE = "brave";
       LASTFM_APIKEY = env.LASTFM_APIKEY or "";
       LASTFM_SECRET = env.LASTFM_SECRET or "";
@@ -122,12 +126,12 @@ in
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
-    shadps4
     shadps4-qtlauncher
     puredata
     plugdata
     cardinal
     reaper
+    firebase-tools
     # === BROWSERS ===
     brave
     google-chrome
@@ -184,6 +188,7 @@ in
     prettier
     live-server
     bun
+    watchman # File watcher required by React Native / Metro for fast refresh
 
     # === BUILD TOOLS ===
     gcc
@@ -215,7 +220,6 @@ in
     brightnessctl
     mission-center
     libreoffice-fresh
-    weylus
     hunspell
     hunspellDicts.es_CO
     hunspellDicts.es-es
@@ -232,13 +236,14 @@ in
 
     # === DATABASE TOOLS ===
     dbeaver-bin
+    mysql-workbench
+    mysql84
     postman
     apidog
 
     # === PRODUCTIVITY ===
     zotero
     obsidian
-    xournalpp
     epr
     kdePackages.okular
     koodo-reader
@@ -409,6 +414,14 @@ in
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
+  };
+
+  # direnv: auto-loads per-project Nix devShells (e.g. the React Native template).
+  # nix-direnv caches the shell so re-entering a project is instant.
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
   };
 
   programs.mpv = {

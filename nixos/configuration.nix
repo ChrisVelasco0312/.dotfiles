@@ -53,6 +53,9 @@ in
   boot.kernelParams = [ "nvidia_drm.modeset=1" ];
   boot.kernel.sysctl."kernel.sysrq" = 1;
   boot.kernel.sysctl."kernel.sched_rt_runtime_us" = -1;
+  # Metro bundler (React Native) watches thousands of files; the NixOS default
+  # of 8192 inotify watches is far too low and causes "ENOSPC" errors.
+  boot.kernel.sysctl."fs.inotify.max_user_watches" = 524288;
 
   # Ensure Xbox Wireless Controller over Bluetooth gets a proper HID driver
   boot.kernelModules = [ "pstore" "snd-seq" "snd-rawmidi" "hid_microsoft" ];
@@ -260,11 +263,11 @@ in
 
   services.openssh.enable = true;
 
-  # services.mysql = {
-  #   enable = true;
-  #   package = pkgs.mysql84;
-  # };
-  # To re-enable: uncomment above and run: sudo nixos-rebuild switch
+  services.mysql = {
+    enable = true;
+    package = pkgs.mysql84;
+  };
+  # To disable: comment above and run: sudo nixos-rebuild switch
 
   # services.postgresql = {
   #   enable = true;
@@ -409,6 +412,7 @@ in
     4533
     8000
     5173
+    8081 # Metro bundler (React Native dev server)
   ];
   networking.firewall = {
     enable = true;
@@ -420,6 +424,9 @@ in
 
   programs.zsh.enable = true;
   programs.hyprland.enable = true;
+  # Android USB debugging: `android-tools` (above in systemPackages) provides adb.
+  # systemd 258 handles udev/uaccess rules automatically, so `programs.adb` is no
+  # longer needed. The `adbusers` group in extraGroups is kept for compatibility.
 
   # Enable flatpak support
   services.flatpak.enable = true;
