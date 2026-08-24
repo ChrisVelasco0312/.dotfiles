@@ -133,7 +133,7 @@ in
   home = {
     username = "cavelasco";
     homeDirectory = "/home/cavelasco";
-    stateVersion = "25.05";
+    stateVersion = "26.05";
 
     pointerCursor = {
       gtk.enable = true;

@@ -112,7 +112,6 @@ in
 
   services.greetd = {
     enable = true;
-    vt = 3;
     settings = {
       default_session = {
         user = "cavelasco";
@@ -294,10 +293,6 @@ in
     jstest-gtk # Joystick testing tool
   ];
 
-  # Enable adb and set proper udev rules for Android devices
-  programs.adb.enable = true;
-  services.udev.packages = [ pkgs.android-udev-rules ];
-
   virtualisation.libvirtd = {
     enable = true;
     qemu = {
@@ -363,5 +358,5 @@ in
     experimental-features = nix-command flakes
   '';
 
-  system.stateVersion = "25.05"; # Ensure this matches your NixOS channel
+  system.stateVersion = "26.05"; # Ensure this matches your NixOS channel
 }

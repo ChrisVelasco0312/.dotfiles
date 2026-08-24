@@ -61,6 +61,10 @@
           plugin = nvim-lspconfig;
           config = toLuaFile ./nvim-lua/plugins/lsp.lua;
         }
+        {
+          plugin = scnvim;
+          config = toLuaFile ./nvim-lua/plugins/scnvim.lua;
+        }
         lsp-colors-nvim
         trouble-nvim
         {
