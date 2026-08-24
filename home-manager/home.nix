@@ -89,6 +89,9 @@ in
     sessionPath = [
       "$HOME/.local/bin"
       "$HOME/.opencode/bin"
+      "$HOME/Android/Sdk/emulator"
+      "$HOME/Android/Sdk/platform-tools"
+      "$HOME/Android/Sdk/cmdline-tools/latest/bin"
     ];
 
     shellAliases = {
@@ -449,6 +452,7 @@ in
   xdg.configFile."eww/scripts/rofi-minimized.sh".source = ../dots/eww/scripts/rofi-minimized.sh;
   xdg.configFile."rofi/window-switcher.rasi".source = ../dots/rofi/window-switcher.rasi;
   xdg.configFile."nvim/ftplugin/java.lua".source = ./programs/neovim/nvim-lua/ftplugin/java.lua;
+  xdg.configFile."nvim/ftplugin/markdown.lua".source = ./programs/neovim/nvim-lua/ftplugin/markdown.lua;
   xdg.configFile."ncmpcpp/config".source = ../dots/ncmpcpp/config;
   xdg.configFile."ncmpcpp/bindings".source = ../dots/ncmpcpp/bindings;
   xdg.configFile."ghostty/config".source = ../dots/ghostty/config;
@@ -520,6 +524,11 @@ in
 
   # Optional fallback WM config
   # xdg.configFile.awesome.source = ../dots/awesome;
+
+  services.gnome-keyring = {
+    enable = true;
+    components = [ "secrets" ];
+  };
 
   services.mpd = {
     enable = false; # Disabled in favor of Mopidy

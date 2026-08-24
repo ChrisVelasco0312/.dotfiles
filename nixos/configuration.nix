@@ -58,7 +58,7 @@ in
   boot.kernel.sysctl."fs.inotify.max_user_watches" = 524288;
 
   # Ensure Xbox Wireless Controller over Bluetooth gets a proper HID driver
-  boot.kernelModules = [ "pstore" "snd-seq" "snd-rawmidi" "hid_microsoft" ];
+  boot.kernelModules = [ "pstore" "snd-seq" "snd-rawmidi" "hid_microsoft" "kvm_amd" ];
 
   services.journald.extraConfig = ''
     Storage=persistent
@@ -450,6 +450,22 @@ in
     nss
     nspr
     glib
+    # Android Emulator system dependencies
+    libx11
+    libxcb
+    libXext
+    libXi
+    pulseaudio
+    zlib
+    libpng
+    expat
+    dbus
+    libxkbfile
+    libuuid
+    libbsd
+    xcb-util-cursor
+    libSM
+    libICE
   ];
 
   fonts.packages = with pkgs; [

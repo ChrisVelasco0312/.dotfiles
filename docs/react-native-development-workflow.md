@@ -236,15 +236,45 @@ If no device appears at all:
 
 #### Emulator (AVD)
 
+**Prerequisites** — before using the emulator you must install the emulator
+package, a system image, and confirm KVM is available:
+
+```bash
+# 1. Verify KVM (required for hardware acceleration on Linux)
+ls /dev/kvm          # must exist; if not, enable virtualization in BIOS/UEFI
+
+# 2. Install the Android Emulator package + a system image via Android Studio:
+#    Android Studio → Settings → SDK Manager → SDK Platforms
+#      → install a platform (e.g., Android API 36.1)
+#    SDK Manager → SDK Tools
+#      → check "Android Emulator" and install
+
+# 3. Confirm the emulator binary is reachable (devShell adds it to PATH)
+which emulator       # should print ~/Android/Sdk/emulator/emulator
+
+# 4. Create an AVD (if you didn't create one via Android Studio UI)
+avdmanager create avd -n TestDevice -k "system-images;android-36.1;google_apis_playstore;x86_64"
+```
+
+> **NixOS-specific notes:**
+>
+> - **KVM module** — `configuration.nix` must load `kvm_amd` (or `kvm-intel`)
+>   in `boot.kernelModules` so KVM is available after every boot. Verify:
+>   `lsmod | grep kvm`.
+> - **Missing shared libraries** — the Android Emulator is a prebuilt binary
+>   that expects FHS paths. NixOS fixes this via `programs.nix-ld`; the
+>   required library (`libx11`) must be in `nix-ld.libraries`. If you see
+>   `error while loading shared libraries: libX11.so.6`, rebuild: `make flake`.
+> - **Rebuild required** — after changing `configuration.nix`, run
+>   `sudo nixos-rebuild switch` (or `make flake`) for KVM and nix-ld changes
+>   to take effect.
+
 ```bash
 # List available AVDs
 emulator -list-avds
 
 # Launch an AVD (e.g. the one bundled with the SDK)
 emulator -avd Pixel_9_API_36.1 -no-snapshot-load &
-
-# Or create a new AVD
-avdmanager create avd -n TestDevice -k "system-images;android-36.1;google_apis_playstore;x86_64"
 
 # Run the app on the emulator
 npx expo run:android
