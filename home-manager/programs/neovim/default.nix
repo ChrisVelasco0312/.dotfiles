@@ -8,7 +8,7 @@
 {
   programs.neovim =
     let
-      toLuaFile = file: "lua << EOF\n${builtins.readFile file}\nEOF\n";
+      toLuaFile = file: "${builtins.readFile file}";
     in
     {
       enable = true;
@@ -18,15 +18,15 @@
       extraPackages = with pkgs; [
         emmet-ls
         tree-sitter
-        nodePackages.vscode-langservers-extracted
-        nodePackages.typescript
-        nodePackages.typescript-language-server
-        nodePackages.eslint
+        vscode-langservers-extracted
+        typescript
+        typescript-language-server
+        eslint
         luajitPackages.lua-lsp
         nixd
         nixpkgs-fmt
         python312Packages.python-lsp-server
-        nodePackages.prettier
+        prettier
       ];
 
       extraLuaConfig = ''

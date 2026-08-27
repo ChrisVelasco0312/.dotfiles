@@ -245,15 +245,6 @@ in
     xdg-desktop-portal-hyprland # Hyprland's specific implementation for xdg-desktop-portal
     xdg-desktop-portal-gtk # Recommended for better compatibility with GTK apps (e.g., Firefox, GNOME apps)
 
-    # MIDI support packages for Wine/Proton applications
-    alsa-utils # ALSA utilities including aconnect, amidi
-    alsa-oss # ALSA OSS compatibility layer  
-    timidity # Software synthesizer and MIDI player
-    qjackctl # JACK control application
-    a2jmidid # ALSA to JACK MIDI bridge
-    jack2 # JACK audio connection kit
-    wineasio # ASIO driver for Wine
-
     #virtualization packages
     (
       pkgs.qemu.override {
@@ -275,16 +266,12 @@ in
 
     # Gaming packages
     heroic # Heroic Games Launcher for Epic Games, GOG, and Amazon Prime Games
-    wineWowPackages.stable # Wine for running Windows games
-    winetricks # Wine configuration utility
     vulkan-tools # Vulkan utilities
     vulkan-loader # Vulkan loader
     gamemode # Optimization daemon for games
     mangohud # Performance overlay for games
-    protontricks # Proton configuration utility
 
     # Additional gaming dependencies
-    xorg.xhost # For X11 forwarding in wine
     mesa # OpenGL implementation
     openal # Audio library for games
 

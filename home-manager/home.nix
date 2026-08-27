@@ -192,6 +192,7 @@ in
   home.packages = with pkgs; [
     brave
     qutebrowser
+    opencode
     # editors
     vscode
     cursor-cli
@@ -225,11 +226,10 @@ in
     lombok
     maven
     # NODE
-    nodejs_22
-    nodejs_22.pkgs.pnpm
-    nodejs_22.pkgs.yarn
-    nodejs_22.pkgs.typescript
-    nodejs_22.pkgs.prettier
+    nodejs_24
+    pnpm
+    typescript
+    prettier
     live-server
     bun
     # PYTHON
@@ -277,10 +277,7 @@ in
     feh #image viewer
     gparted # Partition editor
     vlc # Cross-platform media player
-    stremio
-    libsForQt5.dolphin # file manager
-    libsForQt5.dolphin-plugins
-    libsForQt5.breeze-icons # icons
+    nautilus
     # GNOME/GTK theming and thumbnails
     papirus-icon-theme # Modern icon theme
     adwaita-icon-theme # Default GNOME icons (fallback)
@@ -302,7 +299,6 @@ in
     feh
     gparted
     vlc
-    nautilus
     spotify
     obs-studio
     inkscape
