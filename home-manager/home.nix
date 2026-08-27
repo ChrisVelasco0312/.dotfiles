@@ -269,6 +269,7 @@ in
     nerd-fonts.inconsolata
     # APPS
     postman # API testing
+    apidog
     anki # spaced repetition cards
     ardour # audio editing
     zotero # research management
@@ -413,6 +414,7 @@ in
   xdg.configFile."hypr/hyprland.conf".source = ../dots/hypr/hyprland.conf;
   xdg.configFile."hypr/start.sh".source = ../dots/hypr/start.sh;
   xdg.configFile."hypr/background.jpg".source = ../dots/hypr/background.jpg;
+  xdg.configFile."hypr/scripts/monitor-setup.sh".source = ../dots/hypr/scripts/monitor-setup.sh;
   xdg.configFile."nvim/ftplugin/java.lua".source = ./programs/neovim/nvim-lua/ftplugin/java.lua;
   xdg.configFile."dunst/dunstrc".source = ../dots/dunst/dunstrc;
 
