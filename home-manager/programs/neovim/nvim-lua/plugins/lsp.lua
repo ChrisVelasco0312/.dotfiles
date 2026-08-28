@@ -70,10 +70,8 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-local lspconfig = require('lspconfig')
-
 require('neodev').setup();
-lspconfig.lua_ls.setup {
+vim.lsp.config('lua_ls', {
   on_attach = on_attach,
   capabilities = capabilities,
   root_dir = function()
@@ -93,20 +91,20 @@ lspconfig.lua_ls.setup {
       }
     },
   }
-}
+})
+vim.lsp.enable('lua_ls')
 
 
 
 local function setup_diags()
-  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics,
-    {
+  vim.lsp.handlers["textDocument/publishDiagnostics"] = function(err, result, ctx, config)
+    vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx, {
       virtual_text = false,
       signs = true,
       update_in_insert = false,
       underline = true,
-    }
-  )
+    })
+  end
 end
 
 setup_diags()
@@ -198,26 +196,29 @@ local server_configs = {
   }
 }
 
-lspconfig.ts_ls.setup {
+vim.lsp.config('ts_ls', {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = server_configs.ts_ls
-}
+})
+vim.lsp.enable('ts_ls')
 
-lspconfig.eslint.setup {
+vim.lsp.config('eslint', {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = server_configs.eslint
-}
+})
+vim.lsp.enable('eslint')
 
-lspconfig.pylsp.setup {
+vim.lsp.config('pylsp', {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = server_configs.pylsp
-}
+})
+vim.lsp.enable('pylsp')
 
-lspconfig.markdown_oxide.setup({
-  on_attach = on_attach, -- configure your on attach config
+vim.lsp.config('markdown_oxide', {
+  on_attach = on_attach,
   capabilities = vim.tbl_deep_extend(
     'force',
     capabilities,
@@ -230,24 +231,28 @@ lspconfig.markdown_oxide.setup({
     }
   ),
 })
+vim.lsp.enable('markdown_oxide')
 
-lspconfig.jdtls.setup {
+vim.lsp.config('jdtls', {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = server_configs.jdtls
-}
+})
+vim.lsp.enable('jdtls')
 
-lspconfig.emmet_ls.setup {
+vim.lsp.config('emmet_ls', {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = server_configs.emmet_ls
-}
+})
+vim.lsp.enable('emmet_ls')
 
-lspconfig.nixd.setup {
+vim.lsp.config('nixd', {
   autostart = true,
   capabilities = capabilities,
   settings = server_configs.nixd
-}
+})
+vim.lsp.enable('nixd')
 
 -- Function to check if a floating dialog exists and if not
 -- then check for diagnostics under the cursor

@@ -56,17 +56,14 @@ in
       XCURSOR_SIZE = toString cursorTheme.size;
       XDG_DATA_DIRS = "$XDG_DATA_DIRS:$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share";
       JAVA_HOME = "${pkgs.jdk21}/lib/openjdk";
-      JAVA_TOOL_OPTIONS = "-Dsun.java2d.uiScale=1.2";
       # React Native / Android
       ANDROID_HOME = "$HOME/Android/Sdk";
       ANDROID_SDK_ROOT = "$HOME/Android/Sdk"; # Some Gradle scripts read this in addition to ANDROID_HOME
       CHROME_EXECUTABLE = "brave";
-      # Display scaling
+      # Wayland: run Electron apps native (avoids XWayland blur)
       NIXOS_OZONE_WL = "1";
       ELECTRON_OZONE_PLATFORM_HINT = "auto";
-      QT_SCALE_FACTOR = "1.2";
       QT_AUTO_SCREEN_SCALE_FACTOR = "1";
-      GDK_DPI_SCALE = "1.2";
     };
 
     sessionPath = [
@@ -117,6 +114,7 @@ in
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
+    libreoffice
     brave
     opencode
     # LANGUAGES
