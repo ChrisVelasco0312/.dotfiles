@@ -38,7 +38,11 @@ in
   # Explicitly load kernel modules early during boot.
   boot.kernelParams = [ "processor.max_cstate=1" "idle=nomwait" ];
   boot.kernel.sysctl."kernel.sysrq" = 1;
-  boot.kernelModules = [ "pstore" "snd-seq" "snd-rawmidi" ];
+  # Metro bundler (React Native) watches thousands of files; the NixOS default
+  # of 8192 inotify watches is far too low and causes "ENOSPC" errors.
+  boot.kernel.sysctl."fs.inotify.max_user_watches" = 524288;
+
+  boot.kernelModules = [ "pstore" "snd-seq" "snd-rawmidi" "kvm_amd" ];
 
   services.journald.extraConfig = ''
     Storage=persistent
@@ -264,13 +268,6 @@ in
     curl
     jq
 
-    # Gaming packages
-    heroic # Heroic Games Launcher for Epic Games, GOG, and Amazon Prime Games
-    vulkan-tools # Vulkan utilities
-    vulkan-loader # Vulkan loader
-    gamemode # Optimization daemon for games
-    mangohud # Performance overlay for games
-
     # Additional gaming dependencies
     mesa # OpenGL implementation
     openal # Audio library for games
@@ -278,6 +275,9 @@ in
     # Controller support packages
     linuxConsoleTools # Tools for gamepad support
     jstest-gtk # Joystick testing tool
+
+    # Android debugging tools
+    android-tools
   ];
 
   virtualisation.libvirtd = {
@@ -304,6 +304,7 @@ in
   # Open ports in the firewall for Mumble server (phone microphone)
   networking.firewall.allowedTCPPorts = [
     64738 # Mumble Murmur server port
+    8081 # Metro bundler (React Native dev server)
   ];
   networking.firewall.allowedUDPPorts = [
     64738 # Mumble Murmur server port
@@ -325,6 +326,7 @@ in
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
+    stdenv.cc.cc
     libdrm
     mesa
     libxkbcommon
@@ -333,6 +335,22 @@ in
     nss
     nspr
     glib
+    # Android Emulator system dependencies
+    libx11
+    libxcb
+    libXext
+    libXi
+    pulseaudio
+    zlib
+    libpng
+    expat
+    dbus
+    libxkbfile
+    libuuid
+    libbsd
+    xcb-util-cursor
+    libSM
+    libICE
   ];
 
   fonts.packages = with pkgs; [

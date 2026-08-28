@@ -13,6 +13,7 @@ in
 
   nixpkgs = {
     overlays = [
+
       (final: prev: {
         vimPlugins = prev.vimPlugins // {
           own-lualine-nvim = prev.vimUtils.buildVimPlugin {
@@ -20,101 +21,7 @@ in
             src = inputs.plugin-lualine;
           };
         };
-
-        # Custom cursor-cli package that automatically fetches the latest version
-        cursor-cli = prev.stdenv.mkDerivation rec {
-          pname = "cursor-cli";
-          version = "latest";
-
-          # No source needed - we create wrapper scripts
-          src = null;
-          dontUnpack = true;
-
-          nativeBuildInputs = with prev; [ makeWrapper ];
-
-          installPhase = ''
-                        mkdir -p $out/bin
-            
-                        # Create the installer script
-                        cat > $out/bin/cursor-cli-install << 'EOF'
-            ${builtins.readFile ./scripts/cursor-cli-install.sh}
-            EOF
-            
-                        # Create the main wrapper script
-                        cat > $out/bin/cursor-agent << 'EOF'
-            ${builtins.readFile ./scripts/cursor-agent.sh}
-            EOF
-            
-                        # Make scripts executable
-                        chmod +x $out/bin/cursor-cli-install
-                        chmod +x $out/bin/cursor-agent
-            
-                        # Wrap the scripts to ensure proper PATH and dependencies
-                        wrapProgram $out/bin/cursor-cli-install \
-                          --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.bash ]}
-            
-                        wrapProgram $out/bin/cursor-agent \
-                          --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.bash ]} \
-                          --prefix PATH : $out/bin
-            
-                        # Create symlink for convenience
-                        ln -s $out/bin/cursor-agent $out/bin/cursor-cli
-          '';
-
-          meta = with prev.lib; {
-            description = "Cursor CLI - AI-powered code editor command line interface";
-            homepage = "https://cursor.com/cli";
-            license = licenses.unfree;
-            platforms = platforms.unix;
-            maintainers = [ "cavelasco" ];
-          };
-        };
-
         # Custom gemini-cli package that automatically fetches the latest version
-        gemini-cli = prev.stdenv.mkDerivation rec {
-          pname = "gemini-cli";
-          version = "latest";
-
-          # No source needed - we create wrapper scripts
-          src = null;
-          dontUnpack = true;
-
-          nativeBuildInputs = with prev; [ makeWrapper ];
-
-          installPhase = ''
-                        mkdir -p $out/bin
-            
-                        # Create the installer script
-                        cat > $out/bin/gemini-cli-install << 'EOF'
-            ${builtins.readFile ./scripts/gemini-cli-install.sh}
-            EOF
-            
-                        # Create the main wrapper script
-                        cat > $out/bin/gemini << 'EOF'
-            ${builtins.readFile ./scripts/gemini.sh}
-            EOF
-            
-                        # Make scripts executable
-                        chmod +x $out/bin/gemini-cli-install
-                        chmod +x $out/bin/gemini
-            
-                        # Wrap the scripts to ensure proper PATH and dependencies
-                        wrapProgram $out/bin/gemini-cli-install \
-                          --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.jq prev.bash ]}
-            
-                        wrapProgram $out/bin/gemini \
-                          --prefix PATH : ${prev.lib.makeBinPath [ prev.curl prev.jq prev.bash ]} \
-                          --prefix PATH : $out/bin
-          '';
-
-          meta = with prev.lib; {
-            description = "Gemini CLI - Google's Generative AI command line interface";
-            homepage = "https://github.com/google-gemini/gemini-cli";
-            license = licenses.asl20;
-            platforms = platforms.unix;
-            maintainers = [ "cavelasco" ];
-          };
-        };
       })
     ];
     config = {
@@ -149,10 +56,25 @@ in
       XCURSOR_SIZE = toString cursorTheme.size;
       XDG_DATA_DIRS = "$XDG_DATA_DIRS:$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share";
       JAVA_HOME = "${pkgs.jdk21}/lib/openjdk";
+      JAVA_TOOL_OPTIONS = "-Dsun.java2d.uiScale=1.2";
+      # React Native / Android
+      ANDROID_HOME = "$HOME/Android/Sdk";
+      ANDROID_SDK_ROOT = "$HOME/Android/Sdk"; # Some Gradle scripts read this in addition to ANDROID_HOME
+      CHROME_EXECUTABLE = "brave";
+      # Display scaling
+      NIXOS_OZONE_WL = "1";
+      ELECTRON_OZONE_PLATFORM_HINT = "auto";
+      QT_SCALE_FACTOR = "1.2";
+      QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+      GDK_DPI_SCALE = "1.2";
     };
 
     sessionPath = [
       "$HOME/.local/bin"
+      "$HOME/.opencode/bin"
+      "$HOME/Android/Sdk/emulator"
+      "$HOME/Android/Sdk/platform-tools"
+      "$HOME/Android/Sdk/cmdline-tools/latest/bin"
     ];
 
     shellAliases = {
@@ -180,6 +102,11 @@ in
     };
   };
 
+  qt = {
+    enable = true;
+    platformTheme = "gtk";
+  };
+
   wayland.windowManager.hyprland.settings = {
     env = [
       "XCURSOR_THEME,${cursorTheme.name}"
@@ -191,12 +118,7 @@ in
 
   home.packages = with pkgs; [
     brave
-    qutebrowser
     opencode
-    # editors
-    vscode
-    cursor-cli
-    gemini-cli
     # LANGUAGES
     devbox
     racket
@@ -225,20 +147,30 @@ in
     jdk21
     lombok
     maven
+    tmc-cli
+
+    # === FLUTTER & ANDROID ===
+    flutter
+    android-studio
+    android-tools
+    libusb1
+    usbutils
+
     # NODE
     nodejs_24
     pnpm
+    yarn
     typescript
     prettier
     live-server
     bun
+    watchman # File watcher required by React Native / Metro for fast refresh
     # PYTHON
     python312
     python312Packages.pip
     # TOOLS
     direnv
     lazygit
-    zoom-us
     prettierd
     evtest
     unzip
@@ -268,7 +200,6 @@ in
     nerd-fonts.jetbrains-mono
     nerd-fonts.inconsolata
     # APPS
-    postman # API testing
     apidog
     anki # spaced repetition cards
     ardour # audio editing
@@ -296,13 +227,9 @@ in
     hyprshot # screenshot
     zotero
     qbittorrent
-    xournalpp
     feh
     gparted
-    vlc
     spotify
-    obs-studio
-    inkscape
     obsidian
     hyprshot
     kitty
@@ -404,6 +331,14 @@ in
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
+  };
+
+  # direnv: auto-loads per-project Nix devShells (e.g. the React Native template).
+  # nix-direnv caches the shell so re-entering a project is instant.
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
   };
 
   ## CONFIG FILES
