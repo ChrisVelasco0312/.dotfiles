@@ -179,6 +179,11 @@ in
     tree
     eza
     gcc
+    gnumake
+    cmake
+    (lib.hiPrio clang)
+    lldb
+    gdb
     pandoc
     fish
     fd
@@ -348,6 +353,7 @@ in
   xdg.configFile."hypr/start.sh".source = ../dots/hypr/start.sh;
   xdg.configFile."hypr/background.jpg".source = ../dots/hypr/background.jpg;
   xdg.configFile."hypr/scripts/monitor-setup.sh".source = ../dots/hypr/scripts/monitor-setup.sh;
+  xdg.configFile."hypr/scripts/battery-alert.sh".source = ../dots/hypr/scripts/battery-alert.sh;
   xdg.configFile."nvim/ftplugin/java.lua".source = ./programs/neovim/nvim-lua/ftplugin/java.lua;
   xdg.configFile."dunst/dunstrc".source = ../dots/dunst/dunstrc;
 

@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
-swww init &
-swww img ~/.config/hypr/background.jpg &
 nm-applet --indicator &
 waybar &
-dunst
+dunst &
+awww-daemon &
+~/.dotfiles/dots/hypr/scripts/battery-alert.sh &
 
+# Start wallpaper cycling based on Last.fm scrobbles
+(
+  sleep 2
+  python3 ~/.dotfiles/dots/hypr/background-cycle.py &
+) &

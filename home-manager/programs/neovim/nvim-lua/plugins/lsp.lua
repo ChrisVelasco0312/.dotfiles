@@ -254,6 +254,25 @@ vim.lsp.config('nixd', {
 })
 vim.lsp.enable('nixd')
 
+-- C/C++ (clangd)
+vim.lsp.config('clangd', {
+  on_attach = on_attach,
+  cmd = {
+    'clangd',
+    '--background-index',
+    '--query-driver=' .. table.concat({
+      vim.fn.system('which clang++'):gsub('\n$', ''),
+      vim.fn.system('which clang'):gsub('\n$', ''),
+      vim.fn.system('which g++'):gsub('\n$', ''),
+      vim.fn.system('which gcc'):gsub('\n$', ''),
+    }, ','),
+  },
+  filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda', 'proto' },
+  root_markers = { '.clangd', '.clang-tidy', '.clang-format', 'compile_commands.json', 'compile_flags.txt', 'configure.ac', '.git' },
+  capabilities = capabilities,
+})
+vim.lsp.enable('clangd')
+
 -- Function to check if a floating dialog exists and if not
 -- then check for diagnostics under the cursor
 function OpenDiagnosticIfNoFloat()

@@ -6,7 +6,8 @@
     libnotify                                                                        
     networkmanagerapplet                                                             
     rofi
-    swww                                                                             
+    hyprsunset
+    swww
     waybar   
     eww
   ];                                                                                 

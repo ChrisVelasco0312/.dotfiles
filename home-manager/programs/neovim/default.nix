@@ -16,6 +16,7 @@
       vimAlias = true;
 
       extraPackages = with pkgs; [
+        clang-tools
         emmet-ls
         tree-sitter
         vscode-langservers-extracted
