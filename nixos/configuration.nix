@@ -60,10 +60,6 @@ in
   # Ensure Xbox Wireless Controller over Bluetooth gets a proper HID driver
   boot.kernelModules = [ "pstore" "snd-seq" "snd-rawmidi" "hid_microsoft" "kvm_amd" ];
 
-  services.journald.extraConfig = ''
-    Storage=persistent
-  '';
-
   # --- Graphics Configuration ---
   # NVIDIA VA-API for hardware video decoding (phones, etc.)
   hardware.graphics = {
@@ -89,6 +85,7 @@ in
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
+  networking.interfaces.usb0.useDHCP = true;
   networking.nameservers = [ "1.1.1.1" "8.0.0.0" ];
 
   time.timeZone = "America/Bogota";
@@ -330,7 +327,6 @@ in
     qjackctl # JACK control application
     a2jmidid # ALSA to JACK MIDI bridge
     pipewire.jack # pw-jack wrapper for JACK apps
-    wineasio # ASIO driver for Wine
 
     appimage-run
     curl
@@ -338,7 +334,6 @@ in
 
     # Gaming packages
     heroic # Heroic Games Launcher for Epic Games, GOG, and Amazon Prime Games
-    wineWowPackages.stable # Wine for running Windows games
     winetricks # Wine configuration utility
     vulkan-tools # Vulkan utilities
     vulkan-loader # Vulkan loader
@@ -375,25 +370,25 @@ in
   services.tailscale.enable = true;
   # Samba for Windows file sharing
   # To enable: uncomment below and run: sudo nixos-rebuild switch
-  # services.samba = {
-  #   enable = true;
-  #   settings = {
-  #     global = {
-  #       "workgroup" = "WORKGROUP";
-  #       "server string" = "nixos";
-  #       "netbios name" = "nixos";
-  #       "security" = "user";
-  #       "hosts allow" = "100.64.0.0/10 127.0.0.1 localhost";
-  #       "hosts deny" = "0.0.0.0/0";
-  #     };
-  #     "myfolder" = {
-  #       "path" = "/mnt/myfiles";
-  #       "valid users" = "cavelasco";
-  #       "public" = "no";
-  #       "writeable" = "yes";
-  #     };
-  #   };
-  # };
+  services.samba = {
+    enable = true;
+    settings = {
+      global = {
+        "workgroup" = "WORKGROUP";
+        "server string" = "nixos";
+        "netbios name" = "nixos";
+        "security" = "user";
+        "hosts allow" = "192.168.0.0/16 127.0.0.1 localhost";
+        "hosts deny" = "0.0.0.0/0";
+      };
+      "myfolder" = {
+        "path" = "/mnt/myfiles";
+        "valid users" = "cavelasco";
+        "public" = "no";
+        "writeable" = "yes";
+      };
+    };
+  };
 
   # Navidrome media server for streaming music
   services.navidrome = {
@@ -413,6 +408,10 @@ in
     8000
     5173
     8081 # Metro bundler (React Native dev server)
+    445 # Samba
+    137 # Samba
+    138 # Samba
+    139 # Samba
   ];
   networking.firewall = {
     enable = true;
@@ -420,6 +419,8 @@ in
   };
   networking.firewall.allowedUDPPorts = [
     64738 # Mumble Murmur server port
+    137 # Samba
+    138 # Samba
   ];
 
   programs.zsh.enable = true;

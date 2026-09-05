@@ -77,6 +77,7 @@ in
       XCURSOR_SIZE = toString cursorTheme.size;
       XDG_DATA_DIRS = "$XDG_DATA_DIRS:$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share";
       JAVA_HOME = "${pkgs.jdk21}/lib/openjdk";
+      MOZ_ENABLE_WAYLAND = "1";
       # React Native / Android
       ANDROID_HOME = "$HOME/Android/Sdk";
       ANDROID_SDK_ROOT = "$HOME/Android/Sdk"; # Some Gradle scripts read this in addition to ANDROID_HOME
@@ -138,9 +139,6 @@ in
     # === BROWSERS ===
     brave
     google-chrome
-
-    # === EDITORS & IDE ===
-    vscode
 
     # === CLOUD & DEPLOYMENT ===
     awscli2
