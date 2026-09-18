@@ -301,6 +301,8 @@ in
 
     # === FLATPAK ===
     flatpak
+    warehouse
+    bazaar
   ];
 
   # ---- GITHUB SSH -------#
@@ -395,6 +397,7 @@ in
       }
       alias ranger="ranger-cd"
       alias update:opencode="systemctl --user start install-opencode-cli"
+      alias update:flatpak="flatpak update"
     '';
   };
 
