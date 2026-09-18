@@ -48,6 +48,9 @@ in
     config = {
       allowUnfree = true;
       allowUnfreePredicate = (_: true);
+      permittedInsecurePackages = [
+        "electron-41.10.6"
+      ];
     };
   };
 
@@ -118,13 +121,6 @@ in
       gtk-cursor-theme-size = cursorTheme.size;
       gtk-icon-theme-name = "Papirus";
     };
-  };
-
-  wayland.windowManager.hyprland.settings = {
-    env = [
-      "XCURSOR_THEME,${cursorTheme.name}"
-      "XCURSOR_SIZE,${toString cursorTheme.size}"
-    ];
   };
 
   programs.home-manager.enable = true;
@@ -220,7 +216,7 @@ in
     pavucontrol
     brightnessctl
     mission-center
-    libreoffice-fresh
+    libreoffice
     hunspell
     hunspellDicts.es_CO
     hunspellDicts.es-es
@@ -237,7 +233,6 @@ in
 
     # === DATABASE TOOLS ===
     dbeaver-bin
-    mysql-workbench
     mysql84
     postman
     apidog
@@ -434,8 +429,7 @@ in
   xdg.configFile."waybar/config".source = ../dots/waybar/config;
   xdg.configFile."waybar/style.css".source = ../dots/waybar/style.css;
   xdg.configFile."kitty/kitty.conf".source = ../dots/kitty/kitty.conf;
-  xdg.configFile."hypr/hyprland.conf".force = true;
-  xdg.configFile."hypr/hyprland.conf".source = ../dots/hypr/hyprland.conf;
+  xdg.configFile."hypr/hyprland.lua".source = ../dots/hypr/hyprland.lua;
   xdg.configFile."hypr/start.sh".source = ../dots/hypr/start.sh;
   xdg.configFile."hypr/background.jpg".source = ../dots/hypr/background.jpg;
   xdg.configFile."hypr/rofi-mpd.sh".source = ../dots/hypr/rofi-mpd.sh;

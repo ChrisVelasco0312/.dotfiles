@@ -5,6 +5,16 @@
 let
   useCursorAppImage = true;
   cursorPackage = if useCursorAppImage then null else pkgs.code-cursor;
+  greetdSessions = pkgs.linkFarm "greetd-sessions" [
+    {
+      name = "hyprland-uwsm.desktop";
+      path = "${config.services.displayManager.sessionData.desktops}/share/wayland-sessions/hyprland-uwsm.desktop";
+    }
+    {
+      name = "steam.desktop";
+      path = "${config.services.displayManager.sessionData.desktops}/share/wayland-sessions/steam.desktop";
+    }
+  ];
 in
 {
   imports =
@@ -145,7 +155,10 @@ in
     settings = {
       default_session = {
         user = "cavelasco";
-        command = "${pkgs.tuigreet}/bin/tuigreet --time -cmd Hyprland";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --sessions ${greetdSessions} -cmd ${pkgs.writeShellScript "hyprland-uwsm-session" ''
+          export PATH="/run/current-system/sw/bin:/run/wrappers/bin:$PATH"
+          exec uwsm start -F -- /run/current-system/sw/bin/Hyprland
+        ''}";
       };
     };
   };
@@ -252,10 +265,28 @@ in
   services.pipewire.extraConfig.pipewire."10-pro-audio" = {
     "context.properties" = {
       "default.clock.allowed-rates" = [ 44100 48000 96000 ];
-      "default.clock.quantum" = 512;
+      "default.clock.quantum" = 128;
       "default.clock.min-quantum" = 32;
-      "default.clock.max-quantum" = 8192;
+      "default.clock.max-quantum" = 2048;
     };
+  };
+
+  # Force smaller ALSA buffer for USB audio interfaces
+  services.pipewire.extraConfig.pipewire."11-alsa-buffer" = {
+    "rules" = [
+      {
+        matches = [
+          { "node.name" = "~alsa_input.*"; }
+          { "node.name" = "~alsa_output.*"; }
+        ];
+        actions = {
+          "update-props" = {
+            "api.alsa.period-size" = 128;
+            "api.alsa.buffer-size" = 1024;
+          };
+        };
+      }
+    ];
   };
 
   services.openssh.enable = true;
@@ -315,10 +346,6 @@ in
     zsh
     gnumake
     ntfs3g
-    # Hyprland-specific dependencies for better Wayland compatibility:
-    xdg-desktop-portal # Essential for Wayland portals (screen sharing, file dialogs etc.)
-    xdg-desktop-portal-hyprland # Hyprland's specific implementation for xdg-desktop-portal
-    xdg-desktop-portal-gtk # Recommended for better compatibility with GTK apps (e.g., Firefox, GNOME apps)
 
     # MIDI support packages for Wine/Proton applications
     alsa-utils # ALSA utilities including aconnect, amidi
@@ -424,14 +451,13 @@ in
   ];
 
   programs.zsh.enable = true;
-  programs.hyprland.enable = true;
   # Android USB debugging: `android-tools` (above in systemPackages) provides adb.
   # systemd 258 handles udev/uaccess rules automatically, so `programs.adb` is no
   # longer needed. The `adbusers` group in extraGroups is kept for compatibility.
 
   # Enable flatpak support
   services.flatpak.enable = true;
-  xdg.portal.enable = true;
+  # xdg.portal.enable is set in hyprland.nix
 
   # Gaming optimizations
   programs.gamemode.enable = true; # GameMode for performance optimization
