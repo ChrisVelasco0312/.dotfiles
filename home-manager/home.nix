@@ -148,6 +148,7 @@ in
 
     # === CONTAINERS ===
     docker-compose
+    distrobox
 
     # === PYTHON ===
     (python3.withPackages (ps: with ps; [

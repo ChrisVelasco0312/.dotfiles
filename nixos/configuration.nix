@@ -333,6 +333,12 @@ in
   };
   users.extraGroups.docker.members = [ "cavelasco" ];
 
+  # Podman (for distrobox containers)
+  virtualisation.podman.enable = true;
+
+  # NVIDIA Container Toolkit — GPU passthrough into containers
+  hardware.nvidia-container-toolkit.enable = true;
+
   # Allow unfree packages (necessary for NVIDIA proprietary drivers)
   nixpkgs.config.allowUnfree = true;
 
