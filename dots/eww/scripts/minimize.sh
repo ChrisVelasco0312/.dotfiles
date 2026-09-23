@@ -15,8 +15,8 @@ class=$(echo "$active" | jq -r '.class')
 title=$(echo "$active" | jq -r '.title')
 ws_id=$(echo "$active" | jq -r '.workspace.id')
 
+hyprctl dispatch "hl.dsp.window.move({ workspace = 'special:minimized', follow = false, window = 'address:$addr' })"
+
 jq --arg addr "$addr" --arg class "$class" --arg title "$title" --argjson ws "$ws_id" \
   '. += [{"address": $addr, "class": $class, "title": $title, "workspace": $ws}]' \
   "$STATE" > "${STATE}.tmp" && mv "${STATE}.tmp" "$STATE"
-
-hyprctl dispatch movetoworkspacesilent "special:minimized,address:$addr"
