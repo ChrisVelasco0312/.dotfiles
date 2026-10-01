@@ -140,7 +140,7 @@
         ## opencode dependencies
         snacks-nvim
         {
-          plugin = opencode-nvim;
+          plugin = own-opencode-nvim;
           type = "viml";
           config = toLuaFile ./nvim-lua/plugins/opencode.lua;
         }

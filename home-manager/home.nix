@@ -9,6 +9,15 @@ let
   githubKeyPath = "${config.home.homeDirectory}/.ssh/id_ed25519_personal";
   workKeyPath = "${config.home.homeDirectory}/.ssh/id_ed25519_work";
 
+  # OpenCode v2 is never published to GitHub Releases (those stay on the v1
+  # channel), so the official installer and `opencode upgrade` are stuck on
+  # 1.18.x. Resolve the newest npm build at eval time instead: every
+  # `make home` re-checks the registry, so the package always tracks latest
+  # (nix caches the fetch for `tarball-ttl`, 1h by default).
+  opencodeNpm = builtins.fromJSON (builtins.readFile (builtins.fetchurl {
+    url = "https://registry.npmjs.org/@opencode/cli-linux-x64/latest";
+  }));
+
   # Parse .env file from root
   env =
     let
@@ -31,10 +40,46 @@ in
   nixpkgs = {
     overlays = [
       (final: prev: {
+        # npm-published v2 binary; see `opencodeNpm` above.
+        opencode = final.stdenv.mkDerivation {
+          pname = "opencode";
+          version = opencodeNpm.version;
+          src = builtins.fetchurl {
+            url = "https://registry.npmjs.org/@opencode/cli-linux-x64/-/cli-linux-x64-${opencodeNpm.version}.tgz";
+          };
+          dontBuild = true;
+          # Bun single-file executable: stripping breaks its embedded metadata
+          # (the binary then reports Bun's version instead of OpenCode's).
+          dontStrip = true;
+          installPhase = ''
+            runHook preInstall
+            install -Dm755 bin/opencode $out/bin/opencode
+            runHook postInstall
+          '';
+          meta = {
+            description = "OpenCode AI coding agent CLI (v2, npm channel)";
+            homepage = "https://opencode.ai";
+            license = lib.licenses.mit;
+            mainProgram = "opencode";
+            platforms = [ "x86_64-linux" ];
+          };
+        };
         vimPlugins = prev.vimPlugins // {
           own-lualine-nvim = prev.vimUtils.buildVimPlugin {
             name = "lualine";
             src = inputs.plugin-lualine;
+          };
+          # nixpkgs' opencode-nvim (1.0.1) speaks the v1 HTTP API; OpenCode v2
+          # moved to /api/* + service.json discovery, so track upstream main.
+          own-opencode-nvim = prev.vimUtils.buildVimPlugin {
+            pname = "opencode-nvim";
+            version = "unstable-2026-10-01";
+            src = prev.fetchFromGitHub {
+              owner = "nickjvandyke";
+              repo = "opencode.nvim";
+              rev = "06770e2e3618b82703e3e7af1f2d5dc67bde0002";
+              sha256 = "0sqx7kac6fahxf78jcyh32zx38i54k1klv9hgnnwnhnd2dh7m3ki";
+            };
           };
         };
         python3Packages = prev.python3Packages // {
@@ -92,7 +137,6 @@ in
 
     sessionPath = [
       "$HOME/.local/bin"
-      "$HOME/.opencode/bin"
       "$HOME/Android/Sdk/emulator"
       "$HOME/Android/Sdk/platform-tools"
       "$HOME/Android/Sdk/cmdline-tools/latest/bin"
@@ -126,6 +170,7 @@ in
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
+    opencode
     shadps4-qtlauncher
     puredata
     plugdata
@@ -397,7 +442,6 @@ in
         fi
       }
       alias ranger="ranger-cd"
-      alias update:opencode="systemctl --user start install-opencode-cli"
       alias update:flatpak="flatpak update"
     '';
   };
@@ -440,6 +484,7 @@ in
   xdg.configFile."hypr/rofi-tidal.py".source = ../dots/hypr/rofi-tidal.py;
   xdg.configFile."hypr/rofi-music.sh".source = ../dots/hypr/rofi-music.sh;
   xdg.configFile."hypr/rofi-buffer-size.sh".source = ../dots/hypr/rofi-buffer-size.sh;
+  xdg.configFile."hypr/rofi-monitor-orientation.sh".source = ../dots/hypr/rofi-monitor-orientation.sh;
   xdg.configFile."eww/eww.yuck".source = ../dots/eww/eww.yuck;
   xdg.configFile."eww/eww.scss".source = ../dots/eww/eww.scss;
   xdg.configFile."eww/scripts/minimize.sh".source = ../dots/eww/scripts/minimize.sh;
@@ -589,38 +634,6 @@ in
       mpris = {
         enabled = true;
       };
-    };
-  };
-
-
-
-  systemd.user.services.install-opencode-cli = {
-    Unit = {
-      Description = "Install or update OpenCode CLI via official script";
-      After = [ "network-online.target" ];
-      Wants = [ "network-online.target" ];
-    };
-    Service = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = pkgs.writeShellScript "install-opencode-cli" ''
-        set -euo pipefail
-
-        # Determine installation directory (default to ~/.local/bin, like your PATH setup)
-        INSTALL_DIR="''${XDG_BIN_DIR:-$HOME/.local/bin}"
-        mkdir -p "''${INSTALL_DIR}"
-
-        echo "Installing OpenCode CLI to ''${INSTALL_DIR}..."
-
-        # Use official installer script, targeting the chosen directory
-        XDG_BIN_DIR="''${INSTALL_DIR}" ${pkgs.curl}/bin/curl -fsSL "https://opencode.ai/install" | ${pkgs.bash}/bin/bash
-
-        echo "OpenCode CLI installation completed."
-      '';
-    };
-    Install = {
-      # Not enabled by default - run manually with:
-      # systemctl --user start install-opencode-cli
     };
   };
 

@@ -14,6 +14,7 @@ local volup = "wpctl set-volume @DEFAULT_SINK@ 5%+"
 local voldown = "wpctl set-volume @DEFAULT_SINK@ 5%-"
 local mute = "wpctl set-mute @DEFAULT_SINK@ toggle"
 local reset = "hyprctl reload"
+local monitorOrientation = "~/.config/hypr/rofi-monitor-orientation.sh"
 local screenshotEdit = [[grim -g "$(slurp)" -t ppm - | satty --filename - --fullscreen --copy-command "wl-copy" --output-filename ~/Pictures/Screenshots/satty-$(date '+%Y%m%d-%H:%M:%S').png]]
 local screenshot = [[grim -g "$(slurp)" - | wl-copy]]
 
@@ -104,6 +105,7 @@ hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + U", hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(reset))
 hl.bind(mainMod .. " + O", hl.dsp.exec_cmd("missioncenter"))
+hl.bind(shiftMod .. " + Y", hl.dsp.exec_cmd(monitorOrientation))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("pkill waybar || waybar &"))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("/home/cavelasco/.dotfiles/dots/hypr/rofi-gammastep.sh"))
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("/home/cavelasco/.dotfiles/dots/hypr/rofi-buffer-size.sh"))
