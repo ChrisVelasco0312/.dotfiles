@@ -51,9 +51,13 @@ in
           # Bun single-file executable: stripping breaks its embedded metadata
           # (the binary then reports Bun's version instead of OpenCode's).
           dontStrip = true;
+          nativeBuildInputs = [ final.makeWrapper ];
           installPhase = ''
             runHook preInstall
             install -Dm755 bin/opencode $out/bin/opencode
+            # OpenTUI dlopens libwayland-client.so.0 for clipboard image paste.
+            wrapProgram $out/bin/opencode \
+              --prefix LD_LIBRARY_PATH : ${final.lib.makeLibraryPath [ final.wayland ]}
             runHook postInstall
           '';
           meta = {
@@ -170,6 +174,8 @@ in
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
+    baobab
+    qalculate-qt
     opencode
     shadps4-qtlauncher
     puredata
@@ -485,6 +491,7 @@ in
   xdg.configFile."hypr/rofi-music.sh".source = ../dots/hypr/rofi-music.sh;
   xdg.configFile."hypr/rofi-buffer-size.sh".source = ../dots/hypr/rofi-buffer-size.sh;
   xdg.configFile."hypr/rofi-monitor-orientation.sh".source = ../dots/hypr/rofi-monitor-orientation.sh;
+  xdg.configFile."hypr/rofi-commands.sh".source = ../dots/hypr/rofi-commands.sh;
   xdg.configFile."eww/eww.yuck".source = ../dots/eww/eww.yuck;
   xdg.configFile."eww/eww.scss".source = ../dots/eww/eww.scss;
   xdg.configFile."eww/scripts/minimize.sh".source = ../dots/eww/scripts/minimize.sh;

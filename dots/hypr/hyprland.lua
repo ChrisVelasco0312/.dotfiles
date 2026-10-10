@@ -109,6 +109,7 @@ hl.bind(shiftMod .. " + Y", hl.dsp.exec_cmd(monitorOrientation))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("pkill waybar || waybar &"))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("/home/cavelasco/.dotfiles/dots/hypr/rofi-gammastep.sh"))
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("/home/cavelasco/.dotfiles/dots/hypr/rofi-buffer-size.sh"))
+hl.bind(mainMod .. " + SLASH", hl.dsp.exec_cmd("/home/cavelasco/.dotfiles/dots/hypr/rofi-commands.sh"))
 
 hl.bind(mainMod .. " + PRINT", hl.dsp.exec_cmd("hyprshot -m window"))
 hl.bind("PRINT", hl.dsp.exec_cmd(screenshotEdit))

@@ -23,11 +23,13 @@ if [ "$1" = "--status" ]; then
 fi
 
 if [ -f "$STATE_FILE" ]; then
-    hyprctl keyword "device[$KBD]:enabled" true
+    # Hyprland 0.55+ Lua parser: `hyprctl keyword` no longer works for device
+    # options; runtime config changes must go through the Lua `hl.device` API.
+    hyprctl eval "hl.device({ name = \"$KBD\", enabled = true })" >/dev/null 2>&1
     rm "$STATE_FILE"
     echo "󰌌"
 else
-    hyprctl keyword "device[$KBD]:enabled" false
+    hyprctl eval "hl.device({ name = \"$KBD\", enabled = false })" >/dev/null 2>&1
     touch "$STATE_FILE"
     echo "<span color='#888888'>󰌌</span>"
 fi
