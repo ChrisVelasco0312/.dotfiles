@@ -465,6 +465,12 @@ in
   services.flatpak.enable = true;
   # xdg.portal.enable is set in hyprland.nix
 
+  services.flatpak.packages = [
+    # Zotero: nixpkgs' package hardcodes an end-of-life Firefox ESR build that
+    # nixpkgs now refuses to evaluate, so Zotero is managed via flatpak instead.
+    "app/org.zotero.Zotero/x86_64/stable"
+  ];
+
   # Gaming optimizations
   programs.gamemode.enable = true; # GameMode for performance optimization
   programs.gamescope.enable = true; # Gamescope for micro-compositor

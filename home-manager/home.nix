@@ -8,10 +8,8 @@ let
   };
   githubKeyPath = "${config.home.homeDirectory}/.ssh/id_ed25519_personal";
   workKeyPath = "${config.home.homeDirectory}/.ssh/id_ed25519_work";
+  gitlabKeyPath = "${config.home.homeDirectory}/.ssh/id_ed25519_gitlab";
 
-  # OpenCode v2 is never published to GitHub Releases (those stay on the v1
-  # channel), so the official installer and `opencode upgrade` are stuck on
-  # 1.18.x. Resolve the newest npm build at eval time instead: every
   # `make home` re-checks the registry, so the package always tracks latest
   # (nix caches the fetch for `tarball-ttl`, 1h by default).
   opencodeNpm = builtins.fromJSON (builtins.readFile (builtins.fetchurl {
@@ -92,13 +90,24 @@ in
             doInstallCheck = false;
           });
         };
+        plugdata = prev.plugdata.overrideAttrs (old: {
+          postPatch = (old.postPatch or "") + ''
+            cat >> Source/PluginEditor.cpp <<'NIXEOF'
+
+            // nixpkgs fix: closeAllPatches() is defined only in the standalone
+            // target (Standalone/PlugDataApp.h). VST3/LV2 are linked with
+            // -Wl,--no-undefined, so provide a weak fallback here.
+            __attribute__((weak)) void PlugDataWindow::closeAllPatches() {}
+            NIXEOF
+          '';
+        });
       })
     ];
     config = {
       allowUnfree = true;
       allowUnfreePredicate = (_: true);
       permittedInsecurePackages = [
-        "electron-41.10.6"
+        "electron-41.10.7"
       ];
     };
   };
@@ -116,6 +125,7 @@ in
     stateVersion = "26.05";
 
     pointerCursor = {
+      enable = true;
       gtk.enable = true;
       x11.enable = true;
       name = cursorTheme.name;
@@ -174,6 +184,7 @@ in
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
+    jflap
     baobab
     qalculate-qt
     opencode
@@ -183,6 +194,9 @@ in
     cardinal
     reaper
     firebase-tools
+
+    # === GAMING / VULKAN POST-PROCESSING ===
+    vkbasalt
     # === BROWSERS ===
     brave
     google-chrome
@@ -290,7 +304,6 @@ in
     apidog
 
     # === PRODUCTIVITY ===
-    zotero
     obsidian
     epr
     kdePackages.okular
@@ -377,6 +390,12 @@ in
       IdentityFile = workKeyPath;
       IdentitiesOnly = true;
     };
+    "gitlab.com" = {
+      User = "git";
+      HostName = "gitlab.com";
+      IdentityFile = gitlabKeyPath;
+      IdentitiesOnly = true;
+    };
   };
 
   systemd.user.services = {
@@ -403,6 +422,20 @@ in
         Type = "oneshot";
         Environment = [ "SSH_AUTH_SOCK=%t/ssh-agent" ];
         ExecStart = "${pkgs.openssh}/bin/ssh-add ${workKeyPath}"; # Uses workKeyPath
+      };
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
+    };
+    add-gitlab-ssh-key = {
+      Unit = {
+        Description = "Add GitLab SSH key to ssh-agent";
+        After = [ "ssh-agent.service" ];
+      };
+      Service = {
+        Type = "oneshot";
+        Environment = [ "SSH_AUTH_SOCK=%t/ssh-agent" ];
+        ExecStart = "${pkgs.openssh}/bin/ssh-add ${gitlabKeyPath}";
       };
       Install = {
         WantedBy = [ "default.target" ];
