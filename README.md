@@ -16,5 +16,4 @@ It is still a mess, but I'm still learning nix.
 
 - [ ] Change waybar for AGS to improve the top panel.
 - [ ] Prepare some shells for legacy nodejs version projects.
-- [ ] Fix cursor before running any program.
 - [ ] Fix obsidian gpu problem.

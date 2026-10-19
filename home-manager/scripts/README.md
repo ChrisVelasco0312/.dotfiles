@@ -4,10 +4,6 @@ This directory contains shell scripts that are used by the custom packages defin
 
 ## Scripts
 
-### Cursor CLI
-- `cursor-cli-install.sh` - Installation script for Cursor CLI
-- `cursor-agent.sh` - Wrapper script for Cursor CLI execution
-
 ### Gemini CLI
 - `gemini-cli-install.sh` - Installation script for Gemini CLI
 - `gemini.sh` - Wrapper script for Gemini CLI execution
