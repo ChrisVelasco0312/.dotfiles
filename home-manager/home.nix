@@ -525,6 +525,7 @@ in
   xdg.configFile."hypr/rofi-buffer-size.sh".source = ../dots/hypr/rofi-buffer-size.sh;
   xdg.configFile."hypr/rofi-monitor-orientation.sh".source = ../dots/hypr/rofi-monitor-orientation.sh;
   xdg.configFile."hypr/rofi-commands.sh".source = ../dots/hypr/rofi-commands.sh;
+  xdg.configFile."hypr/rofi-ai.sh".source = ../dots/hypr/rofi-ai.sh;
   xdg.configFile."eww/eww.yuck".source = ../dots/eww/eww.yuck;
   xdg.configFile."eww/eww.scss".source = ../dots/eww/eww.scss;
   xdg.configFile."eww/scripts/minimize.sh".source = ../dots/eww/scripts/minimize.sh;

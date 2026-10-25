@@ -60,6 +60,7 @@ add "SUPER+B"        "Restart Waybar"            "pkill waybar || waybar &"
 add "SUPER+N"        "Night Light (gammastep)"   "/home/cavelasco/.dotfiles/dots/hypr/rofi-gammastep.sh"
 add "SUPER+A"        "Audio Buffer Size"         "/home/cavelasco/.dotfiles/dots/hypr/rofi-buffer-size.sh"
 add "SUPER+SHIFT+Y"  "Monitor Orientation"       "/home/cavelasco/.dotfiles/dots/hypr/rofi-monitor-orientation.sh"
+add "SUPER+SHIFT+SPACE" "AI Tools"                "/home/cavelasco/.dotfiles/dots/hypr/rofi-ai.sh"
 add ""               "Power Menu"                "/home/cavelasco/.dotfiles/dots/waybar/scripts/power_menu.sh"
 add ""               "Lock Screen"               "swaylock -f -c 000000"
 
