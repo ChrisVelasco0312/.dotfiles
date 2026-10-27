@@ -185,10 +185,7 @@ in
 
   home.packages = with pkgs; [
     jflap
-    baobab
-    qalculate-qt
     opencode
-    shadps4-qtlauncher
     puredata
     plugdata
     cardinal
@@ -313,6 +310,8 @@ in
     feh
     gparted
     nautilus
+    superfile
+    ncdu
 
     # === VIDEO/AUDIO TOOLS ===
     kdePackages.kdenlive

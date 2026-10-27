@@ -49,6 +49,12 @@ backup-configs:
 clean:
 	nix-collect-garbage
 
+clean-old:
+	sudo nix-collect-garbage --delete-old
+
+optimise:
+	nix-store --optimise -v
+
 wallpaper-fix:
 	rm -f ~/.cache/album_covers/rofi_list_cache.txt
 	python3 ~/.dotfiles/dots/hypr/wallpaper-picker.py --recent --force
