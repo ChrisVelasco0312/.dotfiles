@@ -480,6 +480,18 @@ in
         fi
       }
       alias ranger="ranger-cd"
+
+      # superfile cd-on-quit: on exit, superfile writes a `cd` command to
+      # $SPF_LAST_DIR; source it so the shell lands in the last browsed dir.
+      function superfile {
+        export SPF_LAST_DIR="''${XDG_STATE_HOME:-$HOME/.local/state}/superfile/lastdir"
+        command superfile "$@"
+        if [ -f "$SPF_LAST_DIR" ]; then
+          . "$SPF_LAST_DIR"
+          rm -f -- "$SPF_LAST_DIR"
+        fi
+      }
+
       alias update:flatpak="flatpak update"
     '';
   };
@@ -537,6 +549,9 @@ in
   xdg.configFile."ncmpcpp/config".source = ../dots/ncmpcpp/config;
   xdg.configFile."ncmpcpp/bindings".source = ../dots/ncmpcpp/bindings;
   xdg.configFile."ghostty/config".source = ../dots/ghostty/config;
+
+  xdg.configFile."superfile/config.toml".source = ../dots/superfile/config.toml;
+  xdg.configFile."superfile/hotkeys.toml".source = ../dots/superfile/hotkeys.toml;
 
   # Apidog protocol handler for OAuth redirects
   home.file.".local/share/applications/apidog.desktop".text = ''
